@@ -37,24 +37,24 @@ export const Sidebar: React.FC<SidebarProps> = ({ employeeInfo, currentView, onN
             <button
               key={item.id}
               onClick={() => onNavigate(item.id)}
-              className={`flex-1 md:w-full flex flex-col md:flex-row items-center justify-center md:justify-start gap-1 md:gap-3 px-2 md:px-3 py-2 md:py-2.5 rounded-xl text-[10px] md:text-sm font-semibold transition-all ${
+              className={`flex-1 md:w-full flex flex-col md:flex-row items-center justify-center md:justify-start gap-1 md:gap-3 px-1 md:px-3 py-2 md:py-2.5 rounded-xl text-[10px] md:text-sm font-semibold transition-all ${
                 isActive
                   ? 'bg-blue-600/20 text-blue-400'
                   : 'text-slate-400 hover:text-white hover:bg-slate-800'
               }`}
             >
               <Icon className="w-5 h-5 md:w-4 md:h-4 shrink-0" />
-              <span className="truncate">{item.label}</span>
+              <span className="whitespace-nowrap">{item.label}</span>
             </button>
           );
         })}
         {/* Logout on Mobile only (inside nav) */}
         <button 
           onClick={onLogout}
-          className="md:hidden flex-1 flex flex-col items-center justify-center gap-1 px-2 py-2 rounded-xl text-[10px] font-semibold text-slate-400 hover:text-rose-400 hover:bg-slate-800 transition-all"
+          className="md:hidden flex-1 flex flex-col items-center justify-center gap-1 px-1 py-2 rounded-xl text-[10px] font-semibold text-slate-400 hover:text-rose-400 hover:bg-slate-800 transition-all"
         >
           <LogOut className="w-5 h-5 shrink-0" />
-          <span className="truncate">로그아웃</span>
+          <span className="whitespace-nowrap">로그아웃</span>
         </button>
       </nav>
 

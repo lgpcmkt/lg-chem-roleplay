@@ -1,6 +1,7 @@
 import React from 'react';
 import { DoctorType, Product } from '../types';
 import { ArrowLeft } from 'lucide-react';
+import { soundEffects } from '../utils/audioEffects';
 
 interface DoctorTypeSelectScreenProps {
   product: Product;
@@ -35,7 +36,10 @@ export const DoctorTypeSelectScreen: React.FC<DoctorTypeSelectScreenProps> = ({ 
           {doctorTypes.map((doc) => (
             <button
               key={doc.id}
-              onClick={() => onSelectDoctorType(doc.id)}
+              onClick={() => {
+                soundEffects.playClick();
+                onSelectDoctorType(doc.id);
+              }}
               className="w-full bg-white rounded-3xl p-5 flex items-center gap-5 shadow-[0_2px_10px_rgba(0,0,0,0.04)] hover:shadow-[0_8px_20px_rgba(0,0,0,0.08)] active:scale-[0.98] transition-all border border-slate-100"
             >
               {/* Doctor Avatar/Image */}

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Product } from '../types';
+import { soundEffects } from '../utils/audioEffects';
 
 interface ProductSelectScreenProps {
   products: Product[];
@@ -25,7 +26,10 @@ export const ProductSelectScreen: React.FC<ProductSelectScreenProps> = ({ produc
           {products.map((product) => (
             <button
               key={product.id}
-              onClick={() => onSelectProduct(product.id)}
+              onClick={() => {
+                soundEffects.playClick();
+                onSelectProduct(product.id);
+              }}
               className="w-full bg-white rounded-3xl p-5 flex items-center gap-5 shadow-[0_2px_10px_rgba(0,0,0,0.04)] hover:shadow-[0_8px_20px_rgba(0,0,0,0.08)] active:scale-[0.98] transition-all border border-slate-100"
             >
               {/* Product Image */}

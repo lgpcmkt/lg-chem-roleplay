@@ -3,6 +3,7 @@ const AudioCtx = typeof window !== 'undefined' ? (window.AudioContext || (window
 const sounds = {
   fail: typeof Audio !== 'undefined' ? new Audio('https://cdn.freesound.org/previews/171/171673_2437358-lq.mp3') : null,
   knock: typeof Audio !== 'undefined' ? new Audio('https://actions.google.com/sounds/v1/doors/wood_door_knock_1.ogg') : null,
+  click: typeof Audio !== 'undefined' ? new Audio('https://actions.google.com/sounds/v1/ui/button_click.ogg') : null,
 };
 
 function playTone(frequency: number, duration: number, type: OscillatorType = 'sine', volume = 0.15) {
@@ -30,6 +31,12 @@ export const soundEffects = {
     if (sounds.knock) {
       sounds.knock.currentTime = 0;
       sounds.knock.play().catch(e => console.log('Audio play failed:', e));
+    }
+  },
+  playClick: () => {
+    if (sounds.click) {
+      sounds.click.currentTime = 0;
+      sounds.click.play().catch(e => console.log('Audio play failed:', e));
     }
   },
   playDoorOpen: () => playTone(440, 0.3, 'sine', 0.1),

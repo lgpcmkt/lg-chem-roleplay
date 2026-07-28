@@ -59,7 +59,7 @@ export const FlashDoctorRoom: React.FC<FlashDoctorRoomProps> = ({
 
     const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
     if (!SpeechRecognition) {
-      alert('현재 브라우저에서는 음성 인식을 지원하지 않습니다. Chrome 브라우저를 사용해 주세요.');
+      alert('스마트폰이나 현재 브라우저에서는 마이크 음성 인식을 지원하지 않거나 권한이 차단되었습니다. (사파리나 크롬 최신 버전을 권장합니다)');
       return;
     }
 
@@ -86,6 +86,11 @@ export const FlashDoctorRoom: React.FC<FlashDoctorRoomProps> = ({
 
     recognition.onerror = (event: any) => {
       console.error('Speech recognition error', event.error);
+      if (event.error === 'not-allowed') {
+        alert('마이크 사용 권한이 차단되었습니다. 기기 설정에서 마이크 권한을 허용해주세요.');
+      } else {
+        alert(`음성 인식 오류가 발생했습니다: ${event.error}`);
+      }
       setIsRecording(false);
     };
 
@@ -184,7 +189,7 @@ export const FlashDoctorRoom: React.FC<FlashDoctorRoomProps> = ({
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={handleKeyDown}
-                placeholder={isRecording ? "음성을 듣고 있습니다..." : "디테일링 메시지를 입력하거나 마이크로 말씀하세요..."}
+                placeholder={isRecording ? "듣고 있습니다..." : "메시지 입력..."}
                 rows={1}
                 disabled={isLoading}
                   className={`flex-1 pl-4 pr-12 py-3 border rounded-2xl text-sm text-slate-900 resize-none focus:outline-none focus:ring-2 transition-all disabled:opacity-50 ${

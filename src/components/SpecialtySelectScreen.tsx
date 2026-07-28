@@ -1,6 +1,7 @@
 import React from 'react';
 import { Product } from '../types';
 import { ArrowLeft } from 'lucide-react';
+import { soundEffects } from '../utils/audioEffects';
 
 interface SpecialtySelectScreenProps {
   product: Product;
@@ -31,7 +32,10 @@ export const SpecialtySelectScreen: React.FC<SpecialtySelectScreenProps> = ({ pr
           {product.specialties.map((specialty) => (
             <button
               key={specialty.id}
-              onClick={() => onSelectSpecialty(specialty.id)}
+              onClick={() => {
+                soundEffects.playClick();
+                onSelectSpecialty(specialty.id);
+              }}
               className="w-full bg-white rounded-3xl p-5 flex items-center gap-5 shadow-[0_2px_10px_rgba(0,0,0,0.04)] hover:shadow-[0_8px_20px_rgba(0,0,0,0.08)] active:scale-[0.98] transition-all border border-slate-100"
             >
               <div className="w-14 h-14 shrink-0 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-2xl border border-blue-100">
