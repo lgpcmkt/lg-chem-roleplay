@@ -63,18 +63,18 @@ const PRODUCT_CHECKLIST: Record<string, { key: string; label: string; regex: Reg
     { key: 'closing', label: '클로징으로 제미다파 처방을 유도하세요.', regex: /처방|추천|권유|사용|적용/i },
   ],
   vimovo: [
-    { key: 'coating', label: '5중 코팅 기전', regex: /코팅|속방|장용|에스오메프라졸|방출/i },
-    { key: 'ulcerData', label: '위궤양 임상데이터', regex: /위궤양|4\.1|23\.1|PN400|위장관/i },
-    { key: 'compliance', label: '1정 복합 편의성', regex: /1정|복합|ppi|편의|순응도/i },
-    { key: 'safety', label: '안전성', regex: /안전|부작용|심혈관|위장/i },
-    { key: 'closing', label: '클로징', regex: /처방|추천|권유|사용|적용/i },
+    { key: 'coating', label: '5중 코팅 기전의 특장점을 상세히 설명하세요.', regex: /코팅|속방|장용|에스오메프라졸|방출/i },
+    { key: 'ulcerData', label: 'PN400 연구 기반 위궤양 예방 데이터를 언급하세요.', regex: /위궤양|4\.1|23\.1|PN400|위장관/i },
+    { key: 'compliance', label: '1정 복합제로 인한 환자 복약 순응도 개선을 강조하세요.', regex: /1정|복합|ppi|편의|순응도/i },
+    { key: 'safety', label: '장기 복용 시의 심혈관 및 위장관 안전성을 설명하세요.', regex: /안전|부작용|심혈관|위장/i },
+    { key: 'closing', label: '클로징으로 비모보 처방을 적극 유도하세요.', regex: /처방|추천|권유|사용|적용/i },
   ],
   nephoxil: [
-    { key: 'phosphate', label: '인결합 기전', regex: /인결합|인산|phosphate|인 감소|비칼슘/i },
-    { key: 'iron', label: '철분 보충', regex: /철분|iron|ferric|esa|주사제|보충/i },
-    { key: 'kdigo', label: 'KDIGO 가이드라인', regex: /kdigo|가이드라인|빈혈|모니터링/i },
-    { key: 'competitor', label: '경쟁품 차별', regex: /세벨라머|칼슘계|석회화|경쟁/i },
-    { key: 'closing', label: '클로징', regex: /처방|추천|권유|사용|적용/i },
+    { key: 'phosphate', label: '비칼슘계 인결합제로서의 인 감소 효과를 설명하세요.', regex: /인결합|인산|phosphate|인 감소|비칼슘/i },
+    { key: 'iron', label: '철분 보충 효과로 인한 ESA 주사제 절감 이점을 언급하세요.', regex: /철분|iron|ferric|esa|주사제|보충/i },
+    { key: 'kdigo', label: 'KDIGO 가이드라인에 기반한 네폭실의 적합성을 강조하세요.', regex: /kdigo|가이드라인|빈혈|모니터링/i },
+    { key: 'competitor', label: '세벨라머 등 타 경쟁품 대비 차별점을 논리적으로 제시하세요.', regex: /세벨라머|칼슘계|석회화|경쟁/i },
+    { key: 'closing', label: '클로징으로 네폭실 처방을 적극 유도하세요.', regex: /처방|추천|권유|사용|적용/i },
   ],
 };
 
