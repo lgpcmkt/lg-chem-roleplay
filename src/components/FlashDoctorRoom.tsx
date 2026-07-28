@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Send, RotateCcw, MessageCircle, CheckCircle2, Circle, Mic, Volume2, Square } from 'lucide-react';
+import { Send, RotateCcw, MessageCircle, CheckCircle2, Circle, Mic, Volume2, Square, ArrowLeft } from 'lucide-react';
 import { ChatMessage, Product, DoctorType, Specialty } from '../types';
 import { TypewriterText } from './TypewriterText';
 import { soundEffects } from '../utils/audioEffects';
@@ -16,11 +16,12 @@ interface FlashDoctorRoomProps {
   turnCount: number;
   checklistStatus: Record<string, boolean>;
   checklistItems: { key: string; label: string }[];
+  onBack?: () => void;
 }
 
 export const FlashDoctorRoom: React.FC<FlashDoctorRoomProps> = ({
   product, specialty, doctorType, chatHistory, onSendMessage, onEndRoleplay,
-  isLoading, isFinalTurn, turnCount, checklistStatus, checklistItems,
+  isLoading, isFinalTurn, turnCount, checklistStatus, checklistItems, onBack
 }) => {
   const [input, setInput] = useState('');
   const [isRecording, setIsRecording] = useState(false);
@@ -170,6 +171,14 @@ export const FlashDoctorRoom: React.FC<FlashDoctorRoomProps> = ({
       {/* Top Bar */}
       <div className="shrink-0 px-4 py-3 bg-white border-b border-slate-200 shadow-sm flex items-center justify-between">
         <div className="flex items-center gap-2 min-w-0 flex-1">
+          {onBack && (
+            <button 
+              onClick={onBack} 
+              className="shrink-0 w-8 h-8 flex items-center justify-center rounded-full bg-slate-50 hover:bg-slate-100 text-slate-500 transition-colors mr-1 active:scale-95"
+            >
+              <ArrowLeft className="w-4 h-4" />
+            </button>
+          )}
           <div className={`shrink-0 w-10 h-10 rounded-xl bg-gradient-to-br ${product.color} text-white flex items-center justify-center text-lg shadow-md`}>
             {product.icon}
           </div>

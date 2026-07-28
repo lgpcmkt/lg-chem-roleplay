@@ -435,6 +435,14 @@ export default function App() {
             turnCount={turnCount}
             checklistStatus={checklistStatus}
             checklistItems={checklistItems.map(i => ({ key: i.key, label: i.label }))}
+            onBack={() => {
+              setSelectedProductId('');
+              setSelectedSpecialtyId('');
+              setSelectedDoctorTypeId('');
+              setChatHistory([]);
+              setChecklistStatus({});
+              setScreen('productSelect');
+            }}
           />
         ) : null;
       case 'evaluation':
