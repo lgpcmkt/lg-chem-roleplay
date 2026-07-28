@@ -16,6 +16,7 @@ export interface Specialty {
   id: string;
   name: string;
   icon: string;
+  imageUrl?: string;
   description: string;
 }
 
