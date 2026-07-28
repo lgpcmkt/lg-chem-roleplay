@@ -106,10 +106,7 @@ export const FlashDoctorRoom: React.FC<FlashDoctorRoomProps> = ({
         // Zemiglo / Zemimet
         .replace(/재미글로/g, '제미글로').replace(/제미 글로/g, '제미글로')
         .replace(/재미메트/g, '제미메트').replace(/제미 매트/g, '제미메트')
-        .replace(/재미매트/g, '제미메트').replace(/제미 메트/g, '제미메트')
-        // Yvoire / Eutropin
-        .replace(/이브아르/g, '이브아르').replace(/이 브아르/g, '이브아르')
-        .replace(/유트로핀/g, '유트로핀').replace(/유트 로핀/g, '유트로핀');
+        .replace(/재미매트/g, '제미메트').replace(/제미 메트/g, '제미메트');
     };
 
     let originalInput = input;
@@ -124,7 +121,7 @@ export const FlashDoctorRoom: React.FC<FlashDoctorRoomProps> = ({
           interimTranscript += event.results[i][0].transcript;
         }
       }
-      
+
       let currentText = originalInput + (originalInput && (finalTranscript || interimTranscript) ? ' ' : '') + finalTranscript + interimTranscript;
       setInput(applyMedicalTerms(currentText));
 
@@ -171,9 +168,6 @@ export const FlashDoctorRoom: React.FC<FlashDoctorRoomProps> = ({
           </div>
         </div>
         <div className="flex items-center gap-2 text-xs shrink-0 ml-2">
-          <span className="px-3 py-1.5 rounded-full bg-blue-50 text-blue-700 font-bold border border-blue-100 hidden sm:inline-block">
-            Turn {userTurnCount}/6
-          </span>
           <button onClick={onEndRoleplay}
             className="px-4 py-2 bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-bold rounded-xl shadow-md shadow-emerald-500/20 hover:from-emerald-700 hover:to-teal-700 transition-all flex items-center gap-1.5">
             <MessageCircle className="w-3.5 h-3.5" />
@@ -187,7 +181,7 @@ export const FlashDoctorRoom: React.FC<FlashDoctorRoomProps> = ({
       <div className="flex-1 flex min-h-0 overflow-hidden">
         {/* Chat Area */}
         <div className="flex-1 flex flex-col min-w-0 overflow-hidden relative">
-          
+
           {/* Hospital Background */}
           <div className="absolute inset-0 bg-slate-50 opacity-90 z-0">
             <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?q=80&w=2053&auto=format&fit=crop')] bg-cover bg-center opacity-10 mix-blend-luminosity"></div>
@@ -206,15 +200,14 @@ export const FlashDoctorRoom: React.FC<FlashDoctorRoomProps> = ({
                   )
                 )}
                 <div className="flex flex-col gap-1 items-start max-w-[85%] md:max-w-[75%]">
-                  <div className={`px-4 py-3 rounded-2xl text-sm font-medium leading-relaxed shadow-sm break-words whitespace-pre-wrap ${
-                    msg.role === 'user'
+                  <div className={`px-4 py-3 rounded-2xl text-sm font-medium leading-relaxed shadow-sm break-words whitespace-pre-wrap ${msg.role === 'user'
                       ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-br-sm'
                       : 'bg-white/95 backdrop-blur-sm text-slate-800 border border-slate-200/50 rounded-bl-sm'
-                  }`}>
+                    }`}>
                     {msg.content}
                   </div>
                   {msg.role === 'assistant' && (
-                    <button 
+                    <button
                       onClick={() => handleSpeak(msg.content)}
                       className="ml-1 flex items-center gap-1 text-[10px] text-slate-400 hover:text-blue-500 transition-colors"
                     >
@@ -256,32 +249,30 @@ export const FlashDoctorRoom: React.FC<FlashDoctorRoomProps> = ({
                 placeholder={isRecording ? "듣고 있습니다..." : "메시지 입력..."}
                 rows={1}
                 disabled={isLoading}
-                  className={`flex-1 pl-4 pr-12 py-3 border rounded-2xl text-sm text-slate-900 resize-none focus:outline-none focus:ring-2 transition-all disabled:opacity-50 ${
-                    isRecording 
-                      ? 'bg-rose-50 border-rose-300 focus:border-rose-500 focus:ring-rose-500/20 text-rose-900' 
-                      : 'bg-slate-50 border-slate-200 focus:border-blue-500 focus:ring-blue-500/20'
+                className={`flex-1 pl-4 pr-12 py-3 border rounded-2xl text-sm text-slate-900 resize-none focus:outline-none focus:ring-2 transition-all disabled:opacity-50 ${isRecording
+                    ? 'bg-rose-50 border-rose-300 focus:border-rose-500 focus:ring-rose-500/20 text-rose-900'
+                    : 'bg-slate-50 border-slate-200 focus:border-blue-500 focus:ring-blue-500/20'
                   }`}
-                  style={{ maxHeight: '120px' }}
-                />
-                
-                <button 
-                  onClick={toggleRecording}
-                  disabled={isLoading}
-                  className={`absolute right-16 bottom-1.5 w-9 h-9 rounded-xl flex items-center justify-center transition-all disabled:opacity-40 ${
-                    isRecording 
-                      ? 'bg-rose-100 text-rose-600 animate-pulse' 
-                      : 'bg-slate-100 text-slate-400 hover:bg-slate-200 hover:text-slate-600'
-                  }`}
-                >
-                  <Mic className="w-4 h-4" />
-                </button>
+                style={{ maxHeight: '120px' }}
+              />
 
-                <button onClick={handleSend} disabled={!input.trim() || isLoading}
-                  className="w-12 h-12 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-2xl flex items-center justify-center shadow-md hover:shadow-lg disabled:opacity-40 disabled:cursor-not-allowed transition-all active:scale-95">
-                  <Send className="w-5 h-5" />
-                </button>
-              </div>
+              <button
+                onClick={toggleRecording}
+                disabled={isLoading}
+                className={`absolute right-16 bottom-1.5 w-9 h-9 rounded-xl flex items-center justify-center transition-all disabled:opacity-40 ${isRecording
+                    ? 'bg-rose-100 text-rose-600 animate-pulse'
+                    : 'bg-slate-100 text-slate-400 hover:bg-slate-200 hover:text-slate-600'
+                  }`}
+              >
+                <Mic className="w-4 h-4" />
+              </button>
+
+              <button onClick={handleSend} disabled={!input.trim() || isLoading}
+                className="w-12 h-12 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-2xl flex items-center justify-center shadow-md hover:shadow-lg disabled:opacity-40 disabled:cursor-not-allowed transition-all active:scale-95">
+                <Send className="w-5 h-5" />
+              </button>
             </div>
+          </div>
         </div>
 
         {/* Side Checklist */}
@@ -292,9 +283,8 @@ export const FlashDoctorRoom: React.FC<FlashDoctorRoomProps> = ({
           </h3>
           <div className="space-y-2.5">
             {checklistItems.map((item) => (
-              <div key={item.key} className={`flex items-center gap-2 text-xs font-medium transition-all ${
-                checklistStatus[item.key] ? 'text-emerald-600' : 'text-slate-400'
-              }`}>
+              <div key={item.key} className={`flex items-center gap-2 text-xs font-medium transition-all ${checklistStatus[item.key] ? 'text-emerald-600' : 'text-slate-400'
+                }`}>
                 {checklistStatus[item.key] ? (
                   <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
                 ) : (

@@ -12,7 +12,7 @@ interface SidebarProps {
 export const Sidebar: React.FC<SidebarProps> = ({ employeeInfo, currentView, onNavigate, onLogout }) => {
   const navItems = [
     { id: 'dashboard', label: '디테일링', icon: Home },
-    { id: 'gradebook', label: '성적표', icon: BookOpen },
+    { id: 'gradebook', label: '학습기록', icon: BookOpen },
   ];
 
   return (
@@ -37,7 +37,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ employeeInfo, currentView, onN
             <button
               key={item.id}
               onClick={() => onNavigate(item.id)}
-              className={`flex-1 md:w-full flex flex-col md:flex-row items-center justify-center md:justify-start gap-1 md:gap-3 px-1 md:px-3 py-2 md:py-2.5 rounded-xl text-[10px] md:text-sm font-semibold transition-all ${
+              className={`flex-1 md:flex-none md:w-full flex flex-col md:flex-row items-center justify-center md:justify-start gap-1 md:gap-3 px-1 md:px-3 py-2 md:py-2.5 rounded-xl text-[10px] md:text-sm font-semibold transition-all ${
                 isActive
                   ? 'bg-blue-600/20 text-blue-400'
                   : 'text-slate-400 hover:text-white hover:bg-slate-800'
@@ -51,7 +51,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ employeeInfo, currentView, onN
         {/* Logout on Mobile only (inside nav) */}
         <button 
           onClick={onLogout}
-          className="md:hidden flex-1 flex flex-col items-center justify-center gap-1 px-1 py-2 rounded-xl text-[10px] font-semibold text-slate-400 hover:text-rose-400 hover:bg-slate-800 transition-all"
+          className="md:hidden flex-1 md:flex-none flex flex-col items-center justify-center gap-1 px-1 py-2 rounded-xl text-[10px] font-semibold text-slate-400 hover:text-rose-400 hover:bg-slate-800 transition-all"
         >
           <LogOut className="w-5 h-5 shrink-0" />
           <span className="whitespace-nowrap">로그아웃</span>
