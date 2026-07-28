@@ -70,12 +70,25 @@ export const FlashDoctorRoom: React.FC<FlashDoctorRoomProps> = ({
 
     const applyMedicalTerms = (text: string) => {
       return text
+        // DPP-4i variations
         .replace(/디피포/g, 'DPP-4i')
         .replace(/디 피 포/g, 'DPP-4i')
+        .replace(/디피피포/g, 'DPP-4i')
+        .replace(/디 피 피 포/g, 'DPP-4i')
+        .replace(/dpp4/gi, 'DPP-4i')
+        // SGLT-2i variations
         .replace(/에스지엘티투/g, 'SGLT-2i')
         .replace(/에스 지 엘 티 투/g, 'SGLT-2i')
+        .replace(/sglt2/gi, 'SGLT-2i')
+        // FDC variations
         .replace(/에프디씨/g, 'FDC')
-        .replace(/에프 디 씨/g, 'FDC');
+        .replace(/에프 디 씨/g, 'FDC')
+        .replace(/fdc/gi, 'FDC')
+        // 제미다파 variations
+        .replace(/제 이다파/g, '제미다파')
+        .replace(/제미 다파/g, '제미다파')
+        .replace(/재미다파/g, '제미다파')
+        .replace(/제미다 파/g, '제미다파');
     };
 
     let originalInput = input;
