@@ -19,9 +19,9 @@ const PRODUCTS: Record<string, Product> = {
     indication: '2형 당뇨병 치료 (복합제)', tagline: 'SWITCHING 연구 기반 혈당 조절 전략',
     color: 'from-blue-600 to-indigo-700', icon: '💊', imageUrl: '/images/zemidapa.jpg',
     specialties: [
-      { id: 'cardio', name: '순환기내과', icon: '❤️', imageUrl: 'https://images.unsplash.com/photo-1551076805-e1869033e561?w=300&q=80', description: 'SGLT-2i 심혈관 보호 관점' },
-      { id: 'endocrine', name: '내분비내과', icon: '🔬', imageUrl: 'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?w=300&q=80', description: '당뇨 혈당 조절 전문' },
-      { id: 'nephro', name: '신장내과', icon: '🫘', imageUrl: 'https://images.unsplash.com/photo-1581594693702-fbdc51b2763b?w=300&q=80', description: 'eGFR/신장 보호 관점' },
+      { id: 'cardio', name: '순환기내과', icon: '❤️', imageUrl: 'https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=300&q=80', description: 'SGLT-2i 심혈관 보호 관점' },
+      { id: 'endocrine', name: '내분비내과', icon: '🔬', imageUrl: 'https://images.unsplash.com/photo-1538108149393-fbbd81895907?w=300&q=80', description: '당뇨 혈당 조절 전문' },
+      { id: 'nephro', name: '신장내과', icon: '🫘', imageUrl: 'https://images.unsplash.com/photo-1582560475093-ba66accbc424?w=300&q=80', description: 'eGFR/신장 보호 관점' },
     ],
   },
   vimovo: {
@@ -30,9 +30,9 @@ const PRODUCTS: Record<string, Product> = {
     indication: 'NSAID 위궤양 위험 관절염 환자', tagline: '5중 코팅으로 위장 보호 + 강력 소염진통',
     color: 'from-emerald-600 to-teal-700', icon: '🛡️', imageUrl: '/images/vimovo.jpg',
     specialties: [
-      { id: 'rheumatology', name: '류마티스내과', icon: '🦴', imageUrl: 'https://images.unsplash.com/photo-1582560475093-ba66accbc424?w=300&q=80', description: '류마티스/골관절염 전문' },
+      { id: 'rheumatology', name: '류마티스내과', icon: '🦴', imageUrl: 'https://images.unsplash.com/photo-1551076805-e1869033e561?w=300&q=80', description: '류마티스/골관절염 전문' },
       { id: 'orthopedics', name: '정형외과', icon: '🏥', imageUrl: 'https://images.unsplash.com/photo-1505751172876-fa1923c5c528?w=300&q=80', description: '근골격계 통증 관리' },
-      { id: 'neurology', name: '신경과', icon: '🧠', imageUrl: 'https://images.unsplash.com/photo-1538108149393-fbbd81895907?w=300&q=80', description: '통증/신경 질환 관점' },
+      { id: 'neurology', name: '신경과', icon: '🧠', imageUrl: 'https://images.unsplash.com/photo-1516549655169-df83a0774514?w=300&q=80', description: '통증/신경 질환 관점' },
     ],
   },
   nephoxil: {
@@ -41,9 +41,9 @@ const PRODUCTS: Record<string, Product> = {
     indication: '혈액투석 CKD 환자의 고인산혈증', tagline: '인 감소 + 철분 보충, 하나로 해결',
     color: 'from-orange-600 to-red-700', icon: '🩸', imageUrl: '/images/nephoxil.jpg',
     specialties: [
-      { id: 'nephro_ckd', name: '신장내과', icon: '🫘', imageUrl: 'https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=300&q=80', description: '투석 환자 인/철분 관리' },
-      { id: 'endocrine_ckd', name: '내분비내과', icon: '🔬', imageUrl: 'https://images.unsplash.com/photo-1579684385127-1ef15d508118?w=300&q=80', description: 'CKD 대사 합병증 관리' },
-      { id: 'general_internal', name: '일반내과', icon: '🩺', imageUrl: 'https://images.unsplash.com/photo-1516549655169-df83a0774514?w=300&q=80', description: '만성 질환 예방 관리' },
+      { id: 'nephro_ckd', name: '신장내과', icon: '🫘', imageUrl: 'https://images.unsplash.com/photo-1579684385127-1ef15d508118?w=300&q=80', description: '투석 환자 인/철분 관리' },
+      { id: 'endocrine_ckd', name: '내분비내과', icon: '🔬', imageUrl: 'https://images.unsplash.com/photo-1581594693702-fbdc51b2763b?w=300&q=80', description: 'CKD 대사 합병증 관리' },
+      { id: 'general_internal', name: '일반내과', icon: '🩺', imageUrl: 'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?w=300&q=80', description: '만성 질환 예방 관리' },
     ],
   },
 };

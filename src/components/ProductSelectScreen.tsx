@@ -30,7 +30,7 @@ export const ProductSelectScreen: React.FC<ProductSelectScreenProps> = ({ produc
                 soundEffects.playClick();
                 onSelectProduct(product.id);
               }}
-              className="w-full bg-white rounded-3xl p-5 flex items-center gap-5 shadow-[0_2px_10px_rgba(0,0,0,0.04)] hover:shadow-[0_8px_20px_rgba(0,0,0,0.08)] active:scale-[0.98] transition-all border border-slate-100"
+              className="w-full bg-white rounded-3xl p-5 md:p-6 flex items-center gap-5 md:gap-6 shadow-[0_2px_10px_rgba(0,0,0,0.04)] hover:shadow-[0_8px_20px_rgba(0,0,0,0.08)] active:scale-[0.98] transition-all border border-slate-100 group"
             >
               {/* Product Image */}
               <div className="w-16 h-16 shrink-0 rounded-2xl bg-slate-50 flex items-center justify-center p-2 border border-slate-100">

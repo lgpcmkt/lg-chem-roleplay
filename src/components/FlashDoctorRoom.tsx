@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Send, RotateCcw, MessageCircle, CheckCircle2, Circle, Mic, Volume2 } from 'lucide-react';
+import { Send, RotateCcw, MessageCircle, CheckCircle2, Circle, Mic, Volume2, Square } from 'lucide-react';
 import { ChatMessage, Product, DoctorType, Specialty } from '../types';
 import { TypewriterText } from './TypewriterText';
 import { soundEffects } from '../utils/audioEffects';
@@ -24,6 +24,7 @@ export const FlashDoctorRoom: React.FC<FlashDoctorRoomProps> = ({
 }) => {
   const [input, setInput] = useState('');
   const [isRecording, setIsRecording] = useState(false);
+  const [speakingMsgId, setSpeakingMsgId] = useState<string | null>(null);
   const chatEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const recognitionRef = useRef<any>(null);
@@ -47,14 +48,27 @@ export const FlashDoctorRoom: React.FC<FlashDoctorRoomProps> = ({
     }
   };
 
-  const handleSpeak = (text: string) => {
+  const handleSpeak = (msgId: string, text: string) => {
     if ('speechSynthesis' in window) {
+      if (speakingMsgId === msgId) {
+        window.speechSynthesis.cancel();
+        setSpeakingMsgId(null);
+        return;
+      }
+      
       window.speechSynthesis.cancel();
       const utterance = new SpeechSynthesisUtterance(text);
       utterance.lang = 'ko-KR';
-      utterance.rate = 1.1; // 살짝 빠르게 설정
-      utterance.pitch = doctorType.id.includes('internal') ? 0.9 : 1.0; // 의사 타입별 미세한 목소리 톤 변화
+      utterance.rate = 1.1;
+      
+      // friendly(김민희 과장)는 여성(높은 피치), 나머지는 남성(낮은 피치)
+      utterance.pitch = doctorType.id === 'friendly' ? 1.3 : 0.6; 
+      
+      utterance.onend = () => setSpeakingMsgId(null);
+      utterance.onerror = () => setSpeakingMsgId(null);
+      
       window.speechSynthesis.speak(utterance);
+      setSpeakingMsgId(msgId);
     } else {
       alert('현재 기기에서는 음성 듣기를 지원하지 않습니다.');
     }
@@ -208,11 +222,22 @@ export const FlashDoctorRoom: React.FC<FlashDoctorRoomProps> = ({
                   </div>
                   {msg.role === 'assistant' && (
                     <button
-                      onClick={() => handleSpeak(msg.content)}
-                      className="ml-1 flex items-center gap-1 text-[10px] text-slate-400 hover:text-blue-500 transition-colors"
+                      onClick={() => handleSpeak(msg.id, msg.content)}
+                      className={`ml-1 flex items-center gap-1 text-[10px] transition-colors ${
+                        speakingMsgId === msg.id ? 'text-blue-600 font-bold animate-pulse' : 'text-slate-400 hover:text-blue-500'
+                      }`}
                     >
-                      <Volume2 className="w-3.5 h-3.5" />
-                      <span>음성 듣기</span>
+                      {speakingMsgId === msg.id ? (
+                        <>
+                          <Square className="w-3.5 h-3.5 fill-blue-600" />
+                          <span>중단하기</span>
+                        </>
+                      ) : (
+                        <>
+                          <Volume2 className="w-3.5 h-3.5" />
+                          <span>음성 듣기</span>
+                        </>
+                      )}
                     </button>
                   )}
                 </div>
