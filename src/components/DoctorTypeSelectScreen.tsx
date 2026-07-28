@@ -13,8 +13,8 @@ interface DoctorTypeSelectScreenProps {
 
 export const DoctorTypeSelectScreen: React.FC<DoctorTypeSelectScreenProps> = ({ product, specialtyName, doctorTypes, onSelectDoctorType, onBack }) => {
   return (
-    <div className="flex-1 flex flex-col items-center bg-slate-50 p-6 overflow-y-auto w-full h-full">
-      <div className="w-full max-w-md pt-4 pb-8 animate-fadeIn">
+    <div className="flex-1 flex flex-col items-center justify-center bg-slate-50 min-h-0 overflow-y-auto w-full px-4">
+      <div className="w-full max-w-md md:max-w-3xl pt-8 pb-8 animate-fadeIn">
         
         {/* Back Button */}
         <button onClick={onBack} className="w-10 h-10 flex items-center justify-center rounded-full bg-white shadow-sm border border-slate-200 text-slate-600 mb-6 hover:bg-slate-50 active:scale-95 transition-all">
@@ -31,8 +31,8 @@ export const DoctorTypeSelectScreen: React.FC<DoctorTypeSelectScreenProps> = ({ 
           </p>
         </div>
 
-        {/* Doctor Type List */}
-        <div className="space-y-4">
+        {/* Doctor List */}
+        <div className="space-y-4 md:grid md:grid-cols-2 md:gap-5 md:space-y-0">
           {doctorTypes.map((doc) => (
             <button
               key={doc.id}

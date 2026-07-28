@@ -11,8 +11,8 @@ interface SpecialtySelectScreenProps {
 
 export const SpecialtySelectScreen: React.FC<SpecialtySelectScreenProps> = ({ product, onSelectSpecialty, onBack }) => {
   return (
-    <div className="flex-1 flex flex-col items-center bg-slate-50 p-6 overflow-y-auto w-full h-full">
-      <div className="w-full max-w-md pt-4 pb-8 animate-fadeIn">
+    <div className="flex-1 flex flex-col items-center justify-center bg-slate-50 min-h-0 overflow-y-auto w-full px-4">
+      <div className="w-full max-w-md md:max-w-3xl pt-8 pb-8 animate-fadeIn">
         
         {/* Back Button */}
         <button onClick={onBack} className="w-10 h-10 flex items-center justify-center rounded-full bg-white shadow-sm border border-slate-200 text-slate-600 mb-6 hover:bg-slate-50 active:scale-95 transition-all">
@@ -28,7 +28,7 @@ export const SpecialtySelectScreen: React.FC<SpecialtySelectScreenProps> = ({ pr
         </div>
 
         {/* Specialty List */}
-        <div className="space-y-4">
+        <div className="space-y-4 md:grid md:grid-cols-2 md:gap-5 md:space-y-0">
           {product.specialties.map((specialty) => (
             <button
               key={specialty.id}

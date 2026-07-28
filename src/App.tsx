@@ -467,7 +467,7 @@ export default function App() {
   };
 
   return (
-    <div className="h-screen flex flex-col-reverse md:flex-row bg-slate-50 overflow-hidden">
+    <div className="fixed inset-0 flex flex-col-reverse md:flex-row bg-slate-50 overflow-hidden">
       <Sidebar
         employeeInfo={employeeInfo}
         currentView={sideView === 'gradebook' ? 'gradebook' : 'dashboard'}

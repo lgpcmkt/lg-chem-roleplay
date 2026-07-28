@@ -10,8 +10,8 @@ interface ProductSelectScreenProps {
 
 export const ProductSelectScreen: React.FC<ProductSelectScreenProps> = ({ products, onSelectProduct, employeeName }) => {
   return (
-    <div className="flex-1 flex flex-col items-center bg-slate-50 p-6 overflow-y-auto w-full h-full">
-      <div className="w-full max-w-md pt-12 pb-8 animate-fadeIn">
+    <div className="flex-1 flex flex-col items-center justify-center bg-slate-50 min-h-0 overflow-y-auto w-full px-4">
+      <div className="w-full max-w-md md:max-w-3xl pt-12 pb-8 animate-fadeIn">
         
         {/* Title Area */}
         <div className="text-center mb-10 space-y-2">
@@ -22,7 +22,7 @@ export const ProductSelectScreen: React.FC<ProductSelectScreenProps> = ({ produc
         </div>
 
         {/* Product List */}
-        <div className="space-y-4">
+        <div className="space-y-4 md:grid md:grid-cols-2 md:gap-5 md:space-y-0">
           {products.map((product) => (
             <button
               key={product.id}
