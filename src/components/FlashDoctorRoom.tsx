@@ -100,19 +100,19 @@ export const FlashDoctorRoom: React.FC<FlashDoctorRoomProps> = ({
     <div className="flex-1 flex flex-col bg-slate-50 h-full">
       {/* Top Bar */}
       <div className="shrink-0 px-4 py-3 bg-white border-b border-slate-200 shadow-sm flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${product.color} text-white flex items-center justify-center text-lg shadow-md`}>
+        <div className="flex items-center gap-2 min-w-0 flex-1">
+          <div className={`shrink-0 w-10 h-10 rounded-xl bg-gradient-to-br ${product.color} text-white flex items-center justify-center text-lg shadow-md`}>
             {product.icon}
           </div>
-          <div>
+          <div className="min-w-0">
             <div className="flex items-center gap-2">
-              <h2 className="text-sm font-extrabold text-slate-900">{doctorType.name} {doctorType.title}</h2>
-              <span className="text-[10px] px-2 py-0.5 rounded-full bg-slate-100 text-slate-500 font-semibold">{specialty.name}</span>
+              <h2 className="text-sm font-extrabold text-slate-900 truncate">{doctorType.name} {doctorType.title}</h2>
+              <span className="shrink-0 text-[10px] px-2 py-0.5 rounded-full bg-slate-100 text-slate-500 font-semibold">{specialty.name}</span>
             </div>
-            <p className="text-[11px] text-slate-400 font-medium">{product.name} 디테일링</p>
+            <p className="text-[11px] text-slate-400 font-medium truncate">{product.name} 디테일링</p>
           </div>
         </div>
-        <div className="flex items-center gap-2 text-xs">
+        <div className="flex items-center gap-2 text-xs shrink-0 ml-2">
           <span className="px-3 py-1.5 rounded-full bg-blue-50 text-blue-700 font-bold border border-blue-100 hidden sm:inline-block">
             Turn {userTurnCount}/6
           </span>
@@ -147,7 +147,7 @@ export const FlashDoctorRoom: React.FC<FlashDoctorRoomProps> = ({
                     </div>
                   )
                 )}
-                <div className={`max-w-[75%] px-4 py-3 rounded-2xl text-sm font-medium leading-relaxed shadow-sm ${
+                <div className={`max-w-[85%] md:max-w-[75%] px-4 py-3 rounded-2xl text-sm font-medium leading-relaxed shadow-sm break-words whitespace-pre-wrap ${
                   msg.role === 'user'
                     ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-br-sm'
                     : 'bg-white/95 backdrop-blur-sm text-slate-800 border border-slate-200/50 rounded-bl-sm'

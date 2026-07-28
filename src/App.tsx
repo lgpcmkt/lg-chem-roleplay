@@ -462,14 +462,14 @@ export default function App() {
   };
 
   return (
-    <div className="h-screen flex bg-slate-50 overflow-hidden">
+    <div className="h-screen flex flex-col-reverse md:flex-row bg-slate-50 overflow-hidden">
       <Sidebar
         employeeInfo={employeeInfo}
         currentView={sideView === 'gradebook' ? 'gradebook' : 'dashboard'}
         onNavigate={handleNavigate}
         onLogout={handleLogout}
       />
-      <main className="flex-1 flex flex-col min-w-0 overflow-hidden">
+      <main className="flex-1 flex flex-col min-w-0 overflow-hidden relative pb-[env(safe-area-inset-bottom)]">
         {renderMainContent()}
       </main>
 
