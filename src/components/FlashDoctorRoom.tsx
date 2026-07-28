@@ -68,15 +68,34 @@ export const FlashDoctorRoom: React.FC<FlashDoctorRoomProps> = ({
     recognition.interimResults = true;
     recognition.continuous = false;
 
+    const applyMedicalTerms = (text: string) => {
+      return text
+        .replace(/디피포/g, 'DPP-4i')
+        .replace(/디 피 포/g, 'DPP-4i')
+        .replace(/에스지엘티투/g, 'SGLT-2i')
+        .replace(/에스 지 엘 티 투/g, 'SGLT-2i')
+        .replace(/에프디씨/g, 'FDC')
+        .replace(/에프 디 씨/g, 'FDC');
+    };
+
+    let originalInput = input;
+
     recognition.onresult = (event: any) => {
+      let interimTranscript = '';
       let finalTranscript = '';
       for (let i = event.resultIndex; i < event.results.length; ++i) {
         if (event.results[i].isFinal) {
           finalTranscript += event.results[i][0].transcript;
+        } else {
+          interimTranscript += event.results[i][0].transcript;
         }
       }
+      
+      let currentText = originalInput + (originalInput && (finalTranscript || interimTranscript) ? ' ' : '') + finalTranscript + interimTranscript;
+      setInput(applyMedicalTerms(currentText));
+
       if (finalTranscript) {
-        setInput((prev) => prev + (prev ? ' ' : '') + finalTranscript);
+        originalInput = originalInput + (originalInput ? ' ' : '') + applyMedicalTerms(finalTranscript);
       }
     };
 
