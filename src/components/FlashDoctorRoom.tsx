@@ -41,6 +41,10 @@ export const FlashDoctorRoom: React.FC<FlashDoctorRoomProps> = ({
     if (!trimmed || isLoading) return;
     onSendMessage(trimmed);
     setInput('');
+    if (isRecording) {
+      recognitionRef.current?.stop();
+      setIsRecording(false);
+    }
   };
 
   const handleSpeak = (text: string) => {
@@ -83,25 +87,29 @@ export const FlashDoctorRoom: React.FC<FlashDoctorRoomProps> = ({
 
     const applyMedicalTerms = (text: string) => {
       return text
-        // DPP-4i variations
-        .replace(/디피포/g, 'DPP-4i')
-        .replace(/디 피 포/g, 'DPP-4i')
-        .replace(/디피피포/g, 'DPP-4i')
-        .replace(/디 피 피 포/g, 'DPP-4i')
+        // DPP-4i
+        .replace(/디피포/g, 'DPP-4i').replace(/디 피 포/g, 'DPP-4i')
+        .replace(/디피피포/g, 'DPP-4i').replace(/디 피 피 포/g, 'DPP-4i')
         .replace(/dpp4/gi, 'DPP-4i')
-        // SGLT-2i variations
-        .replace(/에스지엘티투/g, 'SGLT-2i')
-        .replace(/에스 지 엘 티 투/g, 'SGLT-2i')
+        // SGLT-2i
+        .replace(/에스지엘티투/g, 'SGLT-2i').replace(/에스 지 엘 티 투/g, 'SGLT-2i')
         .replace(/sglt2/gi, 'SGLT-2i')
-        // FDC variations
-        .replace(/에프디씨/g, 'FDC')
-        .replace(/에프 디 씨/g, 'FDC')
+        // FDC
+        .replace(/에프디씨/g, 'FDC').replace(/에프 디 씨/g, 'FDC')
         .replace(/fdc/gi, 'FDC')
-        // 제미다파 variations
-        .replace(/제 이다파/g, '제미다파')
-        .replace(/제미 다파/g, '제미다파')
-        .replace(/재미다파/g, '제미다파')
-        .replace(/제미다 파/g, '제미다파');
+        // Zemidapa
+        .replace(/제 이다파/g, '제미다파').replace(/제미 다파/g, '제미다파')
+        .replace(/재미다파/g, '제미다파').replace(/제미다 파/g, '제미다파')
+        // Vimovo
+        .replace(/비무보/g, '비모보').replace(/비 무 보/g, '비모보')
+        .replace(/비모 보/g, '비모보').replace(/비 모보/g, '비모보')
+        // Zemiglo / Zemimet
+        .replace(/재미글로/g, '제미글로').replace(/제미 글로/g, '제미글로')
+        .replace(/재미메트/g, '제미메트').replace(/제미 매트/g, '제미메트')
+        .replace(/재미매트/g, '제미메트').replace(/제미 메트/g, '제미메트')
+        // Yvoire / Eutropin
+        .replace(/이브아르/g, '이브아르').replace(/이 브아르/g, '이브아르')
+        .replace(/유트로핀/g, '유트로핀').replace(/유트 로핀/g, '유트로핀');
     };
 
     let originalInput = input;
