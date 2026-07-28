@@ -56,11 +56,11 @@ const DOCTOR_TYPES: Record<string, DoctorType> = {
 
 const PRODUCT_CHECKLIST: Record<string, { key: string; label: string; regex: RegExp }[]> = {
   zemidapa: [
-    { key: 'switchingStudy', label: 'SWITCHING 연구', regex: /switching|스위칭|교체|switch/i },
-    { key: 'hba1c', label: 'HbA1c 강하', regex: /hba1c|혈당|강하|당화혈색소/i },
-    { key: 'tabletSize', label: '알약 크기 강조', regex: /크기|목넘김|시다프비아|순응도|작은|알약/i },
-    { key: 'safety', label: '안전성', regex: /안전|저혈당|부작용|내약성/i },
-    { key: 'closing', label: '클로징', regex: /처방|추천|권유|사용|적용/i },
+    { key: 'switchingStudy', label: 'SWITCHING 연구 디자인을 소개하세요.', regex: /switching|스위칭|교체|switch/i },
+    { key: 'hba1c', label: '각 군별 HbA1c 감소 효과를 자세히 언급하세요.', regex: /hba1c|혈당|강하|당화혈색소/i },
+    { key: 'safety', label: '각 군별 안전성 결과도 언급하세요.', regex: /안전|저혈당|부작용|내약성/i },
+    { key: 'tabletSize', label: '타 경쟁품 대비 작은 알약 크기 강조하세요.', regex: /크기|목넘김|시다프비아|순응도|작은|알약/i },
+    { key: 'closing', label: '클로징으로 제미다파 처방을 유도하세요.', regex: /처방|추천|권유|사용|적용/i },
   ],
   vimovo: [
     { key: 'coating', label: '5중 코팅 기전', regex: /코팅|속방|장용|에스오메프라졸|방출/i },
