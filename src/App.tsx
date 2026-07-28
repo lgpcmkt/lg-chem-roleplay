@@ -49,9 +49,9 @@ const PRODUCTS: Record<string, Product> = {
 };
 
 const DOCTOR_TYPES: Record<string, DoctorType> = {
-  strict: { id: 'strict', name: '최실리 원장', title: '원장', avatar: '🤨', imageUrl: '/images/doctor_strict_1785238829473.png', difficulty: '상', personality: '깐깐하고 상업적. 실질적 이득을 따지는 50대 원장.', focusArea: '실질적 경영 이득, 환자 만족도, 경쟁약 차별점' },
-  academic: { id: 'academic', name: '이학술 교수', title: '교수', avatar: '👨‍🏫', imageUrl: '/images/doctor_academic_1785238840727.png', difficulty: '최상', personality: '학술적이고 냉소적이며 시니컬. P-value와 연구 디자인 중시.', focusArea: '연구 디자인, 통계 유의성, 에비던스, 가이드라인' },
-  friendly: { id: 'friendly', name: '김민희 과장', title: '과장', avatar: '👩‍⚕️', imageUrl: '/images/doctor_friendly_1785238849913.png', difficulty: '중', personality: '30대 주니어. 친화적이지만 원장님 눈치를 봄.', focusArea: '원장 보고 명분, 안전성, 가이드라인, 환자 사례' },
+  strict: { id: 'strict', name: '최실리', title: '원장', avatar: '🤨', imageUrl: '/images/doctor_strict_1785238829473.png', difficulty: '상', personality: '깐깐하고 상업적. 실질적 이득을 따지는 50대 원장.', focusArea: '실질적 경영 이득, 환자 만족도, 경쟁약 차별점' },
+  academic: { id: 'academic', name: '이학술', title: '교수', avatar: '👨‍🏫', imageUrl: '/images/doctor_academic_1785238840727.png', difficulty: '최상', personality: '학술적이고 냉소적이며 시니컬. P-value와 연구 디자인 중시.', focusArea: '연구 디자인, 통계 유의성, 에비던스, 가이드라인' },
+  friendly: { id: 'friendly', name: '김민희', title: '과장', avatar: '👩‍⚕️', imageUrl: '/images/doctor_friendly_1785238849913.png', difficulty: '중', personality: '30대 주니어. 친화적이지만 원장님 눈치를 봄.', focusArea: '원장 보고 명분, 안전성, 가이드라인, 환자 사례' },
 };
 
 const PRODUCT_CHECKLIST: Record<string, { key: string; label: string; regex: RegExp }[]> = {

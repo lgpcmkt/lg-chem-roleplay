@@ -26,10 +26,10 @@ export const WaitingRoomScreen: React.FC<WaitingRoomScreenProps> = ({ doctorType
     <div className="flex-1 flex flex-col relative w-full h-full bg-slate-900 overflow-hidden">
       {/* Background Image (Hospital Corridor/Waiting area) */}
       <div 
-        className="absolute inset-0 bg-cover bg-center opacity-30 mix-blend-luminosity"
+        className={`absolute inset-0 bg-cover bg-center mix-blend-luminosity transition-all ${isKnocking ? 'animate-door-open' : 'opacity-30'}`}
         style={{ backgroundImage: "url('https://images.unsplash.com/photo-1538108149393-fbbd81895907?q=80&w=2128&auto=format&fit=crop')" }}
       />
-      <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/60 to-transparent" />
+      <div className={`absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/60 to-transparent transition-opacity duration-1000 ${isKnocking ? 'opacity-0' : 'opacity-100'}`} />
 
       {/* Content */}
       <div className="relative z-10 flex-1 flex flex-col justify-center items-center p-8 text-center animate-fadeIn">

@@ -2,7 +2,6 @@ const AudioCtx = typeof window !== 'undefined' ? (window.AudioContext || (window
 
 const sounds = {
   fail: typeof Audio !== 'undefined' ? new Audio('https://cdn.freesound.org/previews/171/171673_2437358-lq.mp3') : null,
-  knock: typeof Audio !== 'undefined' ? new Audio('https://actions.google.com/sounds/v1/doors/wood_door_knock_1.ogg') : null,
   click: typeof Audio !== 'undefined' ? new Audio('https://actions.google.com/sounds/v1/ui/button_click.ogg') : null,
 };
 
@@ -28,10 +27,26 @@ export const soundEffects = {
     sounds.fail?.play().catch(e => console.log('Audio play failed:', e));
   },
   playKnock: () => {
-    if (sounds.knock) {
-      sounds.knock.currentTime = 0;
-      sounds.knock.play().catch(e => console.log('Audio play failed:', e));
-    }
+    if (!AudioCtx) return;
+    try {
+      const ctx = new AudioCtx();
+      const playThump = (timeOffset: number) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(80, ctx.currentTime + timeOffset);
+        osc.frequency.exponentialRampToValueAtTime(10, ctx.currentTime + timeOffset + 0.1);
+        gain.gain.setValueAtTime(2.0, ctx.currentTime + timeOffset);
+        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + timeOffset + 0.1);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(ctx.currentTime + timeOffset);
+        osc.stop(ctx.currentTime + timeOffset + 0.1);
+      };
+      playThump(0);
+      playThump(0.15);
+      playThump(0.3);
+    } catch {}
   },
   playClick: () => {
     if (sounds.click) {
