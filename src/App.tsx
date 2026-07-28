@@ -15,7 +15,7 @@ import { GoogleSheetsModal } from './components/GoogleSheetsModal';
 const PRODUCTS: Record<string, Product> = {
   zemidapa: {
     id: 'zemidapa', name: '제미다파', nameEn: 'Zemidapa',
-    composition: '제미글립틴 50mg + 다파글리플로진 10mg (DPP-4i + SGLT-2i FDC)',
+    composition: '제미글립틴 50 mg + 다파글리플로진 10 mg',
     indication: '2형 당뇨병 치료 (복합제)', tagline: 'SWITCHING 연구 기반 혈당 조절 전략',
     color: 'from-blue-600 to-indigo-700', icon: '💊', imageUrl: '/images/zemidapa.jpg',
     specialties: [
@@ -347,9 +347,14 @@ export default function App() {
   };
 
   const handleLogout = () => {
-    setScreen('login');
     setEmployeeInfo(null);
-    handleNewProduct();
+    setSelectedProductId('');
+    setSelectedSpecialtyId('');
+    setSelectedDoctorTypeId('');
+    setChatHistory([]);
+    setEvaluation(null);
+    setIsFinalTurn(false);
+    setScreen('login');
   };
 
   const handleNavigate = (view: string) => {

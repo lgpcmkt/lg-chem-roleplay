@@ -10,7 +10,6 @@ interface EmployeeLoginModalProps {
 
 export const EmployeeLoginModal: React.FC<EmployeeLoginModalProps> = ({ onSave, currentInfo, isOpen }) => {
   const [employeeId, setEmployeeId] = useState(currentInfo?.employeeId || '');
-  const [name, setName] = useState(currentInfo?.name || '');
   const [error, setError] = useState('');
 
   if (!isOpen) return null;
@@ -18,9 +17,9 @@ export const EmployeeLoginModal: React.FC<EmployeeLoginModalProps> = ({ onSave, 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!employeeId.trim()) { setError('사번을 입력해 주세요.'); return; }
-    if (!name.trim()) { setError('이름을 입력해 주세요.'); return; }
     setError('');
-    onSave({ employeeId: employeeId.trim(), name: name.trim(), department: 'LG화학 영업본부' });
+    // 이름을 따로 묻지 않으므로 사번을 이름으로 임시 사용하거나 담당자로 표시
+    onSave({ employeeId: employeeId.trim(), name: employeeId.trim(), department: 'LG화학 영업본부' });
   };
 
   return (
@@ -41,16 +40,10 @@ export const EmployeeLoginModal: React.FC<EmployeeLoginModalProps> = ({ onSave, 
             <label className="block text-xs font-bold text-slate-700 mb-1">사번 <span className="text-rose-500">*</span></label>
             <div className="relative">
               <input type="text" value={employeeId} onChange={(e) => setEmployeeId(e.target.value)}
-                placeholder="예: 20240101" autoFocus
+                placeholder="예: 234353" autoFocus
                 className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-semibold text-slate-900 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:bg-white transition-all placeholder:text-slate-400" />
               <User className="absolute right-3.5 top-3.5 w-4 h-4 text-slate-400 pointer-events-none" />
             </div>
-          </div>
-          <div>
-            <label className="block text-xs font-bold text-slate-700 mb-1">이름 (성함) <span className="text-rose-500">*</span></label>
-            <input type="text" value={name} onChange={(e) => setName(e.target.value)}
-              placeholder="예: 홍길동"
-              className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-semibold text-slate-900 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:bg-white transition-all placeholder:text-slate-400" />
           </div>
           {error && <p className="text-xs text-rose-500 font-semibold text-center">{error}</p>}
           <button type="submit" className="w-full py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 active:scale-[0.98] text-white font-bold text-sm rounded-2xl shadow-lg shadow-blue-500/25 transition-all flex items-center justify-center gap-2">
