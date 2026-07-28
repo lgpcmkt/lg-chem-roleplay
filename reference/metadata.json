@@ -1,0 +1,10 @@
+{
+  "name": "제미다파 AI 롤플레이 시스템",
+  "description": "제미글립틴+다파글리플로진 복합제 제미다파(Zemidapa) MR 영업 역량 강화를 위한 AI 의사 페르소나 롤플레이 및 자동 채점 리포트 시스템",
+  "requestFramePermissions": [
+    "microphone"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

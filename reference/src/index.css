@@ -1,0 +1,18 @@
+@import "tailwindcss";
+
+@layer base {
+  body {
+    font-family: 'NanumSquare', 'NanumSquareRound', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+}
+
+@keyframes popBounce {
+  0% { transform: scale(0.92); opacity: 0.8; }
+  50% { transform: scale(1.05); }
+  70% { transform: scale(0.98); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.animate-pop-bounce {
+  animation: popBounce 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}

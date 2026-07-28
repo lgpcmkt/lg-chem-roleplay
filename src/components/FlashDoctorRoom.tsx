@@ -1,0 +1,247 @@
+import React, { useState, useRef, useEffect } from 'react';
+import { Send, RotateCcw, MessageCircle, CheckCircle2, Circle, Mic, Volume2 } from 'lucide-react';
+import { ChatMessage, Product, DoctorType, Specialty } from '../types';
+import { TypewriterText } from './TypewriterText';
+import { soundEffects } from '../utils/audioEffects';
+
+interface FlashDoctorRoomProps {
+  product: Product;
+  specialty: Specialty;
+  doctorType: DoctorType;
+  chatHistory: ChatMessage[];
+  onSendMessage: (message: string) => void;
+  onEndRoleplay: () => void;
+  isLoading: boolean;
+  isFinalTurn: boolean;
+  turnCount: number;
+  checklistStatus: Record<string, boolean>;
+  checklistItems: { key: string; label: string }[];
+}
+
+export const FlashDoctorRoom: React.FC<FlashDoctorRoomProps> = ({
+  product, specialty, doctorType, chatHistory, onSendMessage, onEndRoleplay,
+  isLoading, isFinalTurn, turnCount, checklistStatus, checklistItems,
+}) => {
+  const [input, setInput] = useState('');
+  const [isRecording, setIsRecording] = useState(false);
+  const chatEndRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLTextAreaElement>(null);
+  const recognitionRef = useRef<any>(null);
+
+  useEffect(() => {
+    chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [chatHistory, isLoading]);
+
+  useEffect(() => {
+    if (!isLoading) inputRef.current?.focus();
+  }, [isLoading]);
+
+  const handleSend = () => {
+    const trimmed = input.trim();
+    if (!trimmed || isLoading) return;
+    onSendMessage(trimmed);
+    setInput('');
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSend();
+    }
+  };
+
+  const toggleRecording = () => {
+    if (isRecording) {
+      recognitionRef.current?.stop();
+      setIsRecording(false);
+      return;
+    }
+
+    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+      alert('현재 브라우저에서는 음성 인식을 지원하지 않습니다. Chrome 브라우저를 사용해 주세요.');
+      return;
+    }
+
+    const recognition = new SpeechRecognition();
+    recognition.lang = 'ko-KR';
+    recognition.interimResults = true;
+    recognition.continuous = false;
+
+    recognition.onresult = (event: any) => {
+      let finalTranscript = '';
+      for (let i = event.resultIndex; i < event.results.length; ++i) {
+        if (event.results[i].isFinal) {
+          finalTranscript += event.results[i][0].transcript;
+        }
+      }
+      if (finalTranscript) {
+        setInput((prev) => prev + (prev ? ' ' : '') + finalTranscript);
+      }
+    };
+
+    recognition.onend = () => {
+      setIsRecording(false);
+    };
+
+    recognition.onerror = (event: any) => {
+      console.error('Speech recognition error', event.error);
+      setIsRecording(false);
+    };
+
+    recognitionRef.current = recognition;
+    recognition.start();
+    setIsRecording(true);
+  };
+
+  const userTurnCount = chatHistory.filter(m => m.role === 'user').length;
+
+  return (
+    <div className="flex-1 flex flex-col bg-slate-50 h-full">
+      {/* Top Bar */}
+      <div className="shrink-0 px-4 py-3 bg-white border-b border-slate-200 shadow-sm flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${product.color} text-white flex items-center justify-center text-lg shadow-md`}>
+            {product.icon}
+          </div>
+          <div>
+            <div className="flex items-center gap-2">
+              <h2 className="text-sm font-extrabold text-slate-900">{doctorType.name} {doctorType.title}</h2>
+              <span className="text-[10px] px-2 py-0.5 rounded-full bg-slate-100 text-slate-500 font-semibold">{specialty.name}</span>
+            </div>
+            <p className="text-[11px] text-slate-400 font-medium">{product.name} 디테일링</p>
+          </div>
+        </div>
+        <div className="flex items-center gap-2 text-xs">
+          <span className="px-3 py-1.5 rounded-full bg-blue-50 text-blue-700 font-bold border border-blue-100 hidden sm:inline-block">
+            Turn {userTurnCount}/6
+          </span>
+          <button onClick={onEndRoleplay}
+            className="px-4 py-2 bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-bold rounded-xl shadow-md shadow-emerald-500/20 hover:from-emerald-700 hover:to-teal-700 transition-all flex items-center gap-1.5">
+            <MessageCircle className="w-3.5 h-3.5" />
+            <span className="hidden sm:inline">대화 종료 & 평가 보기</span>
+            <span className="sm:hidden">평가 받기</span>
+          </button>
+        </div>
+      </div>
+
+      {/* Main Content: Chat + Checklist */}
+      <div className="flex-1 flex min-h-0 overflow-hidden">
+        {/* Chat Area */}
+        <div className="flex-1 flex flex-col min-w-0 overflow-hidden relative">
+          
+          {/* Hospital Background */}
+          <div className="absolute inset-0 bg-slate-50 opacity-90 z-0">
+            <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?q=80&w=2053&auto=format&fit=crop')] bg-cover bg-center opacity-10 mix-blend-luminosity"></div>
+          </div>
+
+          <div className="flex-1 overflow-y-auto p-4 space-y-4 z-10">
+            {chatHistory.map((msg) => (
+              <div key={msg.id} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'} animate-slideUp`}>
+                {msg.role === 'assistant' && (
+                  doctorType.imageUrl ? (
+                    <img src={doctorType.imageUrl} alt={doctorType.name} className="shrink-0 w-10 h-10 rounded-full object-cover border-2 border-white shadow-sm mr-2 mt-1" />
+                  ) : (
+                    <div className="shrink-0 w-10 h-10 rounded-full bg-slate-200 flex items-center justify-center text-sm mr-2 mt-1 shadow-sm">
+                      {doctorType.avatar}
+                    </div>
+                  )
+                )}
+                <div className={`max-w-[75%] px-4 py-3 rounded-2xl text-sm font-medium leading-relaxed shadow-sm ${
+                  msg.role === 'user'
+                    ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-br-sm'
+                    : 'bg-white/95 backdrop-blur-sm text-slate-800 border border-slate-200/50 rounded-bl-sm'
+                }`}>
+                  {msg.content}
+                </div>
+              </div>
+            ))}
+
+            {isLoading && (
+              <div className="flex justify-start animate-fadeIn z-10">
+                {doctorType.imageUrl ? (
+                  <img src={doctorType.imageUrl} alt={doctorType.name} className="shrink-0 w-10 h-10 rounded-full object-cover border-2 border-white shadow-sm mr-2 mt-1" />
+                ) : (
+                  <div className="shrink-0 w-10 h-10 rounded-full bg-slate-200 flex items-center justify-center text-sm mr-2 mt-1 shadow-sm">{doctorType.avatar}</div>
+                )}
+                <div className="bg-white/95 backdrop-blur-sm border border-slate-200/50 rounded-2xl rounded-bl-sm px-4 py-3 shadow-sm">
+                  <div className="flex gap-1.5">
+                    <span className="w-2 h-2 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                    <span className="w-2 h-2 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                    <span className="w-2 h-2 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                  </div>
+                </div>
+              </div>
+            )}
+            <div ref={chatEndRef} />
+          </div>
+
+          {/* Input Area */}
+          <div className="shrink-0 px-4 py-3 bg-white/90 backdrop-blur-md border-t border-slate-200/50">
+            <div className="flex items-end gap-2 relative">
+              <textarea
+                ref={inputRef}
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                onKeyDown={handleKeyDown}
+                placeholder={isRecording ? "음성을 듣고 있습니다..." : "디테일링 메시지를 입력하거나 마이크로 말씀하세요..."}
+                rows={1}
+                disabled={isLoading}
+                  className={`flex-1 pl-4 pr-12 py-3 border rounded-2xl text-sm text-slate-900 resize-none focus:outline-none focus:ring-2 transition-all disabled:opacity-50 ${
+                    isRecording 
+                      ? 'bg-rose-50 border-rose-300 focus:border-rose-500 focus:ring-rose-500/20 text-rose-900' 
+                      : 'bg-slate-50 border-slate-200 focus:border-blue-500 focus:ring-blue-500/20'
+                  }`}
+                  style={{ maxHeight: '120px' }}
+                />
+                
+                <button 
+                  onClick={toggleRecording}
+                  disabled={isLoading}
+                  className={`absolute right-16 bottom-1.5 w-9 h-9 rounded-xl flex items-center justify-center transition-all disabled:opacity-40 ${
+                    isRecording 
+                      ? 'bg-rose-100 text-rose-600 animate-pulse' 
+                      : 'bg-slate-100 text-slate-400 hover:bg-slate-200 hover:text-slate-600'
+                  }`}
+                >
+                  <Mic className="w-4 h-4" />
+                </button>
+
+                <button onClick={handleSend} disabled={!input.trim() || isLoading}
+                  className="w-12 h-12 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-2xl flex items-center justify-center shadow-md hover:shadow-lg disabled:opacity-40 disabled:cursor-not-allowed transition-all active:scale-95">
+                  <Send className="w-5 h-5" />
+                </button>
+              </div>
+            </div>
+        </div>
+
+        {/* Side Checklist */}
+        <div className="hidden lg:flex w-56 shrink-0 border-l border-slate-200 bg-white p-4 flex-col">
+          <h3 className="text-xs font-extrabold text-slate-700 mb-3 flex items-center gap-1.5">
+            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
+            실시간 미션
+          </h3>
+          <div className="space-y-2.5">
+            {checklistItems.map((item) => (
+              <div key={item.key} className={`flex items-center gap-2 text-xs font-medium transition-all ${
+                checklistStatus[item.key] ? 'text-emerald-600' : 'text-slate-400'
+              }`}>
+                {checklistStatus[item.key] ? (
+                  <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
+                ) : (
+                  <Circle className="w-4 h-4 text-slate-300 shrink-0" />
+                )}
+                <span className={checklistStatus[item.key] ? 'line-through' : ''}>{item.label}</span>
+              </div>
+            ))}
+          </div>
+          <div className="mt-auto pt-4 border-t border-slate-100 text-center">
+            <p className="text-[10px] text-slate-400 font-medium">
+              완료: {Object.values(checklistStatus).filter(Boolean).length}/{checklistItems.length}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
