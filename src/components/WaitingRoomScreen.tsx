@@ -33,13 +33,15 @@ export const WaitingRoomScreen: React.FC<WaitingRoomScreenProps> = ({ doctorType
 
       {/* Content */}
       <div className="relative z-10 flex-1 flex flex-col justify-center items-center p-8 text-center animate-fadeIn">
-        {doctorType.imageUrl ? (
-          <img src={doctorType.imageUrl} alt={doctorType.name} className="w-28 h-28 rounded-full object-cover border-4 border-slate-700/50 shadow-2xl mb-6" />
-        ) : (
-          <div className="w-28 h-28 rounded-full bg-slate-800 text-3xl flex items-center justify-center mb-6 shadow-2xl border-4 border-slate-700/50">
-            {doctorType.avatar}
-          </div>
-        )}
+        <div className={`transition-all ${isKnocking ? 'animate-knock' : ''}`}>
+          {doctorType.imageUrl ? (
+            <img src={doctorType.imageUrl} alt={doctorType.name} className="w-28 h-28 rounded-full object-cover border-4 border-slate-700/50 shadow-2xl mb-6" />
+          ) : (
+            <div className="w-28 h-28 rounded-full bg-slate-800 text-3xl flex items-center justify-center mb-6 shadow-2xl border-4 border-slate-700/50">
+              {doctorType.avatar}
+            </div>
+          )}
+        </div>
         
         <h2 className="text-3xl font-extrabold text-white mb-2 tracking-tight">
           {doctorType.name} {doctorType.title}
