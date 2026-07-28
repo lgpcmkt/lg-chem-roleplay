@@ -43,6 +43,19 @@ export const FlashDoctorRoom: React.FC<FlashDoctorRoomProps> = ({
     setInput('');
   };
 
+  const handleSpeak = (text: string) => {
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'ko-KR';
+      utterance.rate = 1.1; // 살짝 빠르게 설정
+      utterance.pitch = doctorType.id.includes('internal') ? 0.9 : 1.0; // 의사 타입별 미세한 목소리 톤 변화
+      window.speechSynthesis.speak(utterance);
+    } else {
+      alert('현재 기기에서는 음성 듣기를 지원하지 않습니다.');
+    }
+  };
+
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
@@ -184,12 +197,23 @@ export const FlashDoctorRoom: React.FC<FlashDoctorRoomProps> = ({
                     </div>
                   )
                 )}
-                <div className={`max-w-[85%] md:max-w-[75%] px-4 py-3 rounded-2xl text-sm font-medium leading-relaxed shadow-sm break-words whitespace-pre-wrap ${
-                  msg.role === 'user'
-                    ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-br-sm'
-                    : 'bg-white/95 backdrop-blur-sm text-slate-800 border border-slate-200/50 rounded-bl-sm'
-                }`}>
-                  {msg.content}
+                <div className="flex flex-col gap-1 items-start max-w-[85%] md:max-w-[75%]">
+                  <div className={`px-4 py-3 rounded-2xl text-sm font-medium leading-relaxed shadow-sm break-words whitespace-pre-wrap ${
+                    msg.role === 'user'
+                      ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-br-sm'
+                      : 'bg-white/95 backdrop-blur-sm text-slate-800 border border-slate-200/50 rounded-bl-sm'
+                  }`}>
+                    {msg.content}
+                  </div>
+                  {msg.role === 'assistant' && (
+                    <button 
+                      onClick={() => handleSpeak(msg.content)}
+                      className="ml-1 flex items-center gap-1 text-[10px] text-slate-400 hover:text-blue-500 transition-colors"
+                    >
+                      <Volume2 className="w-3.5 h-3.5" />
+                      <span>음성 듣기</span>
+                    </button>
+                  )}
                 </div>
               </div>
             ))}
