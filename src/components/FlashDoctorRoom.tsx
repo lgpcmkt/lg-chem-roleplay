@@ -11,7 +11,7 @@ interface FlashDoctorRoomProps {
   checklistStatus: Record<string, boolean>;
   setChecklistStatus: React.Dispatch<React.SetStateAction<Record<string, boolean>>>;
   checklistItems: { key: string; label: string; regex: RegExp }[];
-  onEndRoleplay: () => void;
+  onEndRoleplay: (conversationId?: string) => void;
   chatHistory: ChatMessage[];
   setChatHistory: React.Dispatch<React.SetStateAction<ChatMessage[]>>;
   onBack: () => void;
@@ -134,25 +134,14 @@ export const FlashDoctorRoom: React.FC<FlashDoctorRoomProps> = ({
       await navigator.mediaDevices.getUserMedia({ audio: true });
       setIsMuted(false);
 
-      const isFemale = scenario.name.includes('이학술') || scenario.name.includes('최안전');
-      const isOldMale = scenario.name.includes('김제미') || scenario.name.includes('박보수') || scenario.name.includes('김비모') || scenario.name.includes('한네폭');
-
       await conversation.startSession({
         agentId: AGENT_ID,
         dynamicVariables: {
           product_name: product.name,
           persona: scenario.title,
           user_name: employeeInfo.name,
-          voice_instruction: (isFemale 
-            ? "당신은 여성 의사입니다. 반드시 'female_doctor' 보이스 레이블을 사용하여 대답하세요. " 
-            : isOldMale
-            ? "당신은 중년 이상의 권위있는 남성 의사(교수/원장)입니다. 반드시 'old_doctor' 보이스 레이블을 사용하여 대답하세요. 약간 중후하고 무게감 있는 말투를 사용하세요. "
-            : "당신은 남성 의사입니다. 기본 보이스를 사용하세요. ") + "절대 사용자의 말을 길게 요약하지 마세요. 요약이나 반복 없이, 곧바로 본론에 대한 짧은 꼬리 질문을 던지거나 반론을 제기하세요.",
-          first_message: isFemale
-            ? "네 담당자님, 어서 오세요. 오늘은 어떤 일로 오셨나요?" 
-            : isOldMale
-            ? "어, 담당자님 왔어요? 오늘은 무슨 일로 왔나."
-            : "네 담당자님, 오랜만이네요. 오늘은 어떤 일로 오셨나요?"
+          voice_instruction: "당신은 남성 의사입니다. 기본 보이스를 사용하세요. 절대 사용자의 말을 길게 요약하지 마세요. 요약이나 반복 없이, 곧바로 본론에 대한 짧은 꼬리 질문을 던지거나 반론을 제기하세요.",
+          first_message: "네 담당자님, 오랜만이네요. 오늘은 어떤 일로 오셨나요?"
         }
       });
     } catch (err) {
@@ -164,8 +153,9 @@ export const FlashDoctorRoom: React.FC<FlashDoctorRoomProps> = ({
   }, [conversation, product.name, scenario.title, employeeInfo.name, scenario.personaImage]);
 
   const handleEndCall = useCallback(async () => {
+    const cid = conversation.getId();
     await conversation.endSession();
-    onEndRoleplay();
+    onEndRoleplay(cid);
   }, [conversation, onEndRoleplay]);
 
   const handleSendText = useCallback(() => {

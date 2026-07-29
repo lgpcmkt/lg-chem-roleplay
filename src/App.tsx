@@ -37,12 +37,12 @@ const PRODUCTS: Record<string, Product> = {
 const SCENARIOS: Record<string, Scenario[]> = {
   zemidapa: [
     { id: 'z1', title: '시다프비아 선호 고객', name: '김제미 원장', description: '', difficulty: '중급', personaImage: '/images/doctor_z1_1785320119267.png', hashtags: ['#스위칭연구', '#혈당강하 효과', '#작은 약제크기'], missionMsg: '시다프비아 선호 고객에게 제미다파의 이점을 설명하고, 처방을 유도해내세요!' },
-    { id: 'z2', title: '에스글리토 선호 고객', name: '이학술 교수', description: '', difficulty: '고급', personaImage: '/images/doctor_z2_1785320131579.png', hashtags: ['#스위칭연구', '#혈당강하 효과', '#작은 약제크기'], missionMsg: '에스글리토 선호 고객에게 제미다파의 임상 데이터를 설명하고, 처방을 유도해내세요!' },
+    { id: 'z2', title: '에스글리토 선호 고객', name: '이학술 교수', description: '', difficulty: '고급', personaImage: '/images/doctor_academic_1785238840727.png', hashtags: ['#스위칭연구', '#혈당강하 효과', '#작은 약제크기'], missionMsg: '에스글리토 선호 고객에게 제미다파의 임상 데이터를 설명하고, 처방을 유도해내세요!' },
     { id: 'z3', title: '타 MET/DPP-4i 복합제 선호 고객', name: '박보수 원장', description: '', difficulty: '초급', personaImage: '/images/doctor_z3_1785320142217.png', hashtags: ['#스위칭연구', '#혈당강하 효과', '#작은 약제크기'], missionMsg: '타 약제 선호 고객에게 제미다파 스위칭의 이점을 설명하고, 처방을 유도해내세요!' }
   ],
   vimovo: [
     { id: 'v1', title: '낙소졸 선호 고객', name: '김비모 원장', description: '', difficulty: '중급', personaImage: '/images/doctor_v1_1785320153099.png', hashtags: ['#복합제이점', '#심혈관안전성', '#오리지널'], missionMsg: '낙소졸 선호 고객에게 비모보의 이점을 설명하고, 처방을 유도해내세요!' },
-    { id: 'v2', title: '쎄레브렉스 선호 고객', name: '최안전 교수', description: '', difficulty: '고급', personaImage: '/images/doctor_v2_1785320164407.png', hashtags: ['#복합제이점', '#심혈관안전성', '#오리지널'], missionMsg: '쎄레브렉스 선호 교수에게 비모보의 위장관 안전성을 설명하고, 처방을 유도해내세요!' },
+    { id: 'v2', title: '쎄레브렉스 선호 고객', name: '최안전 교수', description: '', difficulty: '고급', personaImage: '/images/doctor_strict_male_1785317537635.png', hashtags: ['#복합제이점', '#심혈관안전성', '#오리지널'], missionMsg: '쎄레브렉스 선호 교수에게 비모보의 위장관 안전성을 설명하고, 처방을 유도해내세요!' },
     { id: 'v3', title: 'SYSADOA 선호 고객', name: '이순응 원장', description: '', difficulty: '초급', personaImage: '/images/doctor_v3_1785320175316.png', hashtags: ['#복합제이점', '#심혈관안전성', '#오리지널'], missionMsg: 'SYSADOA 선호 고객에게 비모보 1정 복합제의 이점을 설명하고, 처방을 유도해내세요!' }
   ],
   nephoxil: [
@@ -165,7 +165,7 @@ export default function App() {
     setScreen('roleplay');
   };
 
-  const handleEndRoleplay = useCallback(async () => {
+  const handleEndRoleplay = useCallback(async (conversationId?: string) => {
     setIsEvaluating(true);
     setScreen('evaluation');
 
@@ -178,6 +178,7 @@ export default function App() {
           productId: selectedProductId,
           scenarioTitle: selectedScenario?.title || selectedScenarioId,
           chatHistory: historyForApi,
+          conversationId,
         }),
       });
 
