@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ShieldCheck, ArrowRight, User } from 'lucide-react';
+import { ArrowRight, User } from 'lucide-react';
 import { EmployeeInfo } from '../types';
 
 interface EmployeeLoginModalProps {
@@ -18,39 +18,50 @@ export const EmployeeLoginModal: React.FC<EmployeeLoginModalProps> = ({ onSave, 
     e.preventDefault();
     if (!employeeId.trim()) { setError('사번을 입력해 주세요.'); return; }
     setError('');
-    // 이름을 따로 묻지 않으므로 사번을 이름으로 임시 사용하거나 담당자로 표시
     onSave({ employeeId: employeeId.trim(), name: employeeId.trim(), department: 'LG화학 영업본부' });
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/70 backdrop-blur-md animate-fadeIn">
-      <div className="w-full max-w-md bg-white rounded-3xl p-8 shadow-2xl border border-slate-100 space-y-6">
-        <div className="flex flex-col items-center text-center space-y-3">
-          <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 text-white flex items-center justify-center shadow-lg shadow-blue-500/30">
-            <ShieldCheck className="w-8 h-8" />
-          </div>
-          <div>
-            <h2 className="text-xl font-extrabold text-slate-900 tracking-tight">LG화학 AI 디테일링</h2>
-            <p className="text-xs text-slate-500 mt-1">롤플레이 트레이닝 시스템</p>
-          </div>
+    <div className="fixed inset-0 z-50 flex flex-col items-center justify-center p-4 bg-white animate-fadeIn">
+      <div className="w-full max-w-sm space-y-10">
+        
+        <div className="flex flex-col items-center text-center space-y-4">
+          <img 
+            src="/images/detail_go_logo.png" 
+            alt="디테일 GO" 
+            className="w-48 md:w-56 object-contain drop-shadow-md animate-float"
+          />
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-5">
           <div>
-            <label className="block text-xs font-bold text-slate-700 mb-1">사번 <span className="text-rose-500">*</span></label>
             <div className="relative">
-              <input type="text" value={employeeId} onChange={(e) => setEmployeeId(e.target.value)}
-                placeholder="예: 234353" autoFocus
-                className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-semibold text-slate-900 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:bg-white transition-all placeholder:text-slate-400" />
-              <User className="absolute right-3.5 top-3.5 w-4 h-4 text-slate-400 pointer-events-none" />
+              <input 
+                type="text" 
+                value={employeeId} 
+                onChange={(e) => setEmployeeId(e.target.value)}
+                placeholder="사번을 입력하세요" 
+                autoFocus
+                className="w-full px-5 py-4 bg-slate-50 border-2 border-slate-100 rounded-2xl text-base font-bold text-slate-900 focus:outline-none focus:border-blue-500 focus:bg-white transition-all placeholder:text-slate-400 shadow-inner" 
+              />
+              <User className="absolute right-4 top-4 w-5 h-5 text-slate-400 pointer-events-none" />
             </div>
           </div>
-          {error && <p className="text-xs text-rose-500 font-semibold text-center">{error}</p>}
-          <button type="submit" className="w-full py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 active:scale-[0.98] text-white font-bold text-sm rounded-2xl shadow-lg shadow-blue-500/25 transition-all flex items-center justify-center gap-2">
+          {error && <p className="text-xs text-rose-500 font-bold text-center animate-knock">{error}</p>}
+          <button 
+            type="submit" 
+            className="w-full py-4 bg-blue-600 hover:bg-blue-700 active:scale-[0.98] text-white font-black text-base rounded-2xl shadow-lg shadow-blue-600/30 transition-all flex items-center justify-center gap-2"
+          >
             <span>시작하기</span>
-            <ArrowRight className="w-4 h-4" />
+            <ArrowRight className="w-5 h-5" />
           </button>
         </form>
+
+      </div>
+      
+      {/* Footer */}
+      <div className="absolute bottom-6 left-0 right-0 text-center">
+        <p className="text-[11px] font-bold text-slate-400">개발자: 신채영</p>
       </div>
     </div>
   );

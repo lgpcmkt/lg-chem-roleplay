@@ -1,14 +1,13 @@
 import React from 'react';
 import { SavedSession } from '../types';
-import { Award, Calendar, Trash2, FileSpreadsheet } from 'lucide-react';
+import { Award, Calendar, Trash2 } from 'lucide-react';
 
 interface MyGradebookProps {
   sessions: SavedSession[];
   onDeleteSession: (id: string) => void;
-  onExportAll: () => void;
 }
 
-export const MyGradebook: React.FC<MyGradebookProps> = ({ sessions, onDeleteSession, onExportAll }) => {
+export const MyGradebook: React.FC<MyGradebookProps> = ({ sessions, onDeleteSession }) => {
   const gradeColors: Record<string, string> = {
     S: 'bg-amber-100 text-amber-700 border-amber-200',
     A: 'bg-blue-100 text-blue-700 border-blue-200',
@@ -24,13 +23,6 @@ export const MyGradebook: React.FC<MyGradebookProps> = ({ sessions, onDeleteSess
             <h1 className="text-xl font-extrabold text-slate-900">나의 성적표</h1>
             <p className="text-xs text-slate-500 mt-1">총 {sessions.length}건의 디테일링 기록</p>
           </div>
-          {sessions.length > 0 && (
-            <button onClick={onExportAll}
-              className="flex items-center gap-1.5 px-4 py-2 bg-gradient-to-r from-emerald-600 to-teal-600 text-white rounded-xl text-xs font-bold shadow-md hover:shadow-lg transition-all">
-              <FileSpreadsheet className="w-3.5 h-3.5" />
-              <span>전체 내보내기</span>
-            </button>
-          )}
         </div>
 
         {sessions.length === 0 ? (

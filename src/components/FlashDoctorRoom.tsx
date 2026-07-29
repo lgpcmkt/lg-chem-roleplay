@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+﻿import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { Product, Scenario, EmployeeInfo, ChatMessage } from '../types';
 import { ArrowLeft, Mic, Phone, AlertCircle, Send, MessageSquare, X } from 'lucide-react';
 import { useConversation } from '@elevenlabs/react';
@@ -24,6 +24,7 @@ export const FlashDoctorRoom: React.FC<FlashDoctorRoomProps> = ({
 }) => {
   const [elapsedTime, setElapsedTime] = useState(0);
   const [micVolume, setMicVolume] = useState(0);
+  const [isMuted, setIsMuted] = useState(false);
   const [textInput, setTextInput] = useState('');
   const [showChat, setShowChat] = useState(false);
   const chatEndRef = useRef<HTMLDivElement>(null);
@@ -112,9 +113,18 @@ export const FlashDoctorRoom: React.FC<FlashDoctorRoomProps> = ({
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [chatHistory]);
 
+  const handleToggleMute = useCallback(() => {
+    const nextMuted = !isMuted;
+    setIsMuted(nextMuted);
+    if (conversation.status === 'connected') {
+      conversation.setMicMuted(nextMuted);
+    }
+  }, [isMuted, conversation]);
+
   const handleStartCall = useCallback(async () => {
     try {
       await navigator.mediaDevices.getUserMedia({ audio: true });
+      setIsMuted(false);
       await conversation.startSession({
         agentId: AGENT_ID,
         dynamicVariables: {
@@ -123,7 +133,10 @@ export const FlashDoctorRoom: React.FC<FlashDoctorRoomProps> = ({
           user_name: employeeInfo.name,
           voice_instruction: scenario.personaImage.includes('female') 
             ? "당신은 여성 의사입니다. 반드시 'female_doctor' 보이스 레이블을 사용하여 대답하세요." 
-            : "당신은 남성 의사입니다. 기본 보이스를 사용하세요."
+            : "당신은 남성 의사입니다. 기본 보이스를 사용하세요.",
+          first_message: scenario.personaImage.includes('female')
+            ? "네 담당자님, 어서 오세요. 오늘은 어떤 일로 오셨나요?" 
+            : "네 담당자님, 오랜만이네요. 오늘은 어떤 일로 오셨나요?"
         },
         overrides: {
           tts: {
@@ -292,7 +305,7 @@ export const FlashDoctorRoom: React.FC<FlashDoctorRoomProps> = ({
           {/* Suggestion Box */}
           <div className="bg-white/95 backdrop-blur-xl rounded-2xl p-5 shadow-2xl border border-white/20 transform transition-all hover:scale-[1.02]">
             <h4 className="text-blue-600 font-bold text-xs mb-2 flex items-center gap-1.5">
-              <AlertCircle className="w-4 h-4" /> Try responding like this!
+              <AlertCircle className="w-4 h-4" /> 핵심 키워드를 활용해 보세요!
             </h4>
             <p className="text-sm font-medium text-slate-700 leading-relaxed">
               "{scenario.missionMsg}"

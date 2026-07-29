@@ -7,7 +7,6 @@ import { FlashDoctorRoom } from './components/FlashDoctorRoom';
 import { EvaluationReport } from './components/EvaluationReport';
 import { Sidebar } from './components/Sidebar';
 import { MyGradebook } from './components/MyGradebook';
-import { GoogleSheetsModal } from './components/GoogleSheetsModal';
 import { ConversationProvider } from '@elevenlabs/react';
 
 // ── 정적 데이터 (클라이언트용) ──
@@ -28,22 +27,21 @@ const PRODUCTS: Record<string, Product> = {
   },
   nephoxil: {
     id: 'nephoxil', name: '네폭실', nameEn: 'Nephoxil',
-    composition: 'Ferric citrate hydrate (구연산제이철수화물)',
-    indication: '혈액투석 CKD 환자의 고인산혈증', tagline: '인 감소 + 철분 보충, 하나로 해결',
-    color: 'from-orange-600 to-red-700', icon: '🩸', imageUrl: '/images/nephoxil.jpg',
-    specialties: [],
-  },
-};
-
-const SCENARIOS: Record<string, Scenario[]> = {
+    composition: 'Ferric citrate hydrate (구연�const SCENARIOS: Record<string, Scenario[]> = {
   zemidapa: [
-    { id: 'z1', title: '시다프비아 선호 고객', name: '김제미 원장', description: '', difficulty: '중급', personaImage: '/images/doctor_z1_1785320119267.png', hashtags: ['#가격민감', '#즉각적효과', '#경제성'], missionMsg: '시다프비아 선호 고객에게 제미다파 처방을 유도해내세요!' },
-    { id: 'z2', title: '에스글리토 선호 고객', name: '이학술 교수', description: '', difficulty: '고급', personaImage: '/images/doctor_z2_1785320131579.png', hashtags: ['#임상데이터', '#연구디자인', '#신뢰성'], missionMsg: '에스글리토 선호 고객에게 제미다파의 임상 데이터를 어필하세요!' },
-    { id: 'z3', title: '타 MET/DPP-4i 복합제 선호 고객', name: '박보수 원장', description: '', difficulty: '초급', personaImage: '/images/doctor_z3_1785320142217.png', hashtags: ['#기존처방유지', '#부작용우려', '#안전성'], missionMsg: '타 약제 선호 고객에게 제미다파 스위칭의 이점을 설명하세요!' }
+    { id: 'z1', title: '시다프비아 선호 고객', name: '김제미 원장', description: '', difficulty: '중급', personaImage: '/images/doctor_z1_1785320119267.png', hashtags: ['#스위칭연구', '#혈당강하 효과', '#작은 약제크기'], missionMsg: '키워드를 참고하여 시다프비아 선호 고객에게 제미다파 처방을 유도해내세요!' },
+    { id: 'z2', title: '에스글리토 선호 고객', name: '이학술 교수', description: '', difficulty: '고급', personaImage: '/images/doctor_z2_1785320131579.png', hashtags: ['#스위칭연구', '#혈당강하 효과', '#작은 약제크기'], missionMsg: '키워드를 참고하여 에스글리토 선호 고객에게 제미다파의 임상 데이터를 어필하세요!' },
+    { id: 'z3', title: '타 MET/DPP-4i 복합제 선호 고객', name: '박보수 원장', description: '', difficulty: '초급', personaImage: '/images/doctor_z3_1785320142217.png', hashtags: ['#스위칭연구', '#혈당강하 효과', '#작은 약제크기'], missionMsg: '키워드를 참고하여 타 약제 선호 고객에게 제미다파 스위칭의 이점을 설명하세요!' }
   ],
   vimovo: [
-    { id: 'v1', title: '낙소졸 선호 고객', name: '김비모 원장', description: '', difficulty: '중급', personaImage: '/images/doctor_v1_1785320153099.png', hashtags: ['#약가민감', '#비용효율성', '#보험혜택'], missionMsg: '낙소졸 선호 고객에게 비모보 처방을 유도해내세요!' },
-    { id: 'v2', title: '쎄레브렉스 선호 고객', name: '최안전 교수', description: '', difficulty: '고급', personaImage: '/images/doctor_v2_1785320164407.png', hashtags: ['#심혈관안전', '#가이드라인', '#부작용최소화'], missionMsg: '쎄레브렉스 선호 교수에게 비모보의 위장관 안전성을 강조하세요!' },
+    { id: 'v1', title: '낙소졸 선호 고객', name: '김비모 원장', description: '', difficulty: '중급', personaImage: '/images/doctor_v1_1785320153099.png', hashtags: ['#복합제이점', '#심혈관안전성', '#오리지널'], missionMsg: '키워드를 참고하여 낙소졸 선호 고객에게 비모보 처방을 유도해내세요!' },
+    { id: 'v2', title: '쎄레브렉스 선호 고객', name: '최안전 교수', description: '', difficulty: '고급', personaImage: '/images/doctor_v2_1785320164407.png', hashtags: ['#복합제이점', '#심혈관안전성', '#오리지널'], missionMsg: '키워드를 참고하여 쎄레브렉스 선호 교수에게 비모보의 위장관 안전성을 강조하세요!' },
+    { id: 'v3', title: 'SYSADOA 선호 고객', name: '이순응 원장', description: '', difficulty: '초급', personaImage: '/images/doctor_v3_1785320175316.png', hashtags: ['#복합제이점', '#심혈관안전성', '#오리지널'], missionMsg: '키워드를 참고하여 SYSADOA 선호 고객에게 비모보의 1정 복합제 이점을 어필하세요!' }
+  ],
+  nephoxil: [
+    { id: 'n1', title: '세벨라머 처방 유지 고객 (가상)', name: '한네폭 원장', description: '', difficulty: '중급', personaImage: '/images/doctor_n1_1785320185475.png', hashtags: ['#변비부작용완화'], missionMsg: '키워드를 참고하여 세벨라머 처방 유지 고객에게 네폭실의 차별화된 인결합 능력을 설명하세요!' }
+  ]
+};안전 교수', description: '', difficulty: '고급', personaImage: '/images/doctor_v2_1785320164407.png', hashtags: ['#심혈관안전', '#가이드라인', '#부작용최소화'], missionMsg: '쎄레브렉스 선호 교수에게 비모보의 위장관 안전성을 강조하세요!' },
     { id: 'v3', title: 'SYSADOA 선호 고객', name: '이순응 원장', description: '', difficulty: '초급', personaImage: '/images/doctor_v3_1785320175316.png', hashtags: ['#복약순응도', '#편의성', '#위장보호'], missionMsg: 'SYSADOA 선호 고객에게 비모보의 1정 복합제 이점을 어필하세요!' }
   ],
   nephoxil: [
@@ -129,9 +127,6 @@ export default function App() {
       return stored ? JSON.parse(stored) : [];
     } catch { return []; }
   });
-
-  // Google Sheets
-  const [sheetsModal, setSheetsModal] = useState<{ open: boolean; mode: 'single' | 'bulk' }>({ open: false, mode: 'single' });
 
   // Save sessions to localStorage
   useEffect(() => {
@@ -276,7 +271,6 @@ export default function App() {
         <MyGradebook
           sessions={savedSessions}
           onDeleteSession={handleDeleteSession}
-          onExportAll={() => setSheetsModal({ open: true, mode: 'bulk' })}
         />
       );
     }
@@ -344,7 +338,6 @@ export default function App() {
             doctorType={{ id: 'strict', name: selectedScenario.title, title: '', avatar: '', difficulty: '', personality: '', focusArea: '' }} // placeholder
             onRetry={handleRetry}
             onNewProduct={handleNewProduct}
-            onExportSheets={() => setSheetsModal({ open: true, mode: 'single' })}
           />
         ) : null;
       default:
@@ -363,18 +356,6 @@ export default function App() {
       <main className="flex-1 flex flex-col min-w-0 overflow-hidden relative pb-[env(safe-area-inset-bottom)]">
         {renderMainContent()}
       </main>
-
-      <GoogleSheetsModal
-        isOpen={sheetsModal.open}
-        onClose={() => setSheetsModal({ open: false, mode: 'single' })}
-        evaluation={evaluation}
-        productName={selectedProduct?.name || ''}
-        specialtyName={''}
-        doctorTypeName={selectedScenario?.title || ''}
-        employeeInfo={employeeInfo}
-        savedSessions={savedSessions}
-        mode={sheetsModal.mode}
-      />
     </div>
   );
 }
