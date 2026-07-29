@@ -75,7 +75,7 @@ export interface SavedSession {
   productName: string;
   specialtyName: string;
   doctorTypeName: string;
-  evaluation: RoleplayEvaluationResult;
+  evaluation?: RoleplayEvaluationResult;
   chatHistory: ChatMessage[];
 }
 

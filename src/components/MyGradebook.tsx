@@ -37,19 +37,29 @@ export const MyGradebook: React.FC<MyGradebookProps> = ({ sessions, onDeleteSess
               <div key={session.id} className="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-sm hover:shadow-md transition-all space-y-3">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center font-black text-lg border ${gradeColors[session.evaluation.grade] || gradeColors.C}`}>
-                      {session.evaluation.grade}
-                    </div>
+                    {session.evaluation ? (
+                      <div className={`w-10 h-10 rounded-xl flex items-center justify-center font-black text-lg border ${gradeColors[session.evaluation.grade] || gradeColors.C}`}>
+                        {session.evaluation.grade}
+                      </div>
+                    ) : (
+                      <div className={`w-10 h-10 rounded-xl flex items-center justify-center font-black text-lg border bg-blue-50 text-blue-600 border-blue-200`}>
+                        ✓
+                      </div>
+                    )}
                     <div>
                       <p className="text-sm font-extrabold text-slate-900">
                         {session.productName}
-                        <span className="text-xs text-slate-400 font-medium ml-2">{session.specialtyName} · {session.doctorTypeName}</span>
+                        <span className="text-xs text-slate-400 font-medium ml-2">{session.doctorTypeName}</span>
                       </p>
                       <div className="flex items-center gap-1.5 text-[11px] text-slate-400 font-medium mt-0.5">
                         <Calendar className="w-3 h-3" />
                         <span>{session.date}</span>
-                        <span>·</span>
-                        <span className="font-bold text-blue-600">{session.evaluation.totalScore}점</span>
+                        {session.evaluation && (
+                          <>
+                            <span>·</span>
+                            <span className="font-bold text-blue-600">{session.evaluation.totalScore}점</span>
+                          </>
+                        )}
                       </div>
                     </div>
                   </div>

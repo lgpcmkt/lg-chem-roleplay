@@ -166,13 +166,25 @@ export default function App() {
   };
 
   const handleEndRoleplay = useCallback(async () => {
+    // 세션 기록 저장 (평가 없이 완료 상태로)
+    const newSession: SavedSession = {
+      id: generateId(),
+      date: new Date().toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' }),
+      productId: selectedProductId,
+      productName: selectedProduct?.name || '',
+      specialtyName: '',
+      doctorTypeName: selectedScenario?.title || '',
+      chatHistory,
+    };
+    setSavedSessions(prev => [newSession, ...prev]);
+
     // 평가 생략: 역할극 종료 시 바로 상품 선택 화면으로 이동
     setSelectedProductId('');
     setSelectedScenarioId('');
     setChatHistory([]);
     setChecklistStatus({});
     setScreen('productSelect');
-  }, []);
+  }, [chatHistory, selectedProductId, selectedScenarioId, selectedProduct, selectedScenario]);
 
   const handleRetry = () => {
     handleSelectScenario(selectedScenarioId);
