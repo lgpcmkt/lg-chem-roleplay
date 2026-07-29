@@ -166,24 +166,62 @@ export default function App() {
   };
 
   const handleEndRoleplay = useCallback(async () => {
-    // 세션 기록 저장 (평가 없이 완료 상태로)
-    const newSession: SavedSession = {
-      id: generateId(),
-      date: new Date().toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' }),
-      productId: selectedProductId,
-      productName: selectedProduct?.name || '',
-      specialtyName: '',
-      doctorTypeName: selectedScenario?.title || '',
-      chatHistory,
-    };
-    setSavedSessions(prev => [newSession, ...prev]);
+    setIsEvaluating(true);
+    setScreen('evaluation');
 
-    // 평가 생략: 역할극 종료 시 바로 상품 선택 화면으로 이동
-    setSelectedProductId('');
-    setSelectedScenarioId('');
-    setChatHistory([]);
-    setChecklistStatus({});
-    setScreen('productSelect');
+    try {
+      const historyForApi = chatHistory.map(m => ({ role: m.role, content: m.content }));
+      const res = await fetch('/api/evaluate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          productId: selectedProductId,
+          scenarioTitle: selectedScenario?.title || selectedScenarioId,
+          chatHistory: historyForApi,
+        }),
+      });
+
+      const data = await res.json();
+      const evalResult: RoleplayEvaluationResult = {
+        isSuccess: data.isSuccess ?? false,
+        reasoning: data.reasoning ?? (data.isSuccess ? '선생님의 처방변경 이유: 설득력 있는 어필이었습니다.' : '선생님의 Unmet needs: 전달력이 부족했습니다.')
+      };
+
+      setEvaluation(evalResult);
+
+      const newSession: SavedSession = {
+        id: generateId(),
+        date: new Date().toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' }),
+        productId: selectedProductId,
+        productName: selectedProduct?.name || '',
+        specialtyName: '',
+        doctorTypeName: selectedScenario?.title || '',
+        evaluation: evalResult,
+        chatHistory,
+      };
+      setSavedSessions(prev => [newSession, ...prev]);
+    } catch (err) {
+      console.error('Evaluation error:', err);
+      const evalResult: RoleplayEvaluationResult = {
+        isSuccess: false,
+        reasoning: '선생님의 Unmet needs: 평가 중 오류가 발생했습니다. 좀 더 명확한 데이터 어필이 필요합니다.',
+      };
+      setEvaluation(evalResult);
+      
+      const newSession: SavedSession = {
+        id: generateId(),
+        date: new Date().toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' }),
+        productId: selectedProductId,
+        productName: selectedProduct?.name || '',
+        specialtyName: '',
+        doctorTypeName: selectedScenario?.title || '',
+        evaluation: evalResult,
+        chatHistory,
+      };
+      setSavedSessions(prev => [newSession, ...prev]);
+    } finally {
+      setIsEvaluating(false);
+    }
   }, [chatHistory, selectedProductId, selectedScenarioId, selectedProduct, selectedScenario]);
 
   const handleRetry = () => {

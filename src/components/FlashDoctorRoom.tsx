@@ -127,23 +127,33 @@ export const FlashDoctorRoom: React.FC<FlashDoctorRoomProps> = ({
     try {
       await navigator.mediaDevices.getUserMedia({ audio: true });
       setIsMuted(false);
+
+      const isFemale = scenario.personaImage.includes('female');
+      const isOldMale = !isFemale && (scenario.name.includes('교수') || scenario.name.includes('보수') || scenario.name.includes('네폭') || scenario.personaImage.includes('older'));
+
       await conversation.startSession({
         agentId: AGENT_ID,
         dynamicVariables: {
           product_name: product.name,
           persona: scenario.title,
           user_name: employeeInfo.name,
-          voice_instruction: (scenario.personaImage.includes('female') 
+          voice_instruction: (isFemale 
             ? "당신은 여성 의사입니다. 반드시 'female_doctor' 보이스 레이블을 사용하여 대답하세요. " 
+            : isOldMale
+            ? "당신은 중년 이상의 권위있는 남성 의사(교수/원장)입니다. 약간 중후하고 무게감 있는 말투를 사용하세요. "
             : "당신은 남성 의사입니다. 기본 보이스를 사용하세요. ") + "절대 사용자의 말을 길게 요약하지 마세요. 요약이나 반복 없이, 곧바로 본론에 대한 짧은 꼬리 질문을 던지거나 반론을 제기하세요.",
-          first_message: scenario.personaImage.includes('female')
+          first_message: isFemale
             ? "네 담당자님, 어서 오세요. 오늘은 어떤 일로 오셨나요?" 
+            : isOldMale
+            ? "어, 담당자님 왔어요? 오늘은 무슨 일로 왔나."
             : "네 담당자님, 오랜만이네요. 오늘은 어떤 일로 오셨나요?"
         },
         overrides: {
           tts: {
-            voiceId: scenario.personaImage.includes('female') 
+            voiceId: isFemale 
               ? (import.meta.env.VITE_ELEVENLABS_VOICE_ID_FEMALE || "YDseIkMzKtO5bK1Ehnev") 
+              : isOldMale
+              ? (import.meta.env.VITE_ELEVENLABS_VOICE_ID_MALE_OLD || "SWu2lWaUX4JBPKyh7h1p")
               : (import.meta.env.VITE_ELEVENLABS_VOICE_ID_MALE || "sQ3a15DhENXU8pKTHlcc")
           }
         }

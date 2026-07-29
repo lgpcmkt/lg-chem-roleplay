@@ -1,4 +1,4 @@
-import { GoogleGenAI, Type } from '@google/genai';
+﻿import { GoogleGenAI, Type } from '@google/genai';
 import { PRODUCTS, DOCTOR_TYPES, PRODUCT_EVALUATION_CRITERIA, PRODUCT_CLINICAL_CONTEXT } from './productData';
 import { buildDoctorSystemPrompt, getDoctorStageInstruction } from './doctorPersonas';
 
