@@ -38,8 +38,8 @@ export const MyGradebook: React.FC<MyGradebookProps> = ({ sessions, onDeleteSess
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     {session.evaluation ? (
-                      <div className={`w-10 h-10 rounded-xl flex items-center justify-center font-black text-lg border ${gradeColors[session.evaluation.grade] || gradeColors.C}`}>
-                        {session.evaluation.grade}
+                      <div className={`w-10 h-10 rounded-xl flex items-center justify-center font-black text-lg border ${gradeColors[session.evaluation.grade || 'C'] || gradeColors.C}`}>
+                        {session.evaluation.grade || 'C'}
                       </div>
                     ) : (
                       <div className={`w-10 h-10 rounded-xl flex items-center justify-center font-black text-lg border bg-blue-50 text-blue-600 border-blue-200`}>
@@ -68,7 +68,7 @@ export const MyGradebook: React.FC<MyGradebookProps> = ({ sessions, onDeleteSess
                     <Trash2 className="w-4 h-4" />
                   </button>
                 </div>
-                {session.evaluation.summary && (
+                {session.evaluation?.summary && (
                   <p className="text-xs text-slate-500 font-medium bg-slate-50 rounded-lg p-2.5 border border-slate-100">
                     💭 "{session.evaluation.summary}"
                   </p>

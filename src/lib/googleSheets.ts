@@ -105,10 +105,10 @@ export async function exportAllSessionsToSheets(
     s.productName,
     s.specialtyName,
     s.doctorTypeName,
-    s.evaluation.totalScore,
-    s.evaluation.grade,
-    s.evaluation.summary || '',
-    s.evaluation.recommendedScript || '',
+    s.evaluation?.totalScore || 0,
+    s.evaluation?.grade || '',
+    s.evaluation?.summary || '',
+    s.evaluation?.recommendedScript || '',
   ]);
 
   await fetch(

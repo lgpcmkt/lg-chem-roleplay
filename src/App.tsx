@@ -332,10 +332,9 @@ export default function App() {
           <EvaluationReport
             evaluation={evaluation}
             product={selectedProduct}
-            specialty={{ id: 'none', name: '', icon: '', description: '' }} // placeholder for old props
-            doctorType={{ id: 'strict', name: selectedScenario.title, title: '', avatar: '', difficulty: '', personality: '', focusArea: '' }} // placeholder
             onRetry={handleRetry}
-            onNewProduct={handleNewProduct}
+            onClose={handleNewProduct}
+            chatHistory={chatHistory}
           />
         ) : null;
       default:

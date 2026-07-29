@@ -1,3 +1,4 @@
+/// <reference types="vite/client" />
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { Product, Scenario, EmployeeInfo, ChatMessage } from '../types';
 import { ArrowLeft, Mic, Phone, AlertCircle, Send, MessageSquare, X } from 'lucide-react';
