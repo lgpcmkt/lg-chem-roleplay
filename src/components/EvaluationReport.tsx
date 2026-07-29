@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { RoleplayEvaluationResult, ProductData, ChatMessage } from '../types';
 import { ArrowLeft, RefreshCw } from 'lucide-react';
 
@@ -18,8 +18,8 @@ export const EvaluationReport: React.FC<EvaluationReportProps> = ({
 }) => {
   const isSuccess = evaluation.isSuccess;
   const mainMessage = isSuccess 
-    ? \ 처방 유도에 성공하셨습니다! 
-    : \ 처방 유도에 실패하였습니다.;
+    ? `${product.name} 처방 유도에 성공하셨습니다!` 
+    : `${product.name} 처방 유도에 실패하였습니다.`;
   
   const textColor = isSuccess ? 'text-blue-600' : 'text-red-500';
   const bgColor = isSuccess ? 'bg-blue-50' : 'bg-red-50';
@@ -38,11 +38,11 @@ export const EvaluationReport: React.FC<EvaluationReportProps> = ({
 
       <div className="flex-1 p-6 flex items-center justify-center">
         <div className="max-w-md w-full bg-white rounded-3xl p-8 shadow-xl border border-slate-200 text-center space-y-6 animate-fadeIn">
-          <h1 className={	ext-2xl md:text-3xl font-black \}>
+          <h1 className={`text-2xl md:text-3xl font-black ${textColor}`}>
             {mainMessage}
           </h1>
           
-          <div className={	ext-left p-5 rounded-2xl border \ \ shadow-inner}>
+          <div className={`text-left p-5 rounded-2xl border ${bgColor} ${borderColor} shadow-inner`}>
             <p className="text-slate-800 font-medium leading-relaxed whitespace-pre-wrap">
               {evaluation.reasoning}
             </p>
@@ -58,7 +58,7 @@ export const EvaluationReport: React.FC<EvaluationReportProps> = ({
             </button>
             <button
               onClick={onClose}
-              className={lex-1 py-3.5 rounded-2xl text-white font-bold transition-all flex items-center justify-center gap-2 shadow-lg \}
+              className={`flex-1 py-3.5 rounded-2xl text-white font-bold transition-all flex items-center justify-center gap-2 shadow-lg ${isSuccess ? 'bg-blue-600 hover:bg-blue-700 shadow-blue-500/30' : 'bg-red-500 hover:bg-red-600 shadow-red-500/30'}`}
             >
               다른 상황 선택
             </button>
