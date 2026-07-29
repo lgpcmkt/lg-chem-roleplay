@@ -39,14 +39,13 @@ router.post('/doctor-ai', async (req, res) => {
 // POST /api/evaluate
 router.post('/evaluate', async (req, res) => {
   try {
-    const { productId, specialtyId, doctorTypeId, chatHistory = [] } = req.body;
+    const { productId, scenarioTitle, chatHistory = [] } = req.body;
     if (!chatHistory || chatHistory.length === 0) {
       return res.status(400).json({ error: 'chatHistory is required' });
     }
     const result = await evaluateRoleplayTranscript(
       productId || 'zemidapa',
-      specialtyId || 'endocrine',
-      doctorTypeId || 'friendly',
+      scenarioTitle || '알 수 없는 시나리오',
       chatHistory
     );
     res.json(result);

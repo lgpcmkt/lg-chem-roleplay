@@ -131,17 +131,14 @@ ${stageInstruction}
  */
 export async function evaluateRoleplayTranscript(
   productId: string,
-  specialtyId: string,
-  doctorTypeId: string,
+  scenarioTitle: string,
   chatHistory: ChatMessage[]
 ): Promise<any> {
   const product = PRODUCTS[productId];
-  const doctorType = DOCTOR_TYPES[doctorTypeId];
   const criteria = PRODUCT_EVALUATION_CRITERIA[productId];
-  const specialty = product?.specialties.find(s => s.id === specialtyId);
 
   const transcript = chatHistory
-    .map((m) => `${m.role === 'user' ? '[MR (영업사원)]' : `[${doctorType.name} ${doctorType.title}]`}: ${m.content}`)
+    .map((m) => `${m.role === 'user' ? '[MR (영업사원)]' : `[의사]`}: ${m.content}`)
     .join('\n');
 
   const criteriaText = criteria.map((c, i) => `${i + 1}. ${c.label} (${c.maxScore}점 만점)\n   - ${c.description}`).join('\n');
@@ -160,7 +157,7 @@ export async function evaluateRoleplayTranscript(
 너는 LG화학 ${product.name}(${product.nameEn}) 마케팅 팀장 및 디테일링 채점 최고 전문가이다.
 다음 MR과 의사 간의 롤플레이 녹취록을 분석하여 정밀 평가 리포트를 작성하라.
 
-[대화 대상 의사]: ${doctorType.name} ${doctorType.title} (${specialty?.name || ''})
+[대화 대상 의사 성향]: ${scenarioTitle}
 [디테일 제품]: ${product.name} (${product.composition})
 
 ${PRODUCT_CLINICAL_CONTEXT[productId]}

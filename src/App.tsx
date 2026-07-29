@@ -180,7 +180,7 @@ export default function App() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           productId: selectedProductId,
-          scenarioId: selectedScenarioId,
+          scenarioTitle: selectedScenario?.title || selectedScenarioId,
           chatHistory: historyForApi,
         }),
       });
