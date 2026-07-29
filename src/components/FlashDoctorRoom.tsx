@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { Product, Scenario, EmployeeInfo, ChatMessage } from '../types';
-import { ArrowLeft, Mic, MicOff, Square, Phone, AlertCircle, CheckCircle2, Circle } from 'lucide-react';
+import { ArrowLeft, Mic, Phone, AlertCircle, Send, MessageSquare, X } from 'lucide-react';
 import { useConversation } from '@elevenlabs/react';
 
 interface FlashDoctorRoomProps {
@@ -16,7 +16,6 @@ interface FlashDoctorRoomProps {
   onBack: () => void;
 }
 
-// TODO: Replace with your actual ElevenLabs Agent ID
 const AGENT_ID = 'agent_6501kymkvp51eb68k1m589abc18s';
 
 export const FlashDoctorRoom: React.FC<FlashDoctorRoomProps> = ({
@@ -25,44 +24,55 @@ export const FlashDoctorRoom: React.FC<FlashDoctorRoomProps> = ({
 }) => {
   const [elapsedTime, setElapsedTime] = useState(0);
   const [micVolume, setMicVolume] = useState(0);
+  const [textInput, setTextInput] = useState('');
+  const [showChat, setShowChat] = useState(false);
+  const chatEndRef = useRef<HTMLDivElement>(null);
+
+  // Use refs for callbacks to avoid stale closure issues
+  const setChatHistoryRef = useRef(setChatHistory);
+  const setChecklistStatusRef = useRef(setChecklistStatus);
+  const checklistItemsRef = useRef(checklistItems);
+  setChatHistoryRef.current = setChatHistory;
+  setChecklistStatusRef.current = setChecklistStatus;
+  checklistItemsRef.current = checklistItems;
 
   const conversation = useConversation({
     onMessage: (message) => {
-      // Handle transcript messages from ElevenLabs
-      if (message.source === 'user') {
-        const text = message.message;
-        
-        // Update Chat History
-        setChatHistory(prev => [...prev, {
-          id: Date.now().toString(),
-          role: 'user',
-          content: text,
-          timestamp: new Date().toISOString()
-        }]);
+      console.log('[ElevenLabs onMessage]', message);
+      const role = message.source === 'user' ? 'user' as const : 'assistant' as const;
+      const text = message.message;
 
-        // Update Checklist
-        setChecklistStatus(prev => {
+      setChatHistoryRef.current(prev => [...prev, {
+        id: `${Date.now()}-${Math.random()}`,
+        role,
+        content: text,
+        timestamp: new Date().toISOString()
+      }]);
+
+      // Update checklist for user messages
+      if (message.source === 'user') {
+        setChecklistStatusRef.current(prev => {
           const updated = { ...prev };
-          checklistItems.forEach(item => {
+          checklistItemsRef.current.forEach(item => {
             if (!updated[item.key] && item.regex.test(text)) {
               updated[item.key] = true;
             }
           });
           return updated;
         });
-      } else if (message.source === 'ai') {
-        const text = message.message;
-        setChatHistory(prev => [...prev, {
-          id: Date.now().toString(),
-          role: 'assistant',
-          content: text,
-          timestamp: new Date().toISOString()
-        }]);
       }
     },
     onError: (error) => {
-      console.error('ElevenLabs Error:', error);
-      alert('오디오 세션 중 오류가 발생했습니다.');
+      console.error('[ElevenLabs Error]', error);
+    },
+    onStatusChange: (status) => {
+      console.log('[ElevenLabs Status]', status);
+    },
+    onConnect: (props) => {
+      console.log('[ElevenLabs Connected]', props.conversationId);
+    },
+    onDisconnect: (details) => {
+      console.log('[ElevenLabs Disconnected]', details);
     }
   });
 
@@ -82,8 +92,12 @@ export const FlashDoctorRoom: React.FC<FlashDoctorRoomProps> = ({
     let animationFrameId: number;
     const pollVolume = () => {
       if (conversation.status === 'connected') {
-        const volume = conversation.getInputVolume();
-        setMicVolume(volume || 0); // fallback to 0 if undefined
+        try {
+          const volume = conversation.getInputVolume();
+          setMicVolume(volume || 0);
+        } catch {
+          setMicVolume(0);
+        }
         animationFrameId = requestAnimationFrame(pollVolume);
       }
     };
@@ -93,7 +107,10 @@ export const FlashDoctorRoom: React.FC<FlashDoctorRoomProps> = ({
     return () => cancelAnimationFrame(animationFrameId);
   }, [conversation.status, conversation]);
 
-
+  // Auto-scroll chat
+  useEffect(() => {
+    chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [chatHistory]);
 
   const handleStartCall = useCallback(async () => {
     try {
@@ -119,6 +136,20 @@ export const FlashDoctorRoom: React.FC<FlashDoctorRoomProps> = ({
     await conversation.endSession();
     onEndRoleplay();
   }, [conversation, onEndRoleplay]);
+
+  const handleSendText = useCallback(() => {
+    const msg = textInput.trim();
+    if (!msg || conversation.status !== 'connected') return;
+    conversation.sendUserMessage(msg);
+    setTextInput('');
+  }, [conversation, textInput]);
+
+  const handleTextKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSendText();
+    }
+  };
 
   const formatTime = (seconds: number) => {
     const m = Math.floor(seconds / 60).toString().padStart(2, '0');
@@ -159,13 +190,58 @@ export const FlashDoctorRoom: React.FC<FlashDoctorRoomProps> = ({
       {/* Main Video/Avatar Area */}
       <div className="absolute inset-0 flex items-center justify-center">
         <img 
-          src={scenario.personaImage || '/images/doctor_strict_1785317537635.png'} 
+          src={scenario.personaImage || '/images/doctor_z1_1785320119267.png'} 
           alt={scenario.title} 
           className="w-full h-full object-cover opacity-80"
         />
-        {/* Gradient Overlay for better text readability */}
         <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-slate-900/40" />
       </div>
+
+      {/* Floating Chat Panel */}
+      {showChat && conversation.status === 'connected' && (
+        <div className="absolute right-4 top-20 bottom-40 w-80 md:w-96 z-30 flex flex-col bg-black/70 backdrop-blur-xl rounded-2xl border border-white/10 shadow-2xl overflow-hidden animate-fadeIn">
+          <div className="flex items-center justify-between px-4 py-3 border-b border-white/10">
+            <h3 className="text-sm font-bold text-white">💬 대화 기록</h3>
+            <button onClick={() => setShowChat(false)} className="w-7 h-7 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white/70 transition-colors">
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+          <div className="flex-1 overflow-y-auto p-3 space-y-3">
+            {chatHistory.map((msg) => (
+              <div key={msg.id} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+                <div className={`max-w-[85%] rounded-2xl px-4 py-2.5 text-sm ${
+                  msg.role === 'user'
+                    ? 'bg-blue-500 text-white rounded-br-md'
+                    : 'bg-white/15 text-white/90 rounded-bl-md'
+                }`}>
+                  {msg.content}
+                </div>
+              </div>
+            ))}
+            <div ref={chatEndRef} />
+          </div>
+          {/* Text Input */}
+          <div className="p-3 border-t border-white/10">
+            <div className="flex items-center gap-2 bg-white/10 rounded-xl px-3 py-2">
+              <input
+                type="text"
+                value={textInput}
+                onChange={(e) => setTextInput(e.target.value)}
+                onKeyDown={handleTextKeyDown}
+                placeholder="텍스트로 입력..."
+                className="flex-1 bg-transparent text-white text-sm placeholder-white/40 outline-none"
+              />
+              <button 
+                onClick={handleSendText} 
+                disabled={!textInput.trim()}
+                className="w-8 h-8 rounded-full bg-blue-500 hover:bg-blue-600 disabled:bg-white/10 disabled:cursor-not-allowed flex items-center justify-center text-white transition-colors"
+              >
+                <Send className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Floating UI Elements */}
       <div className="absolute inset-x-0 bottom-0 p-6 md:p-10 z-20 flex flex-col md:flex-row gap-6 items-end justify-between">
@@ -183,6 +259,14 @@ export const FlashDoctorRoom: React.FC<FlashDoctorRoomProps> = ({
               <span className="text-xs text-white/80 font-medium">원장님이 말씀 중입니다...</span>
             </div>
           </div>
+
+          {/* Latest agent message as subtitle */}
+          {conversation.message && (
+            <div className="mb-4 bg-black/50 backdrop-blur-md rounded-xl px-4 py-3 border border-white/10 max-w-lg">
+              <p className="text-white text-sm leading-relaxed">{conversation.message}</p>
+            </div>
+          )}
+
           <div className="text-white">
             <h2 className="text-3xl font-extrabold drop-shadow-lg">{scenario.name}</h2>
             {scenario.hashtags && scenario.hashtags.length > 0 && (
@@ -210,26 +294,38 @@ export const FlashDoctorRoom: React.FC<FlashDoctorRoomProps> = ({
             </p>
           </div>
 
-          <div className="flex items-center justify-center gap-6 bg-black/40 backdrop-blur-md rounded-3xl p-4 border border-white/10 relative">
+          <div className="flex items-center justify-center gap-4 bg-black/40 backdrop-blur-md rounded-3xl p-4 border border-white/10 relative">
             {conversation.status === 'connected' ? (
               <>
                 {/* Active Mic Indicator with Ripple */}
-                <div className="relative flex items-center justify-center w-16 h-16">
-                  {/* Ripple Effect */}
+                <div className="relative flex items-center justify-center w-14 h-14">
                   <div 
                     className="absolute inset-0 bg-emerald-500 rounded-full opacity-40 transition-transform duration-75"
                     style={{ transform: `scale(${1 + micVolume * 2.5})` }} 
                   />
-                  <div className="relative z-10 w-14 h-14 rounded-full bg-slate-800 border-2 border-emerald-500 flex items-center justify-center text-emerald-400">
-                    <Mic className="w-6 h-6" />
+                  <div className="relative z-10 w-12 h-12 rounded-full bg-slate-800 border-2 border-emerald-500 flex items-center justify-center text-emerald-400">
+                    <Mic className="w-5 h-5" />
                   </div>
                 </div>
 
+                {/* Chat Toggle */}
+                <button 
+                  onClick={() => setShowChat(!showChat)}
+                  className={`w-14 h-14 rounded-full flex items-center justify-center transition-all active:scale-95 ${
+                    showChat 
+                      ? 'bg-blue-500 text-white shadow-[0_0_15px_rgba(59,130,246,0.4)]' 
+                      : 'bg-white/10 text-white/70 hover:bg-white/20 hover:text-white'
+                  }`}
+                >
+                  <MessageSquare className="w-5 h-5" />
+                </button>
+
+                {/* End Call */}
                 <button 
                   onClick={handleEndCall}
-                  className="w-16 h-16 rounded-full bg-red-500 hover:bg-red-600 flex items-center justify-center text-white shadow-[0_0_20px_rgba(239,68,68,0.4)] transition-all active:scale-95"
+                  className="w-14 h-14 rounded-full bg-red-500 hover:bg-red-600 flex items-center justify-center text-white shadow-[0_0_20px_rgba(239,68,68,0.4)] transition-all active:scale-95"
                 >
-                  <Phone className="w-6 h-6 rotate-[135deg]" />
+                  <Phone className="w-5 h-5 rotate-[135deg]" />
                 </button>
               </>
             ) : (
