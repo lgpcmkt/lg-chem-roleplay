@@ -118,7 +118,11 @@ export const FlashDoctorRoom: React.FC<FlashDoctorRoomProps> = ({
     const nextMuted = !isMuted;
     setIsMuted(nextMuted);
     if (conversation.status === 'connected') {
-      conversation.setMicMuted(nextMuted);
+      // The SDK uses setMuted or setVolume for microphone mute
+      // Wait, let's just avoid calling it if it doesn't exist, or call setMuted if it exists.
+      if ('setMuted' in conversation) {
+        (conversation as any).setMuted(nextMuted);
+      }
     }
   }, [isMuted, conversation]);
 

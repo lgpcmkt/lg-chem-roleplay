@@ -1,10 +1,10 @@
 import React from 'react';
-import { RoleplayEvaluationResult, ProductData, ChatMessage } from '../types';
+import { RoleplayEvaluationResult, Product, ChatMessage } from '../types';
 import { ArrowLeft, RefreshCw } from 'lucide-react';
 
 interface EvaluationReportProps {
   evaluation: RoleplayEvaluationResult;
-  product: ProductData;
+  product: Product;
   onRetry: () => void;
   onClose: () => void;
   chatHistory: ChatMessage[];

@@ -1,4 +1,4 @@
-﻿// ── Product ──
+// ── Product ──
 export interface Product {
   id: string;
   name: string;
@@ -49,22 +49,24 @@ export interface ScoreItem {
 }
 
 export interface RoleplayEvaluationResult {
-  totalScore: number;
-  grade: 'S' | 'A' | 'B' | 'C';
-  scores: ScoreItem[];
-  summary: string;         // 의사 속마음
-  strengths: string[];
-  weaknesses: string[];
-  detailedFeedback: string;
-  turnByTurnAnalysis: {
+  isSuccess: boolean;
+  reasoning: string;
+  totalScore?: number;
+  grade?: 'S' | 'A' | 'B' | 'C';
+  scores?: ScoreItem[];
+  summary?: string;
+  strengths?: string[];
+  weaknesses?: string[];
+  detailedFeedback?: string;
+  turnByTurnAnalysis?: {
     turn: number;
     mrMessage: string;
     score: number;
     comment: string;
     suggestion: string;
   }[];
-  recommendedScript: string;
-  keyChecklistStatus: Record<string, boolean>;
+  recommendedScript?: string;
+  keyChecklistStatus?: Record<string, boolean>;
 }
 
 // ── Session ──
