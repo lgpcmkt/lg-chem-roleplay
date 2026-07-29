@@ -124,6 +124,11 @@ export const FlashDoctorRoom: React.FC<FlashDoctorRoomProps> = ({
           voice_instruction: scenario.personaImage.includes('female') 
             ? "당신은 여성 의사입니다. 반드시 'female_doctor' 보이스 레이블을 사용하여 대답하세요." 
             : "당신은 남성 의사입니다. 기본 보이스를 사용하세요."
+        },
+        overrides: {
+          tts: {
+            voiceId: scenario.personaImage.includes('female') ? "YDseIkMzKtO5bK1Ehnev" : "sQ3a15DhENXU8pKTHlcc"
+          }
         }
       });
     } catch (err) {
