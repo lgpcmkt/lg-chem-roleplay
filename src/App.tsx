@@ -16,7 +16,7 @@ const PRODUCTS: Record<string, Product> = {
     composition: '제미글립틴 50 mg + 다파글리플로진 10 mg',
     indication: '2형 당뇨병 치료 (복합제)', tagline: 'SWITCHING 연구 기반 혈당 조절 전략',
     color: 'from-blue-600 to-indigo-700', icon: '💊', imageUrl: '/images/zemidapa.jpg',
-    specialties: [], // unused in new flow but kept for type compat
+    specialties: [], 
   },
   vimovo: {
     id: 'vimovo', name: '비모보', nameEn: 'VIMOVO',
@@ -37,7 +37,7 @@ const PRODUCTS: Record<string, Product> = {
 const SCENARIOS: Record<string, Scenario[]> = {
   zemidapa: [
     { id: 'z1', title: '시다프비아 선호 고객', description: '가격과 실질적 이득에 민감한 50대 남성 원장님. 제품의 경제성과 즉각적인 효과를 강조해야 합니다.', difficulty: '중급', personaImage: '/images/doctor_strict_male_1785317537635.png' },
-    { id: 'z2', title: '에스글리토 선호 고객', 단어: '학술적인 분위기', description: '연구 디자인과 임상 데이터를 중시하는 40대 여성 교수님. 신뢰성 있는 근거 제시가 필수적입니다.', difficulty: '고급', personaImage: '/images/doctor_academic_female_1785317548083.png' },
+    { id: 'z2', title: '에스글리토 선호 고객', description: '연구 디자인과 임상 데이터를 중시하는 40대 여성 교수님. 신뢰성 있는 근거 제시가 필수적입니다.', difficulty: '고급', personaImage: '/images/doctor_academic_female_1785317548083.png' },
     { id: 'z3', title: '타 MET/DPP-4i 복합제 선호 고객', description: '기존 처방을 유지하려는 보수적인 60대 남성 원장님. 부작용이 없고 익숙한 약제를 선호합니다.', difficulty: '초급', personaImage: '/images/doctor_friendly_older_male_1785317558177.png' }
   ],
   vimovo: [
