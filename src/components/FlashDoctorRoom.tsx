@@ -282,14 +282,16 @@ export const FlashDoctorRoom: React.FC<FlashDoctorRoomProps> = ({
         {/* Left: Persona Info & Subtitles */}
         <div className="flex-1 max-w-2xl w-full">
           {/* Active Speaking Indicator */}
-          <div className={`transition-opacity duration-300 ${conversation.isSpeaking ? 'opacity-100' : 'opacity-0'}`}>
+          <div className={`transition-opacity duration-300 ${conversation.status === 'connected' ? 'opacity-100' : 'opacity-0'}`}>
             <div className="flex items-center gap-2 mb-2">
               <div className="flex gap-1">
                 <span className="w-1.5 h-1.5 rounded-full bg-white animate-bounce" style={{ animationDelay: '0ms' }} />
                 <span className="w-1.5 h-1.5 rounded-full bg-white animate-bounce" style={{ animationDelay: '150ms' }} />
                 <span className="w-1.5 h-1.5 rounded-full bg-white animate-bounce" style={{ animationDelay: '300ms' }} />
               </div>
-              <span className="text-xs text-white/80 font-medium">원장님이 말씀 중입니다...</span>
+              <span className="text-xs text-white/80 font-medium">
+                {conversation.isSpeaking ? '원장님이 말씀 중입니다...' : '원장님이 듣고 생각 중입니다...'}
+              </span>
             </div>
           </div>
 
@@ -333,10 +335,10 @@ export const FlashDoctorRoom: React.FC<FlashDoctorRoomProps> = ({
                 {/* Active Mic Indicator with Ripple */}
                 <div className="relative flex items-center justify-center w-14 h-14">
                   <div 
-                    className="absolute inset-0 bg-emerald-500 rounded-full opacity-40 transition-transform duration-75"
+                    className="absolute inset-0 bg-emerald-500 rounded-full opacity-40 transition-transform duration-75 will-change-transform"
                     style={{ transform: `scale(${1 + micVolume * 2.5})` }} 
                   />
-                  <div className="relative z-10 w-12 h-12 rounded-full bg-slate-800 border-2 border-emerald-500 flex items-center justify-center text-emerald-400">
+                  <div className="relative z-10 w-12 h-12 rounded-full bg-slate-800 border-2 border-emerald-500 flex items-center justify-center text-emerald-400" style={{ transform: 'translateZ(0)' }}>
                     <Mic className="w-5 h-5" />
                   </div>
                 </div>
