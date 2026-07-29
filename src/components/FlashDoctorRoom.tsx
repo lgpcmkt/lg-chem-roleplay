@@ -103,14 +103,17 @@ export const FlashDoctorRoom: React.FC<FlashDoctorRoomProps> = ({
         dynamicVariables: {
           product_name: product.name,
           persona: scenario.title,
-          user_name: employeeInfo.name
+          user_name: employeeInfo.name,
+          voice_instruction: scenario.personaImage.includes('female') 
+            ? "당신은 여성 의사입니다. 반드시 'female_doctor' 보이스 레이블을 사용하여 대답하세요." 
+            : "당신은 남성 의사입니다. 기본 보이스를 사용하세요."
         }
       });
     } catch (err) {
       console.error('Failed to start call:', err);
       alert('마이크 접근을 허용하거나 에이전트 설정(AGENT_ID)을 확인해주세요.');
     }
-  }, [conversation, product.name, scenario.title, employeeInfo.name]);
+  }, [conversation, product.name, scenario.title, employeeInfo.name, scenario.personaImage]);
 
   const handleEndCall = useCallback(async () => {
     await conversation.endSession();
