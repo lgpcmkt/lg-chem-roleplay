@@ -44,6 +44,9 @@ export const EvaluationReport: React.FC<EvaluationReportProps> = ({
           
           <div className={`text-left p-5 rounded-2xl border ${bgColor} ${borderColor} shadow-inner`}>
             <p className="text-slate-800 font-medium leading-relaxed whitespace-pre-wrap">
+              <span className="font-bold text-slate-900 block mb-2">
+                {isSuccess ? "선생님의 처방변경 이유:" : "선생님의 Unmet needs:"}
+              </span>
               {evaluation.reasoning}
             </p>
           </div>
