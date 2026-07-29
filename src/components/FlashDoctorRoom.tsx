@@ -44,11 +44,12 @@ export const FlashDoctorRoom: React.FC<FlashDoctorRoomProps> = ({
       console.log('[ElevenLabs onMessage]', message);
       const role = message.source === 'user' ? 'user' as const : 'assistant' as const;
       const text = message.message;
+      const cleanText = text.replace(/\[.*?\]|\(.*?\)/g, '').trim();
 
       setChatHistoryRef.current(prev => [...prev, {
         id: `${Date.now()}-${Math.random()}`,
         role,
-        content: text,
+        content: cleanText,
         timestamp: new Date().toISOString()
       }]);
 

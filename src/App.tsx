@@ -183,6 +183,7 @@ export default function App() {
 
       const data = await res.json();
       const evalResult: RoleplayEvaluationResult = {
+        ...data,
         isSuccess: data.isSuccess ?? false,
         reasoning: data.reasoning ?? (data.isSuccess ? '선생님의 처방변경 이유: 설득력 있는 어필이었습니다.' : '선생님의 Unmet needs: 전달력이 부족했습니다.')
       };

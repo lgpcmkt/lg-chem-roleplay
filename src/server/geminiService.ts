@@ -1,4 +1,4 @@
-﻿import { GoogleGenAI, Type } from '@google/genai';
+import { GoogleGenAI, Type } from '@google/genai';
 import { PRODUCTS, DOCTOR_TYPES, PRODUCT_EVALUATION_CRITERIA, PRODUCT_CLINICAL_CONTEXT } from './productData';
 import { buildDoctorSystemPrompt, getDoctorStageInstruction } from './doctorPersonas';
 
@@ -145,7 +145,7 @@ export async function evaluateRoleplayTranscript(
 
   const scoreProperties: any = {};
   criteria.forEach(c => {
-    scoreProperties[c.key] = { type: Type.INTEGER, description: `${c.label} (0~${c.maxScore})` };
+    scoreProperties[c.key] = { type: Type.INTEGER, description: `${c.label} (0~${c.maxScore}점)` };
   });
 
   const checklistProperties: any = {};
@@ -163,10 +163,15 @@ export async function evaluateRoleplayTranscript(
 ${PRODUCT_CLINICAL_CONTEXT[productId]}
 
 [평가 등급 부여 기준 (S~C 4단계)]
-- S 등급 (90~100점): 완벽한 디테일링. 핵심 킬러 포인트를 정확히 집어내고 의사 설득 완벽 성공.
-- A 등급 (80~89점): 우수한 디테일링. 대부분의 핵심 포인트를 잘 언급함.
-- B 등급 (70~79점): 보통 수준의 디테일링. 일부 핵심 포인트 누락.
-- C 등급 (70점 미만): 무성의한 답변이거나 핵심 정보 대부분 누락.
+- S 등급 (90~100점): 완벽한 디테일링. 핵심 킬러 포인트를 정확히 집어내고 의사 설득 완벽 성공. (처방 유도 성공)
+- A 등급 (80~89점): 우수한 디테일링. 대부분의 핵심 포인트를 잘 언급함. (처방 유도 성공)
+- B 등급 (70~79점): 보통 수준의 디테일링. 일부 핵심 포인트 누락. (처방 유도 실패)
+- C 등급 (70점 미만): 무성의한 답변이거나 핵심 정보 대부분 누락. (처방 유도 실패)
+
+[isSuccess 및 reasoning 작성 가이드]
+총점 80점 이상이면 isSuccess: true, 미만이면 false.
+reasoning에는 처방 성공/실패 사유를 상세하게 작성하라. 
+형식: "어떤 점(구체적인 데이터나 논리)은 매우 잘 설명되어 설득력이 있었지만, 어떤 점(구체적 포인트)은 부족했습니다. 따라서 ~~~해서 처방을 변경하기로 결심했습니다(또는 유지하기로 했습니다)."
 
 [summary 항목 - 의사의 구어체 속마음 (1~2문장)]
 예: S등급: "오, 이 정도 데이터면 다음 환자부터 ${product.name} 처방해 봐야겠는데요?"
@@ -186,6 +191,8 @@ ${criteriaText}
       responseSchema: {
         type: Type.OBJECT,
         properties: {
+          isSuccess: { type: Type.BOOLEAN, description: '처방 유도 성공 여부 (80점 이상 true)' },
+          reasoning: { type: Type.STRING, description: '처방 변경 이유 또는 Unmet needs에 대한 구체적이고 상세한 설명 (어떤점이 좋았고 어떤점이 부족했는지)' },
           totalScore: { type: Type.INTEGER, description: '총점 (0~100점)' },
           grade: { type: Type.STRING, description: '등급 (S, A, B, C)' },
           scores: {
@@ -218,7 +225,7 @@ ${criteriaText}
             required: Object.keys(checklistProperties),
           },
         },
-        required: ['totalScore', 'grade', 'scores', 'summary', 'strengths', 'weaknesses', 'detailedFeedback', 'turnByTurnAnalysis', 'recommendedScript', 'keyChecklistStatus'],
+        required: ['isSuccess', 'reasoning', 'totalScore', 'grade', 'scores', 'summary', 'strengths', 'weaknesses', 'detailedFeedback', 'turnByTurnAnalysis', 'recommendedScript', 'keyChecklistStatus'],
       },
     });
 
@@ -233,6 +240,8 @@ ${criteriaText}
     criteria.forEach(c => { fallbackChecklist[`${c.key}Mentioned`] = true; });
 
     return {
+      isSuccess: false,
+      reasoning: '어떤 점은 설명이 되었으나, 임상 데이터와 관련된 구체적인 입증이 부족했습니다. 따라서 이번에는 처방을 유지하기로 했습니다.',
       totalScore: 75,
       grade: 'B',
       scores: fallbackScores,

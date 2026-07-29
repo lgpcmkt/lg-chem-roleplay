@@ -51,6 +51,24 @@ export const EvaluationReport: React.FC<EvaluationReportProps> = ({
             </p>
           </div>
 
+          {(evaluation.strengths && evaluation.strengths.length > 0) && (
+            <div className="text-left bg-emerald-50 rounded-2xl p-5 border border-emerald-100">
+              <h3 className="font-bold text-emerald-800 mb-2">💡 잘 설명된 부분</h3>
+              <ul className="list-disc pl-5 space-y-1 text-sm text-emerald-700 font-medium">
+                {evaluation.strengths.map((s, idx) => <li key={idx}>{s}</li>)}
+              </ul>
+            </div>
+          )}
+
+          {(evaluation.weaknesses && evaluation.weaknesses.length > 0) && (
+            <div className="text-left bg-orange-50 rounded-2xl p-5 border border-orange-100">
+              <h3 className="font-bold text-orange-800 mb-2">⚠️ 다소 아쉬웠던 부분</h3>
+              <ul className="list-disc pl-5 space-y-1 text-sm text-orange-700 font-medium">
+                {evaluation.weaknesses.map((s, idx) => <li key={idx}>{s}</li>)}
+              </ul>
+            </div>
+          )}
+
           <div className="pt-6 flex gap-3">
             <button
               onClick={onRetry}
