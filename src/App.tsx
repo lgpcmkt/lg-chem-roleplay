@@ -37,17 +37,17 @@ const PRODUCTS: Record<string, Product> = {
 
 const SCENARIOS: Record<string, Scenario[]> = {
   zemidapa: [
-    { id: 'z1', title: '시다프비아 선호 고객', name: '김제미 원장', description: '', difficulty: '중급', personaImage: '/images/doctor_strict_male_1785317537635.png', hashtags: ['#가격민감', '#즉각적효과', '#경제성'], missionMsg: '시다프비아 선호 고객에게 제미다파 처방을 유도해내세요!' },
-    { id: 'z2', title: '에스글리토 선호 고객', name: '이학술 교수', description: '', difficulty: '고급', personaImage: '/images/doctor_academic_female_1785317548083.png', hashtags: ['#임상데이터', '#연구디자인', '#신뢰성'], missionMsg: '에스글리토 선호 고객에게 제미다파의 임상 데이터를 어필하세요!' },
-    { id: 'z3', title: '타 MET/DPP-4i 복합제 선호 고객', name: '박보수 원장', description: '', difficulty: '초급', personaImage: '/images/doctor_friendly_older_male_1785317558177.png', hashtags: ['#기존처방유지', '#부작용우려', '#안전성'], missionMsg: '타 약제 선호 고객에게 제미다파 스위칭의 이점을 설명하세요!' }
+    { id: 'z1', title: '시다프비아 선호 고객', name: '김제미 원장', description: '', difficulty: '중급', personaImage: '/images/doctor_z1_1785320119267.png', hashtags: ['#가격민감', '#즉각적효과', '#경제성'], missionMsg: '시다프비아 선호 고객에게 제미다파 처방을 유도해내세요!' },
+    { id: 'z2', title: '에스글리토 선호 고객', name: '이학술 교수', description: '', difficulty: '고급', personaImage: '/images/doctor_z2_1785320131579.png', hashtags: ['#임상데이터', '#연구디자인', '#신뢰성'], missionMsg: '에스글리토 선호 고객에게 제미다파의 임상 데이터를 어필하세요!' },
+    { id: 'z3', title: '타 MET/DPP-4i 복합제 선호 고객', name: '박보수 원장', description: '', difficulty: '초급', personaImage: '/images/doctor_z3_1785320142217.png', hashtags: ['#기존처방유지', '#부작용우려', '#안전성'], missionMsg: '타 약제 선호 고객에게 제미다파 스위칭의 이점을 설명하세요!' }
   ],
   vimovo: [
-    { id: 'v1', title: '낙소졸 선호 고객', name: '김비모 원장', description: '', difficulty: '중급', personaImage: '/images/doctor_strict_male_1785317537635.png', hashtags: ['#약가민감', '#비용효율성', '#보험혜택'], missionMsg: '낙소졸 선호 고객에게 비모보 처방을 유도해내세요!' },
-    { id: 'v2', title: '쎄레브렉스 선호 고객', name: '최안전 교수', description: '', difficulty: '고급', personaImage: '/images/doctor_academic_female_1785317548083.png', hashtags: ['#심혈관안전', '#가이드라인', '#부작용최소화'], missionMsg: '쎄레브렉스 선호 교수에게 비모보의 위장관 안전성을 강조하세요!' },
-    { id: 'v3', title: 'SYSADOA 선호 고객', name: '이순응 원장', description: '', difficulty: '초급', personaImage: '/images/doctor_friendly_older_male_1785317558177.png', hashtags: ['#복약순응도', '#편의성', '#위장보호'], missionMsg: 'SYSADOA 선호 고객에게 비모보의 1정 복합제 이점을 어필하세요!' }
+    { id: 'v1', title: '낙소졸 선호 고객', name: '김비모 원장', description: '', difficulty: '중급', personaImage: '/images/doctor_v1_1785320153099.png', hashtags: ['#약가민감', '#비용효율성', '#보험혜택'], missionMsg: '낙소졸 선호 고객에게 비모보 처방을 유도해내세요!' },
+    { id: 'v2', title: '쎄레브렉스 선호 고객', name: '최안전 교수', description: '', difficulty: '고급', personaImage: '/images/doctor_v2_1785320164407.png', hashtags: ['#심혈관안전', '#가이드라인', '#부작용최소화'], missionMsg: '쎄레브렉스 선호 교수에게 비모보의 위장관 안전성을 강조하세요!' },
+    { id: 'v3', title: 'SYSADOA 선호 고객', name: '이순응 원장', description: '', difficulty: '초급', personaImage: '/images/doctor_v3_1785320175316.png', hashtags: ['#복약순응도', '#편의성', '#위장보호'], missionMsg: 'SYSADOA 선호 고객에게 비모보의 1정 복합제 이점을 어필하세요!' }
   ],
   nephoxil: [
-    { id: 'n1', title: '세벨라머 처방 유지 고객 (가상)', name: '한네폭 원장', description: '', difficulty: '중급', personaImage: '/images/doctor_strict_male_1785317537635.png', hashtags: ['#기존처방유지', '#변화기피', '#투석환자'], missionMsg: '세벨라머 처방 유지 고객에게 네폭실의 차별화된 인결합 능력을 설명하세요!' }
+    { id: 'n1', title: '세벨라머 처방 유지 고객 (가상)', name: '한네폭 원장', description: '', difficulty: '중급', personaImage: '/images/doctor_n1_1785320185475.png', hashtags: ['#기존처방유지', '#변화기피', '#투석환자'], missionMsg: '세벨라머 처방 유지 고객에게 네폭실의 차별화된 인결합 능력을 설명하세요!' }
   ]
 };
 
