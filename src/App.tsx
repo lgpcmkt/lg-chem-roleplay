@@ -8,6 +8,7 @@ import { EvaluationReport } from './components/EvaluationReport';
 import { Sidebar } from './components/Sidebar';
 import { MyGradebook } from './components/MyGradebook';
 import { GoogleSheetsModal } from './components/GoogleSheetsModal';
+import { ConversationProvider } from '@elevenlabs/react';
 
 // ── 정적 데이터 (클라이언트용) ──
 const PRODUCTS: Record<string, Product> = {
@@ -300,24 +301,26 @@ export default function App() {
         ) : null;
       case 'roleplay':
         return selectedProduct && selectedScenario ? (
-          <FlashDoctorRoom
-            product={selectedProduct}
-            scenario={selectedScenario}
-            employeeInfo={employeeInfo!}
-            checklistStatus={checklistStatus}
-            setChecklistStatus={setChecklistStatus}
-            checklistItems={checklistItems.map(i => ({ key: i.key, label: i.label, regex: i.regex }))}
-            onEndRoleplay={handleEndRoleplay}
-            chatHistory={chatHistory}
-            setChatHistory={setChatHistory}
-            onBack={() => {
-              setSelectedProductId('');
-              setSelectedScenarioId('');
-              setChatHistory([]);
-              setChecklistStatus({});
-              setScreen('productSelect');
-            }}
-          />
+          <ConversationProvider>
+            <FlashDoctorRoom
+              product={selectedProduct}
+              scenario={selectedScenario}
+              employeeInfo={employeeInfo!}
+              checklistStatus={checklistStatus}
+              setChecklistStatus={setChecklistStatus}
+              checklistItems={checklistItems.map(i => ({ key: i.key, label: i.label, regex: i.regex }))}
+              onEndRoleplay={handleEndRoleplay}
+              chatHistory={chatHistory}
+              setChatHistory={setChatHistory}
+              onBack={() => {
+                setSelectedProductId('');
+                setSelectedScenarioId('');
+                setChatHistory([]);
+                setChecklistStatus({});
+                setScreen('productSelect');
+              }}
+            />
+          </ConversationProvider>
         ) : null;
       case 'evaluation':
         if (isEvaluating) {
