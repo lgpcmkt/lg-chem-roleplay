@@ -92,3 +92,12 @@ export interface RoleplayConfig {
   specialtyId: string;
   doctorTypeId: string;
 }
+
+// ── Scenario ──
+export interface Scenario {
+  id: string;
+  title: string;
+  description: string;
+  difficulty: '초급' | '중급' | '고급';
+  personaImage: string;
+}

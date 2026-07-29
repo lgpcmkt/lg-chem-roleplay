@@ -1,11 +1,9 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { Product, DoctorType, Specialty, ChatMessage, RoleplayEvaluationResult, SavedSession, EmployeeInfo, ScoreItem } from './types';
+import { Product, Scenario, ChatMessage, RoleplayEvaluationResult, SavedSession, EmployeeInfo, ScoreItem } from './types';
 import { EmployeeLoginModal } from './components/EmployeeLoginModal';
 import { ProductSelectScreen } from './components/ProductSelectScreen';
-import { SpecialtySelectScreen } from './components/SpecialtySelectScreen';
-import { DoctorTypeSelectScreen } from './components/DoctorTypeSelectScreen';
+import { ScenarioSelectScreen } from './components/ScenarioSelectScreen';
 import { FlashDoctorRoom } from './components/FlashDoctorRoom';
-import { WaitingRoomScreen } from './components/WaitingRoomScreen';
 import { EvaluationReport } from './components/EvaluationReport';
 import { Sidebar } from './components/Sidebar';
 import { MyGradebook } from './components/MyGradebook';
@@ -18,40 +16,38 @@ const PRODUCTS: Record<string, Product> = {
     composition: '제미글립틴 50 mg + 다파글리플로진 10 mg',
     indication: '2형 당뇨병 치료 (복합제)', tagline: 'SWITCHING 연구 기반 혈당 조절 전략',
     color: 'from-blue-600 to-indigo-700', icon: '💊', imageUrl: '/images/zemidapa.jpg',
-    specialties: [
-      { id: 'cardio', name: '순환기내과', icon: '❤️', imageUrl: 'https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=300&q=80', description: 'SGLT-2i 심혈관 보호 관점' },
-      { id: 'endocrine', name: '내분비내과', icon: '🔬', imageUrl: 'https://images.unsplash.com/photo-1538108149393-fbbd81895907?w=300&q=80', description: '당뇨 혈당 조절 전문' },
-      { id: 'nephro', name: '신장내과', icon: '🫘', imageUrl: 'https://images.unsplash.com/photo-1582560475093-ba66accbc424?w=300&q=80', description: 'eGFR/신장 보호 관점' },
-    ],
+    specialties: [], // unused in new flow but kept for type compat
   },
   vimovo: {
     id: 'vimovo', name: '비모보', nameEn: 'VIMOVO',
     composition: '나프록센 500mg + 에스오메프라졸 20mg',
     indication: 'NSAID 위궤양 위험 관절염 환자', tagline: '5중 코팅으로 위장 보호 + 강력 소염진통',
     color: 'from-emerald-600 to-teal-700', icon: '🛡️', imageUrl: '/images/vimovo.jpg',
-    specialties: [
-      { id: 'rheumatology', name: '류마티스내과', icon: '🦴', imageUrl: 'https://images.unsplash.com/photo-1551076805-e1869033e561?w=300&q=80', description: '류마티스/골관절염 전문' },
-      { id: 'orthopedics', name: '정형외과', icon: '🏥', imageUrl: 'https://images.unsplash.com/photo-1505751172876-fa1923c5c528?w=300&q=80', description: '근골격계 통증 관리' },
-      { id: 'neurology', name: '신경과', icon: '🧠', imageUrl: 'https://images.unsplash.com/photo-1516549655169-df83a0774514?w=300&q=80', description: '통증/신경 질환 관점' },
-    ],
+    specialties: [],
   },
   nephoxil: {
     id: 'nephoxil', name: '네폭실', nameEn: 'Nephoxil',
     composition: 'Ferric citrate hydrate (구연산제이철수화물)',
     indication: '혈액투석 CKD 환자의 고인산혈증', tagline: '인 감소 + 철분 보충, 하나로 해결',
     color: 'from-orange-600 to-red-700', icon: '🩸', imageUrl: '/images/nephoxil.jpg',
-    specialties: [
-      { id: 'nephro_ckd', name: '신장내과', icon: '🫘', imageUrl: 'https://images.unsplash.com/photo-1579684385127-1ef15d508118?w=300&q=80', description: '투석 환자 인/철분 관리' },
-      { id: 'endocrine_ckd', name: '내분비내과', icon: '🔬', imageUrl: 'https://images.unsplash.com/photo-1581594693702-fbdc51b2763b?w=300&q=80', description: 'CKD 대사 합병증 관리' },
-      { id: 'general_internal', name: '일반내과', icon: '🩺', imageUrl: 'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?w=300&q=80', description: '만성 질환 예방 관리' },
-    ],
+    specialties: [],
   },
 };
 
-const DOCTOR_TYPES: Record<string, DoctorType> = {
-  strict: { id: 'strict', name: '최실리', title: '원장', avatar: '🤨', imageUrl: '/images/doctor_strict_1785238829473.png', difficulty: '상', personality: '깐깐하고 상업적. 실질적 이득을 따지는 50대 원장.', focusArea: '실질적 경영 이득, 환자 만족도, 경쟁약 차별점' },
-  academic: { id: 'academic', name: '이학술', title: '교수', avatar: '👨‍🏫', imageUrl: '/images/doctor_academic_1785238840727.png', difficulty: '최상', personality: '학술적이고 냉소적이며 시니컬. P-value와 연구 디자인 중시.', focusArea: '연구 디자인, 통계 유의성, 에비던스, 가이드라인' },
-  friendly: { id: 'friendly', name: '김민희', title: '과장', avatar: '👩‍⚕️', imageUrl: '/images/doctor_friendly_1785238849913.png', difficulty: '중', personality: '30대 주니어. 친화적이지만 원장님 눈치를 봄.', focusArea: '원장 보고 명분, 안전성, 가이드라인, 환자 사례' },
+const SCENARIOS: Record<string, Scenario[]> = {
+  zemidapa: [
+    { id: 'z1', title: '시다프비아 선호 고객', description: '가격과 실질적 이득에 민감한 50대 남성 원장님. 제품의 경제성과 즉각적인 효과를 강조해야 합니다.', difficulty: '중급', personaImage: '/images/doctor_strict_male_1785317537635.png' },
+    { id: 'z2', title: '에스글리토 선호 고객', 단어: '학술적인 분위기', description: '연구 디자인과 임상 데이터를 중시하는 40대 여성 교수님. 신뢰성 있는 근거 제시가 필수적입니다.', difficulty: '고급', personaImage: '/images/doctor_academic_female_1785317548083.png' },
+    { id: 'z3', title: '타 MET/DPP-4i 복합제 선호 고객', description: '기존 처방을 유지하려는 보수적인 60대 남성 원장님. 부작용이 없고 익숙한 약제를 선호합니다.', difficulty: '초급', personaImage: '/images/doctor_friendly_older_male_1785317558177.png' }
+  ],
+  vimovo: [
+    { id: 'v1', title: '낙소졸 선호 고객', description: '약가와 삭감 이슈에 예민한 개원의. 비용 효율성과 보험 혜택을 강조하세요.', difficulty: '중급', personaImage: '/images/doctor_strict_male_1785317537635.png' },
+    { id: 'v2', title: '쎄레브렉스 선호 고객', description: '심혈관 안전성을 최우선으로 고려하는 교수. 안전성 데이터와 가이드라인을 중심으로 어필하세요.', difficulty: '고급', personaImage: '/images/doctor_academic_female_1785317548083.png' },
+    { id: 'v3', title: 'SYSADOA 선호 고객', description: '환자의 장기 복용 순응도와 위장관 부작용을 걱정하는 원장님. 복약 편의성을 강조하세요.', difficulty: '초급', personaImage: '/images/doctor_friendly_older_male_1785317558177.png' }
+  ],
+  nephoxil: [
+    { id: 'n1', title: '세벨라머 처방 유지 고객 (가상)', description: '기존 세벨라머 처방에 만족하며 새로운 약제로의 변경을 꺼리는 보수적인 원장님.', difficulty: '중급', personaImage: '/images/doctor_strict_male_1785317537635.png' }
+  ]
 };
 
 const PRODUCT_CHECKLIST: Record<string, { key: string; label: string; regex: RegExp }[]> = {
@@ -99,7 +95,7 @@ const PRODUCT_EVAL_CRITERIA: Record<string, { key: string; label: string; maxSco
   ],
 };
 
-type AppScreen = 'login' | 'productSelect' | 'specialtySelect' | 'doctorTypeSelect' | 'waitingRoom' | 'roleplay' | 'evaluation';
+type AppScreen = 'login' | 'productSelect' | 'scenarioSelect' | 'roleplay' | 'evaluation';
 type SideView = 'dashboard' | 'gradebook';
 
 function generateId() {
@@ -114,14 +110,11 @@ export default function App() {
 
   // Selection
   const [selectedProductId, setSelectedProductId] = useState<string>('');
-  const [selectedSpecialtyId, setSelectedSpecialtyId] = useState<string>('');
-  const [selectedDoctorTypeId, setSelectedDoctorTypeId] = useState<string>('');
+  const [selectedScenarioId, setSelectedScenarioId] = useState<string>('');
 
   // Chat
   const [chatHistory, setChatHistory] = useState<ChatMessage[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [isFinalTurn, setIsFinalTurn] = useState(false);
-  const [turnCount, setTurnCount] = useState(0);
   const [checklistStatus, setChecklistStatus] = useState<Record<string, boolean>>({});
 
   // Evaluation
@@ -146,8 +139,8 @@ export default function App() {
 
   // ── Derived ──
   const selectedProduct = PRODUCTS[selectedProductId] || null;
-  const selectedSpecialty = selectedProduct?.specialties.find(s => s.id === selectedSpecialtyId) || null;
-  const selectedDoctorType = DOCTOR_TYPES[selectedDoctorTypeId] || null;
+  const scenarios = SCENARIOS[selectedProductId] || [];
+  const selectedScenario = scenarios.find(s => s.id === selectedScenarioId) || null;
   const checklistItems = PRODUCT_CHECKLIST[selectedProductId] || [];
 
   // ── Handlers ──
@@ -158,24 +151,14 @@ export default function App() {
 
   const handleSelectProduct = (productId: string) => {
     setSelectedProductId(productId);
-    setScreen('specialtySelect');
+    setScreen('scenarioSelect');
   };
 
-  const handleSelectSpecialty = (specialtyId: string) => {
-    setSelectedSpecialtyId(specialtyId);
-    setScreen('doctorTypeSelect');
-  };
-
-  const handleSelectDoctorType = (doctorTypeId: string) => {
-    setSelectedDoctorTypeId(doctorTypeId);
-    setScreen('waitingRoom');
-  };
-
-  const handleEnterRoleplay = () => {
+  const handleSelectScenario = (scenarioId: string) => {
+    setSelectedScenarioId(scenarioId);
+    
     // Reset chat
     setChatHistory([]);
-    setIsFinalTurn(false);
-    setTurnCount(0);
     setEvaluation(null);
 
     // Initialize checklist
@@ -183,93 +166,8 @@ export default function App() {
     (PRODUCT_CHECKLIST[selectedProductId] || []).forEach(item => { initialChecklist[item.key] = false; });
     setChecklistStatus(initialChecklist);
 
-    // Generate initial greeting
-    const product = PRODUCTS[selectedProductId];
-    const doctorType = DOCTOR_TYPES[selectedDoctorTypeId];
-    const specialty = product?.specialties.find(s => s.id === selectedSpecialtyId);
-    const mrName = employeeInfo?.name || 'MR';
-
-    let greeting = '';
-    if (selectedDoctorTypeId === 'strict') {
-      greeting = `네, 오셨어요 ${mrName} 담당자님? 바쁜 시간 내는 건데.. 오늘 ${product?.name || '제품'} 어떤 내용을 디테일하러 오셨나요?`;
-    } else if (selectedDoctorTypeId === 'academic') {
-      greeting = `들어오세요, ${mrName} 담당자님. 외래 중간이라 2분밖에 없습니다. 오늘 ${product?.name || '제품'} 어떤 내용을 디테일하러 오셨나요?`;
-    } else {
-      greeting = `아 네, 어서 오세요 ${mrName} 담당자님. 저희 원장님이 아직 진료 중이셔서.. 짧게만 들을 수 있어요. 오늘 ${product?.name || '제품'} 어떤 내용을 디테일하러 오셨나요?`;
-    }
-
-    setChatHistory([{
-      id: generateId(),
-      role: 'assistant',
-      content: greeting,
-      timestamp: new Date().toISOString(),
-    }]);
-
     setScreen('roleplay');
   };
-
-  const handleSendMessage = useCallback(async (message: string) => {
-    const userMsg: ChatMessage = {
-      id: generateId(),
-      role: 'user',
-      content: message,
-      timestamp: new Date().toISOString(),
-    };
-
-    setChatHistory(prev => [...prev, userMsg]);
-    setIsLoading(true);
-
-    // Update checklist
-    const items = PRODUCT_CHECKLIST[selectedProductId] || [];
-    setChecklistStatus(prev => {
-      const updated = { ...prev };
-      items.forEach(item => {
-        if (!updated[item.key] && item.regex.test(message)) {
-          updated[item.key] = true;
-        }
-      });
-      return updated;
-    });
-
-    try {
-      const historyForApi = [...chatHistory, userMsg].map(m => ({ role: m.role, content: m.content }));
-
-      const res = await fetch('/api/doctor-ai', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          productId: selectedProductId,
-          specialtyId: selectedSpecialtyId,
-          doctorTypeId: selectedDoctorTypeId,
-          chatHistory: historyForApi,
-          userMessage: message,
-          userName: employeeInfo?.name,
-        }),
-      });
-
-      const data = await res.json();
-      const assistantMsg: ChatMessage = {
-        id: generateId(),
-        role: 'assistant',
-        content: data.reply || '네, 좀 더 구체적으로 설명해 주시겠습니까?',
-        timestamp: new Date().toISOString(),
-      };
-
-      setChatHistory(prev => [...prev, assistantMsg]);
-      setIsFinalTurn(data.isFinalTurn || false);
-      setTurnCount(data.turnCount || 0);
-    } catch (err) {
-      console.error('Error:', err);
-      setChatHistory(prev => [...prev, {
-        id: generateId(),
-        role: 'assistant',
-        content: '네, 방금 하신 말씀 좀 더 자세히 설명해 주시겠습니까?',
-        timestamp: new Date().toISOString(),
-      }]);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [chatHistory, selectedProductId, selectedSpecialtyId, selectedDoctorTypeId, employeeInfo]);
 
   const handleEndRoleplay = useCallback(async () => {
     setIsEvaluating(true);
@@ -282,8 +180,7 @@ export default function App() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           productId: selectedProductId,
-          specialtyId: selectedSpecialtyId,
-          doctorTypeId: selectedDoctorTypeId,
+          scenarioId: selectedScenarioId,
           chatHistory: historyForApi,
         }),
       });
@@ -312,8 +209,8 @@ export default function App() {
         date: new Date().toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' }),
         productId: selectedProductId,
         productName: selectedProduct?.name || '',
-        specialtyName: selectedSpecialty?.name || '',
-        doctorTypeName: selectedDoctorType ? `${selectedDoctorType.name} ${selectedDoctorType.title}` : '',
+        specialtyName: '', // Not used in new flow
+        doctorTypeName: selectedScenario?.title || '',
         evaluation: evalResult,
         chatHistory,
       };
@@ -331,30 +228,26 @@ export default function App() {
     } finally {
       setIsEvaluating(false);
     }
-  }, [chatHistory, selectedProductId, selectedSpecialtyId, selectedDoctorTypeId, selectedProduct, selectedSpecialty, selectedDoctorType]);
+  }, [chatHistory, selectedProductId, selectedScenarioId, selectedProduct, selectedScenario]);
 
   const handleRetry = () => {
-    handleSelectDoctorType(selectedDoctorTypeId);
+    handleSelectScenario(selectedScenarioId);
   };
 
   const handleNewProduct = () => {
     setScreen('productSelect');
     setSelectedProductId('');
-    setSelectedSpecialtyId('');
-    setSelectedDoctorTypeId('');
+    setSelectedScenarioId('');
     setChatHistory([]);
     setEvaluation(null);
-    setIsFinalTurn(false);
   };
 
   const handleLogout = () => {
     setEmployeeInfo(null);
     setSelectedProductId('');
-    setSelectedSpecialtyId('');
-    setSelectedDoctorTypeId('');
+    setSelectedScenarioId('');
     setChatHistory([]);
     setEvaluation(null);
-    setIsFinalTurn(false);
     setScreen('login');
   };
 
@@ -396,49 +289,30 @@ export default function App() {
             employeeName={employeeInfo?.name || 'MR'}
           />
         );
-      case 'specialtySelect':
+      case 'scenarioSelect':
         return selectedProduct ? (
-          <SpecialtySelectScreen
+          <ScenarioSelectScreen
             product={selectedProduct}
-            onSelectSpecialty={handleSelectSpecialty}
+            scenarios={scenarios}
+            onSelectScenario={handleSelectScenario}
             onBack={() => setScreen('productSelect')}
           />
         ) : null;
-      case 'doctorTypeSelect':
-        return selectedProduct ? (
-          <DoctorTypeSelectScreen
-            product={selectedProduct}
-            specialtyName={selectedSpecialty?.name || ''}
-            doctorTypes={Object.values(DOCTOR_TYPES)}
-            onSelectDoctorType={handleSelectDoctorType}
-            onBack={() => setScreen('specialtySelect')}
-          />
-        ) : null;
-      case 'waitingRoom':
-        return selectedDoctorType ? (
-          <WaitingRoomScreen 
-            doctorType={selectedDoctorType} 
-            onEnter={handleEnterRoleplay} 
-          />
-        ) : null;
       case 'roleplay':
-        return selectedProduct && selectedSpecialty && selectedDoctorType ? (
+        return selectedProduct && selectedScenario ? (
           <FlashDoctorRoom
             product={selectedProduct}
-            specialty={selectedSpecialty}
-            doctorType={selectedDoctorType}
-            chatHistory={chatHistory}
-            onSendMessage={handleSendMessage}
-            onEndRoleplay={handleEndRoleplay}
-            isLoading={isLoading}
-            isFinalTurn={isFinalTurn}
-            turnCount={turnCount}
+            scenario={selectedScenario}
+            employeeInfo={employeeInfo!}
             checklistStatus={checklistStatus}
-            checklistItems={checklistItems.map(i => ({ key: i.key, label: i.label }))}
+            setChecklistStatus={setChecklistStatus}
+            checklistItems={checklistItems.map(i => ({ key: i.key, label: i.label, regex: i.regex }))}
+            onEndRoleplay={handleEndRoleplay}
+            chatHistory={chatHistory}
+            setChatHistory={setChatHistory}
             onBack={() => {
               setSelectedProductId('');
-              setSelectedSpecialtyId('');
-              setSelectedDoctorTypeId('');
+              setSelectedScenarioId('');
               setChatHistory([]);
               setChecklistStatus({});
               setScreen('productSelect');
@@ -459,12 +333,12 @@ export default function App() {
             </div>
           );
         }
-        return evaluation && selectedProduct && selectedSpecialty && selectedDoctorType ? (
+        return evaluation && selectedProduct && selectedScenario ? (
           <EvaluationReport
             evaluation={evaluation}
             product={selectedProduct}
-            specialty={selectedSpecialty}
-            doctorType={selectedDoctorType}
+            specialty={{ id: 'none', name: '', icon: '', description: '' }} // placeholder for old props
+            doctorType={{ id: 'strict', name: selectedScenario.title, title: '', avatar: '', difficulty: '', personality: '', focusArea: '' }} // placeholder
             onRetry={handleRetry}
             onNewProduct={handleNewProduct}
             onExportSheets={() => setSheetsModal({ open: true, mode: 'single' })}
@@ -492,8 +366,8 @@ export default function App() {
         onClose={() => setSheetsModal({ open: false, mode: 'single' })}
         evaluation={evaluation}
         productName={selectedProduct?.name || ''}
-        specialtyName={selectedSpecialty?.name || ''}
-        doctorTypeName={selectedDoctorType ? `${selectedDoctorType.name} ${selectedDoctorType.title}` : ''}
+        specialtyName={''}
+        doctorTypeName={selectedScenario?.title || ''}
         employeeInfo={employeeInfo}
         savedSessions={savedSessions}
         mode={sheetsModal.mode}
