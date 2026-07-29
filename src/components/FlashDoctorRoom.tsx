@@ -24,6 +24,7 @@ export const FlashDoctorRoom: React.FC<FlashDoctorRoomProps> = ({
   onEndRoleplay, chatHistory, setChatHistory, onBack
 }) => {
   const [elapsedTime, setElapsedTime] = useState(0);
+  const [micVolume, setMicVolume] = useState(0);
 
   const conversation = useConversation({
     onMessage: (message) => {
@@ -75,6 +76,22 @@ export const FlashDoctorRoom: React.FC<FlashDoctorRoomProps> = ({
     }
     return () => clearInterval(interval);
   }, [conversation.status]);
+
+  // Mic Volume Polling for visualizer
+  useEffect(() => {
+    let animationFrameId: number;
+    const pollVolume = () => {
+      if (conversation.status === 'connected') {
+        const volume = conversation.getInputVolume();
+        setMicVolume(volume || 0); // fallback to 0 if undefined
+        animationFrameId = requestAnimationFrame(pollVolume);
+      }
+    };
+    if (conversation.status === 'connected') {
+      pollVolume();
+    }
+    return () => cancelAnimationFrame(animationFrameId);
+  }, [conversation.status, conversation]);
 
 
 
@@ -190,10 +207,21 @@ export const FlashDoctorRoom: React.FC<FlashDoctorRoomProps> = ({
             </p>
           </div>
 
-          {/* Control Buttons */}
-          <div className="flex items-center justify-center gap-4 bg-black/40 backdrop-blur-md rounded-3xl p-3 border border-white/10">
+          <div className="flex items-center justify-center gap-6 bg-black/40 backdrop-blur-md rounded-3xl p-4 border border-white/10 relative">
             {conversation.status === 'connected' ? (
               <>
+                {/* Active Mic Indicator with Ripple */}
+                <div className="relative flex items-center justify-center w-16 h-16">
+                  {/* Ripple Effect */}
+                  <div 
+                    className="absolute inset-0 bg-emerald-500 rounded-full opacity-40 transition-transform duration-75"
+                    style={{ transform: `scale(${1 + micVolume * 2.5})` }} 
+                  />
+                  <div className="relative z-10 w-14 h-14 rounded-full bg-slate-800 border-2 border-emerald-500 flex items-center justify-center text-emerald-400">
+                    <Mic className="w-6 h-6" />
+                  </div>
+                </div>
+
                 <button 
                   onClick={handleEndCall}
                   className="w-16 h-16 rounded-full bg-red-500 hover:bg-red-600 flex items-center justify-center text-white shadow-[0_0_20px_rgba(239,68,68,0.4)] transition-all active:scale-95"
