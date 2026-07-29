@@ -1,4 +1,4 @@
-﻿import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { Product, Scenario, ChatMessage, RoleplayEvaluationResult, SavedSession, EmployeeInfo, ScoreItem } from './types';
 import { EmployeeLoginModal } from './components/EmployeeLoginModal';
 import { ProductSelectScreen } from './components/ProductSelectScreen';
@@ -166,65 +166,13 @@ export default function App() {
   };
 
   const handleEndRoleplay = useCallback(async () => {
-    setIsEvaluating(true);
-    setScreen('evaluation');
-
-    try {
-      const historyForApi = chatHistory.map(m => ({ role: m.role, content: m.content }));
-      const res = await fetch('/api/evaluate', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          productId: selectedProductId,
-          scenarioTitle: selectedScenario?.title || selectedScenarioId,
-          chatHistory: historyForApi,
-        }),
-      });
-
-      const data = await res.json();
-
-      // Transform scores to ScoreItem[]
-      const criteria = PRODUCT_EVAL_CRITERIA[selectedProductId] || [];
-      const scoreItems: ScoreItem[] = criteria.map(c => ({
-        key: c.key,
-        label: c.label,
-        score: data.scores?.[c.key] ?? 0,
-        maxScore: c.maxScore,
-      }));
-
-      const evalResult: RoleplayEvaluationResult = {
-        ...data,
-        scores: scoreItems,
-      };
-
-      setEvaluation(evalResult);
-
-      // Save session
-      const newSession: SavedSession = {
-        id: generateId(),
-        date: new Date().toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' }),
-        productId: selectedProductId,
-        productName: selectedProduct?.name || '',
-        specialtyName: '', // Not used in new flow
-        doctorTypeName: selectedScenario?.title || '',
-        evaluation: evalResult,
-        chatHistory,
-      };
-      setSavedSessions(prev => [newSession, ...prev]);
-    } catch (err) {
-      console.error('Evaluation error:', err);
-      setEvaluation({
-        totalScore: 70, grade: 'B',
-        scores: (PRODUCT_EVAL_CRITERIA[selectedProductId] || []).map(c => ({ key: c.key, label: c.label, score: Math.round(c.maxScore * 0.7), maxScore: c.maxScore })),
-        summary: '평가 중 오류가 발생했습니다. 다시 시도해 주세요.',
-        strengths: ['디테일링을 완료함'], weaknesses: ['평가 데이터 부족'],
-        detailedFeedback: '', turnByTurnAnalysis: [], recommendedScript: '',
-        keyChecklistStatus: {},
-      });
-    } finally {
-      setIsEvaluating(false);
-    }
-  }, [chatHistory, selectedProductId, selectedScenarioId, selectedProduct, selectedScenario]);
+    // 평가 생략: 역할극 종료 시 바로 상품 선택 화면으로 이동
+    setSelectedProductId('');
+    setSelectedScenarioId('');
+    setChatHistory([]);
+    setChecklistStatus({});
+    setScreen('productSelect');
+  }, []);
 
   const handleRetry = () => {
     handleSelectScenario(selectedScenarioId);

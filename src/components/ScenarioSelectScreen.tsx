@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { Product, Scenario } from '../types';
 import { soundEffects } from '../utils/audioEffects';
 import { ArrowLeft, Play, UserCircle2 } from 'lucide-react';
@@ -54,7 +54,6 @@ export const ScenarioSelectScreen: React.FC<ScenarioSelectScreenProps> = ({ prod
                 <div className="flex-1 min-w-0">
                   <div className="flex flex-wrap items-center gap-2">
                     <h3 className="text-base font-bold text-slate-900 group-hover:text-blue-600 transition-colors leading-snug break-keep">{scenario.title}</h3>
-                    <span className="shrink-0 text-[10px] px-2 py-0.5 rounded-full bg-slate-100 text-slate-500 font-semibold">{scenario.difficulty}</span>
                   </div>
                 </div>
                 <div className="shrink-0 w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 group-hover:bg-blue-50 group-hover:text-blue-600 transition-colors">

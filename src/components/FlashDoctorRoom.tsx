@@ -131,16 +131,18 @@ export const FlashDoctorRoom: React.FC<FlashDoctorRoomProps> = ({
           product_name: product.name,
           persona: scenario.title,
           user_name: employeeInfo.name,
-          voice_instruction: scenario.personaImage.includes('female') 
-            ? "당신은 여성 의사입니다. 반드시 'female_doctor' 보이스 레이블을 사용하여 대답하세요." 
-            : "당신은 남성 의사입니다. 기본 보이스를 사용하세요.",
+          voice_instruction: (scenario.personaImage.includes('female') 
+            ? "당신은 여성 의사입니다. 반드시 'female_doctor' 보이스 레이블을 사용하여 대답하세요. " 
+            : "당신은 남성 의사입니다. 기본 보이스를 사용하세요. ") + "절대 사용자의 말을 길게 요약하지 마세요. 요약이나 반복 없이, 곧바로 본론에 대한 짧은 꼬리 질문을 던지거나 반론을 제기하세요.",
           first_message: scenario.personaImage.includes('female')
             ? "네 담당자님, 어서 오세요. 오늘은 어떤 일로 오셨나요?" 
             : "네 담당자님, 오랜만이네요. 오늘은 어떤 일로 오셨나요?"
         },
         overrides: {
           tts: {
-            voiceId: scenario.personaImage.includes('female') ? "YDseIkMzKtO5bK1Ehnev" : "sQ3a15DhENXU8pKTHlcc"
+            voiceId: scenario.personaImage.includes('female') 
+              ? (import.meta.env.VITE_ELEVENLABS_VOICE_ID_FEMALE || "YDseIkMzKtO5bK1Ehnev") 
+              : (import.meta.env.VITE_ELEVENLABS_VOICE_ID_MALE || "sQ3a15DhENXU8pKTHlcc")
           }
         }
       });
