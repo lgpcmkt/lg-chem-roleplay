@@ -200,24 +200,44 @@ export default function App() {
         }
       }
 
-      const historyForApi = chatHistory.map(m => ({ role: m.role, content: m.content }));
-      const res = await fetch('/api/evaluate', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          productId: selectedProductId,
-          scenarioTitle: selectedScenario?.title || selectedScenarioId,
-          chatHistory: historyForApi,
-          elevenLabsData,
-        }),
-      });
+      let evalResult: RoleplayEvaluationResult;
 
-      const data = await res.json();
-      const evalResult: RoleplayEvaluationResult = {
-        ...data,
-        isSuccess: data.isSuccess ?? false,
-        reasoning: data.reasoning ?? (data.isSuccess ? '선생님의 처방변경 이유: 설득력 있는 어필이었습니다.' : '선생님의 Unmet needs: 전달력이 부족했습니다.')
-      };
+      if (elevenLabsData) {
+        // Bypass Gemini completely and use ElevenLabs data directly
+        evalResult = {
+          isSuccess: elevenLabsData.isSuccess,
+          reasoning: elevenLabsData.rationale,
+          summary: elevenLabsData.transcript_summary || '',
+          strengths: [],
+          weaknesses: [],
+          scores: {},
+          detailedFeedback: elevenLabsData.rationale,
+          totalScore: elevenLabsData.isSuccess ? 100 : 50,
+          grade: elevenLabsData.isSuccess ? 'S' : 'C',
+          turnByTurnAnalysis: [],
+          recommendedScript: '',
+          keyChecklistStatus: {}
+        };
+      } else {
+        // Fetch from backend as fallback if elevenLabsData is somehow missing or ElevenLabs polling failed
+        const historyForApi = chatHistory.map(m => ({ role: m.role, content: m.content }));
+        const res = await fetch('/api/evaluate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            productId: selectedProductId,
+            scenarioTitle: selectedScenario?.title || selectedScenarioId,
+            chatHistory: historyForApi,
+          }),
+        });
+
+        const data = await res.json();
+        evalResult = {
+          ...data,
+          isSuccess: data.isSuccess ?? false,
+          reasoning: data.reasoning ?? (data.isSuccess ? '선생님의 처방변경 이유: 설득력 있는 어필이었습니다.' : '선생님의 Unmet needs: 전달력이 부족했습니다.')
+        };
+      }
 
       setEvaluation(evalResult);
 
