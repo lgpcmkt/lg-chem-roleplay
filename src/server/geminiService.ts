@@ -132,7 +132,8 @@ ${stageInstruction}
 export async function evaluateRoleplayTranscript(
   productId: string,
   scenarioTitle: string,
-  chatHistory: ChatMessage[]
+  chatHistory: ChatMessage[],
+  elevenLabsData?: { isSuccess: boolean; rationale: string; transcript_summary?: string }
 ): Promise<any> {
   const product = PRODUCTS[productId];
   const criteria = PRODUCT_EVALUATION_CRITERIA[productId];
@@ -169,13 +170,16 @@ ${PRODUCT_CLINICAL_CONTEXT[productId]}
 - C 등급 (70점 미만): 무성의한 답변이거나 핵심 정보 대부분 누락. (처방 유도 실패)
 
 [isSuccess 및 reasoning 작성 가이드]
-총점 80점 이상이면 isSuccess: true, 미만이면 false.
-reasoning에는 처방 성공/실패 사유를 상세하게 작성하라. 
-형식: "어떤 점(구체적인 데이터나 논리)은 매우 잘 설명되어 설득력이 있었지만, 어떤 점(구체적 포인트)은 부족했습니다. 따라서 ~~~해서 처방을 변경하기로 결심했습니다(또는 유지하기로 했습니다)."
+${elevenLabsData 
+  ? `ElevenLabs의 평가 결과(isSuccess: ${elevenLabsData.isSuccess})를 반드시 100% 동일하게 따르고, ElevenLabs의 코멘트("${elevenLabsData.rationale}")를 바탕으로 reasoning(처방 성공/실패 사유)을 더욱 구체적이고 전문적으로 2~3문장으로 다듬어라. 점수(총점) 또한 ElevenLabs의 성공 여부(성공시 80점 이상, 실패시 80점 미만)에 맞게 알아서 조정하라.`
+  : `총점 80점 이상이면 isSuccess: true, 미만이면 false. reasoning에는 처방 성공/실패 사유를 상세하게 작성하라. 형식: "어떤 점은 매우 잘 설명되어 설득력이 있었지만, 어떤 점은 부족했습니다. 따라서 ~~~해서 처방을 변경하기로 결심했습니다."`
+}
 
 [summary 항목 - 의사의 구어체 속마음 (1~2문장)]
-예: S등급: "오, 이 정도 데이터면 다음 환자부터 ${product.name} 처방해 봐야겠는데요?"
-    C등급: "MR이 좀 무성의하네요. 디테일할 의지가 안 보입니다."
+${elevenLabsData && elevenLabsData.transcript_summary 
+  ? `ElevenLabs의 대화 요약("${elevenLabsData.transcript_summary}")을 바탕으로, 의사 입장에서의 속마음을 구어체로 1~2문장으로 작성하라.` 
+  : `예: S등급: "오, 이 정도 데이터면 다음 환자부터 ${product.name} 처방해 봐야겠는데요?"\n    C등급: "MR이 좀 무성의하네요. 디테일할 의지가 안 보입니다."`
+}
 
 [평가 배점 (총 100점 만점)]
 ${criteriaText}

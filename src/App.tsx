@@ -323,7 +323,7 @@ export default function App() {
               <div className="text-center space-y-4 animate-fadeIn">
                 <div className="w-16 h-16 mx-auto border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin" />
                 <div>
-                  <p className="text-base font-extrabold text-slate-900">AI가 평가 중입니다...</p>
+                  <p className="text-base font-extrabold text-slate-900">원장님의 속마음을 분석 중입니다...</p>
                   <p className="text-xs text-slate-500 mt-1">디테일링 내용을 분석하고 있습니다.</p>
                 </div>
               </div>
