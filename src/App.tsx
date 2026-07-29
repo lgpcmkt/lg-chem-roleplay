@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react';
+﻿import React, { useState, useCallback, useEffect } from 'react';
 import { Product, Scenario, ChatMessage, RoleplayEvaluationResult, SavedSession, EmployeeInfo, ScoreItem } from './types';
 import { EmployeeLoginModal } from './components/EmployeeLoginModal';
 import { ProductSelectScreen } from './components/ProductSelectScreen';
@@ -27,7 +27,14 @@ const PRODUCTS: Record<string, Product> = {
   },
   nephoxil: {
     id: 'nephoxil', name: '네폭실', nameEn: 'Nephoxil',
-    composition: 'Ferric citrate hydrate (구연�const SCENARIOS: Record<string, Scenario[]> = {
+    composition: 'Ferric citrate hydrate (구연산제이철수화물)',
+    indication: '고인산혈증 및 철결핍성 빈혈', tagline: '인 감소와 철분 보충을 동시에',
+    color: 'from-orange-600 to-amber-700', icon: '🩸', imageUrl: '/images/nephoxil.jpg',
+    specialties: [],
+  }
+};
+
+const SCENARIOS: Record<string, Scenario[]> = {
   zemidapa: [
     { id: 'z1', title: '시다프비아 선호 고객', name: '김제미 원장', description: '', difficulty: '중급', personaImage: '/images/doctor_z1_1785320119267.png', hashtags: ['#스위칭연구', '#혈당강하 효과', '#작은 약제크기'], missionMsg: '키워드를 참고하여 시다프비아 선호 고객에게 제미다파 처방을 유도해내세요!' },
     { id: 'z2', title: '에스글리토 선호 고객', name: '이학술 교수', description: '', difficulty: '고급', personaImage: '/images/doctor_z2_1785320131579.png', hashtags: ['#스위칭연구', '#혈당강하 효과', '#작은 약제크기'], missionMsg: '키워드를 참고하여 에스글리토 선호 고객에게 제미다파의 임상 데이터를 어필하세요!' },
@@ -41,14 +48,7 @@ const PRODUCTS: Record<string, Product> = {
   nephoxil: [
     { id: 'n1', title: '세벨라머 처방 유지 고객 (가상)', name: '한네폭 원장', description: '', difficulty: '중급', personaImage: '/images/doctor_n1_1785320185475.png', hashtags: ['#변비부작용완화'], missionMsg: '키워드를 참고하여 세벨라머 처방 유지 고객에게 네폭실의 차별화된 인결합 능력을 설명하세요!' }
   ]
-};안전 교수', description: '', difficulty: '고급', personaImage: '/images/doctor_v2_1785320164407.png', hashtags: ['#심혈관안전', '#가이드라인', '#부작용최소화'], missionMsg: '쎄레브렉스 선호 교수에게 비모보의 위장관 안전성을 강조하세요!' },
-    { id: 'v3', title: 'SYSADOA 선호 고객', name: '이순응 원장', description: '', difficulty: '초급', personaImage: '/images/doctor_v3_1785320175316.png', hashtags: ['#복약순응도', '#편의성', '#위장보호'], missionMsg: 'SYSADOA 선호 고객에게 비모보의 1정 복합제 이점을 어필하세요!' }
-  ],
-  nephoxil: [
-    { id: 'n1', title: '세벨라머 처방 유지 고객 (가상)', name: '한네폭 원장', description: '', difficulty: '중급', personaImage: '/images/doctor_n1_1785320185475.png', hashtags: ['#기존처방유지', '#변화기피', '#투석환자'], missionMsg: '세벨라머 처방 유지 고객에게 네폭실의 차별화된 인결합 능력을 설명하세요!' }
-  ]
 };
-
 const PRODUCT_CHECKLIST: Record<string, { key: string; label: string; regex: RegExp }[]> = {
   zemidapa: [
     { key: 'switchingStudy', label: 'SWITCHING 연구 디자인을 소개하세요.', regex: /switching|스위칭|교체|switch/i },
