@@ -170,6 +170,36 @@ export default function App() {
     setScreen('evaluation');
 
     try {
+      let elevenLabsData = undefined;
+      const apiKey = import.meta.env.VITE_ELEVENLABS_API_KEY;
+
+      if (conversationId && apiKey) {
+        for (let i = 0; i < 15; i++) {
+          try {
+            const response = await fetch(`https://api.elevenlabs.io/v1/convai/conversations/${conversationId}`, {
+              headers: { 'xi-api-key': apiKey }
+            });
+            if (response.ok) {
+              const data = await response.json();
+              if (data.analysis && data.analysis.evaluation_criteria_results) {
+                const rpCriteria = data.analysis.evaluation_criteria_results.rp || Object.values(data.analysis.evaluation_criteria_results)[0] as any;
+                if (rpCriteria) {
+                  elevenLabsData = {
+                    isSuccess: rpCriteria.result === 'success',
+                    rationale: rpCriteria.rationale || '평가 결과가 성공적으로 수집되었습니다.',
+                    transcript_summary: data.analysis.transcript_summary
+                  };
+                  break;
+                }
+              }
+            }
+          } catch (e) {
+            console.error('ElevenLabs poll error:', e);
+          }
+          await new Promise(resolve => setTimeout(resolve, 2000));
+        }
+      }
+
       const historyForApi = chatHistory.map(m => ({ role: m.role, content: m.content }));
       const res = await fetch('/api/evaluate', {
         method: 'POST',
@@ -178,7 +208,7 @@ export default function App() {
           productId: selectedProductId,
           scenarioTitle: selectedScenario?.title || selectedScenarioId,
           chatHistory: historyForApi,
-          conversationId,
+          elevenLabsData,
         }),
       });
 

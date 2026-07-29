@@ -39,51 +39,8 @@ router.post('/doctor-ai', async (req, res) => {
 // POST /api/evaluate
 router.post('/evaluate', async (req, res) => {
   try {
-    const { productId, scenarioTitle, chatHistory = [], conversationId } = req.body;
+    const { productId, scenarioTitle, chatHistory = [], elevenLabsData } = req.body;
     
-    let elevenLabsData: any = undefined;
-    if (conversationId) {
-      const apiKey = process.env.VITE_ELEVENLABS_API_KEY || process.env.ELEVENLABS_API_KEY;
-      if (!apiKey) {
-        return res.status(500).json({ error: 'ElevenLabs API 키가 설정되지 않았습니다. Vercel 환경 변수에 VITE_ELEVENLABS_API_KEY를 추가해주세요.' });
-      }
-
-      // Poll ElevenLabs API for analysis
-      let analysisResult = null;
-      for (let i = 0; i < 15; i++) {
-        try {
-          const response = await fetch(`https://api.elevenlabs.io/v1/convai/conversations/${conversationId}`, {
-            headers: { 'xi-api-key': apiKey }
-          });
-          if (response.ok) {
-            const data = await response.json();
-            if (data.analysis && data.analysis.evaluation_criteria_results) {
-              analysisResult = data.analysis;
-              break;
-            }
-          }
-        } catch (e) {
-          console.error('ElevenLabs poll error:', e);
-        }
-        await new Promise(resolve => setTimeout(resolve, 2000));
-      }
-
-      if (analysisResult?.evaluation_criteria_results) {
-        const rpCriteria = analysisResult.evaluation_criteria_results.rp || Object.values(analysisResult.evaluation_criteria_results)[0];
-        if (rpCriteria) {
-           elevenLabsData = {
-             isSuccess: rpCriteria.result === 'success',
-             rationale: rpCriteria.rationale || '평가 결과가 성공적으로 수집되었습니다.',
-             transcript_summary: analysisResult.transcript_summary
-           };
-        }
-      }
-      
-      if (!elevenLabsData) {
-        return res.status(500).json({ error: 'ElevenLabs 서버에서 분석 결과를 가져오는 데 시간이 너무 오래 걸리거나 실패했습니다.' });
-      }
-    }
-
     if (!chatHistory || chatHistory.length === 0) {
       return res.status(400).json({ error: 'chatHistory is required' });
     }
