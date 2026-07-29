@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { Product, Scenario, EmployeeInfo, ChatMessage } from '../types';
 import { ArrowLeft, Mic, Phone, AlertCircle, Send, MessageSquare, X } from 'lucide-react';
 import { useConversation } from '@elevenlabs/react';
@@ -27,6 +27,7 @@ export const FlashDoctorRoom: React.FC<FlashDoctorRoomProps> = ({
   const [isMuted, setIsMuted] = useState(false);
   const [textInput, setTextInput] = useState('');
   const [showChat, setShowChat] = useState(false);
+  const [isConnecting, setIsConnecting] = useState(false);
   const chatEndRef = useRef<HTMLDivElement>(null);
 
   // Use refs for callbacks to avoid stale closure issues
@@ -122,6 +123,7 @@ export const FlashDoctorRoom: React.FC<FlashDoctorRoomProps> = ({
   }, [isMuted, conversation]);
 
   const handleStartCall = useCallback(async () => {
+    setIsConnecting(true);
     try {
       await navigator.mediaDevices.getUserMedia({ audio: true });
       setIsMuted(false);
@@ -149,6 +151,8 @@ export const FlashDoctorRoom: React.FC<FlashDoctorRoomProps> = ({
     } catch (err) {
       console.error('Failed to start call:', err);
       alert('마이크 접근을 허용하거나 에이전트 설정(AGENT_ID)을 확인해주세요.');
+    } finally {
+      setIsConnecting(false);
     }
   }, [conversation, product.name, scenario.title, employeeInfo.name, scenario.personaImage]);
 
@@ -200,6 +204,8 @@ export const FlashDoctorRoom: React.FC<FlashDoctorRoomProps> = ({
                 <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
                 <span className="text-xs font-bold text-white tracking-widest">LIVE {formatTime(elapsedTime)}</span>
               </>
+            ) : isConnecting ? (
+              <span className="text-xs font-bold text-white/70">CONNECTING...</span>
             ) : (
               <span className="text-xs font-bold text-white/70">READY</span>
             )}
@@ -348,17 +354,22 @@ export const FlashDoctorRoom: React.FC<FlashDoctorRoomProps> = ({
                   <Phone className="w-5 h-5 rotate-[135deg]" />
                 </button>
               </>
+            ) : isConnecting ? (
+              <div className="w-16 h-16 rounded-full bg-blue-500/50 flex items-center justify-center text-white shadow-lg cursor-not-allowed">
+                <div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin" />
+              </div>
             ) : (
               <button 
                 onClick={handleStartCall}
+                disabled={isConnecting}
                 className="w-16 h-16 rounded-full bg-blue-500 hover:bg-blue-600 flex items-center justify-center text-white shadow-[0_0_20px_rgba(59,130,246,0.4)] transition-all active:scale-95"
               >
                 <Mic className="w-7 h-7" />
               </button>
             )}
             
-            <p className="text-xs text-white/60 font-medium absolute -bottom-6">
-              {conversation.status === 'connected' ? '통화 종료' : '음성 롤플레이 시작'}
+            <p className="text-xs text-white/60 font-medium absolute -bottom-6 whitespace-nowrap">
+              {conversation.status === 'connected' ? '통화 종료' : isConnecting ? '연결 중 (약 3초 소요)...' : '음성 롤플레이 시작'}
             </p>
           </div>
 
