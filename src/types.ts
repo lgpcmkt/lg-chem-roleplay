@@ -97,7 +97,10 @@ export interface RoleplayConfig {
 export interface Scenario {
   id: string;
   title: string;
+  name: string;
   description: string;
   difficulty: '초급' | '중급' | '고급';
   personaImage: string;
+  hashtags: string[];
+  missionMsg: string;
 }

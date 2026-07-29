@@ -37,17 +37,17 @@ const PRODUCTS: Record<string, Product> = {
 
 const SCENARIOS: Record<string, Scenario[]> = {
   zemidapa: [
-    { id: 'z1', title: '시다프비아 선호 고객', description: '가격과 실질적 이득에 민감한 50대 남성 원장님. 제품의 경제성과 즉각적인 효과를 강조해야 합니다.', difficulty: '중급', personaImage: '/images/doctor_strict_male_1785317537635.png' },
-    { id: 'z2', title: '에스글리토 선호 고객', description: '연구 디자인과 임상 데이터를 중시하는 40대 여성 교수님. 신뢰성 있는 근거 제시가 필수적입니다.', difficulty: '고급', personaImage: '/images/doctor_academic_female_1785317548083.png' },
-    { id: 'z3', title: '타 MET/DPP-4i 복합제 선호 고객', description: '기존 처방을 유지하려는 보수적인 60대 남성 원장님. 부작용이 없고 익숙한 약제를 선호합니다.', difficulty: '초급', personaImage: '/images/doctor_friendly_older_male_1785317558177.png' }
+    { id: 'z1', title: '시다프비아 선호 고객', name: '김제미 원장', description: '', difficulty: '중급', personaImage: '/images/doctor_strict_male_1785317537635.png', hashtags: ['#가격민감', '#즉각적효과', '#경제성'], missionMsg: '시다프비아 선호 고객에게 제미다파 처방을 유도해내세요!' },
+    { id: 'z2', title: '에스글리토 선호 고객', name: '이학술 교수', description: '', difficulty: '고급', personaImage: '/images/doctor_academic_female_1785317548083.png', hashtags: ['#임상데이터', '#연구디자인', '#신뢰성'], missionMsg: '에스글리토 선호 고객에게 제미다파의 임상 데이터를 어필하세요!' },
+    { id: 'z3', title: '타 MET/DPP-4i 복합제 선호 고객', name: '박보수 원장', description: '', difficulty: '초급', personaImage: '/images/doctor_friendly_older_male_1785317558177.png', hashtags: ['#기존처방유지', '#부작용우려', '#안전성'], missionMsg: '타 약제 선호 고객에게 제미다파 스위칭의 이점을 설명하세요!' }
   ],
   vimovo: [
-    { id: 'v1', title: '낙소졸 선호 고객', description: '약가와 삭감 이슈에 예민한 개원의. 비용 효율성과 보험 혜택을 강조하세요.', difficulty: '중급', personaImage: '/images/doctor_strict_male_1785317537635.png' },
-    { id: 'v2', title: '쎄레브렉스 선호 고객', description: '심혈관 안전성을 최우선으로 고려하는 교수. 안전성 데이터와 가이드라인을 중심으로 어필하세요.', difficulty: '고급', personaImage: '/images/doctor_academic_female_1785317548083.png' },
-    { id: 'v3', title: 'SYSADOA 선호 고객', description: '환자의 장기 복용 순응도와 위장관 부작용을 걱정하는 원장님. 복약 편의성을 강조하세요.', difficulty: '초급', personaImage: '/images/doctor_friendly_older_male_1785317558177.png' }
+    { id: 'v1', title: '낙소졸 선호 고객', name: '김비모 원장', description: '', difficulty: '중급', personaImage: '/images/doctor_strict_male_1785317537635.png', hashtags: ['#약가민감', '#비용효율성', '#보험혜택'], missionMsg: '낙소졸 선호 고객에게 비모보 처방을 유도해내세요!' },
+    { id: 'v2', title: '쎄레브렉스 선호 고객', name: '최안전 교수', description: '', difficulty: '고급', personaImage: '/images/doctor_academic_female_1785317548083.png', hashtags: ['#심혈관안전', '#가이드라인', '#부작용최소화'], missionMsg: '쎄레브렉스 선호 교수에게 비모보의 위장관 안전성을 강조하세요!' },
+    { id: 'v3', title: 'SYSADOA 선호 고객', name: '이순응 원장', description: '', difficulty: '초급', personaImage: '/images/doctor_friendly_older_male_1785317558177.png', hashtags: ['#복약순응도', '#편의성', '#위장보호'], missionMsg: 'SYSADOA 선호 고객에게 비모보의 1정 복합제 이점을 어필하세요!' }
   ],
   nephoxil: [
-    { id: 'n1', title: '세벨라머 처방 유지 고객 (가상)', description: '기존 세벨라머 처방에 만족하며 새로운 약제로의 변경을 꺼리는 보수적인 원장님.', difficulty: '중급', personaImage: '/images/doctor_strict_male_1785317537635.png' }
+    { id: 'n1', title: '세벨라머 처방 유지 고객 (가상)', name: '한네폭 원장', description: '', difficulty: '중급', personaImage: '/images/doctor_strict_male_1785317537635.png', hashtags: ['#기존처방유지', '#변화기피', '#투석환자'], missionMsg: '세벨라머 처방 유지 고객에게 네폭실의 차별화된 인결합 능력을 설명하세요!' }
   ]
 };
 

@@ -24,7 +24,6 @@ export const FlashDoctorRoom: React.FC<FlashDoctorRoomProps> = ({
   onEndRoleplay, chatHistory, setChatHistory, onBack
 }) => {
   const [elapsedTime, setElapsedTime] = useState(0);
-  const [hintMsg, setHintMsg] = useState<string>('');
 
   const conversation = useConversation({
     onMessage: (message) => {
@@ -77,23 +76,7 @@ export const FlashDoctorRoom: React.FC<FlashDoctorRoomProps> = ({
     return () => clearInterval(interval);
   }, [conversation.status]);
 
-  // Hint Logic (Simple logic based on missing checklist items)
-  useEffect(() => {
-    const missing = checklistItems.find(item => !checklistStatus[item.key]);
-    if (missing) {
-      if (missing.key.includes('switching') || missing.key.includes('coating') || missing.key.includes('phosphate')) {
-        setHintMsg(`원장님, ${product.name}의 주요 기전에 대해 먼저 설명해 주시는 건 어떨까요?`);
-      } else if (missing.key.includes('hba1c') || missing.key.includes('ulcer') || missing.key.includes('iron')) {
-        setHintMsg("임상 데이터를 통해 효능을 뒷받침해 보세요!");
-      } else if (missing.key.includes('closing')) {
-        setHintMsg("마무리 클로징과 함께 처방을 권유해 보세요!");
-      } else {
-        setHintMsg(missing.label);
-      }
-    } else {
-      setHintMsg("모든 체크리스트를 완수하셨습니다! 대화를 자연스럽게 마무리하세요.");
-    }
-  }, [checklistStatus, checklistItems, product.name]);
+
 
   const handleStartCall = useCallback(async () => {
     try {
@@ -181,8 +164,16 @@ export const FlashDoctorRoom: React.FC<FlashDoctorRoomProps> = ({
             </div>
           </div>
           <div className="text-white">
-            <h2 className="text-3xl font-extrabold drop-shadow-lg">{scenario.title.split(' ')[0]} 원장</h2>
-            <p className="text-sm text-white/70 mt-1 drop-shadow-md">{scenario.description}</p>
+            <h2 className="text-3xl font-extrabold drop-shadow-lg">{scenario.name}</h2>
+            {scenario.hashtags && scenario.hashtags.length > 0 && (
+              <div className="flex flex-wrap gap-2 mt-3">
+                {scenario.hashtags.map((tag, i) => (
+                  <span key={i} className="text-sm font-semibold text-white/90 bg-white/20 px-3 py-1 rounded-full drop-shadow-md backdrop-blur-md border border-white/30">
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            )}
           </div>
         </div>
 
@@ -195,26 +186,8 @@ export const FlashDoctorRoom: React.FC<FlashDoctorRoomProps> = ({
               <AlertCircle className="w-4 h-4" /> Try responding like this!
             </h4>
             <p className="text-sm font-medium text-slate-700 leading-relaxed">
-              "{hintMsg}"
+              "{scenario.missionMsg}"
             </p>
-          </div>
-
-          {/* Checklist Progress (Compact) */}
-          <div className="bg-slate-900/60 backdrop-blur-md rounded-2xl p-4 border border-white/10">
-            <div className="flex justify-between items-center mb-3">
-              <span className="text-xs font-bold text-white/90">실시간 미션</span>
-              <span className="text-[10px] text-emerald-400 font-bold">
-                {Object.values(checklistStatus).filter(Boolean).length} / {checklistItems.length}
-              </span>
-            </div>
-            <div className="space-y-2">
-              {checklistItems.map(item => (
-                <div key={item.key} className={`flex items-center gap-2 text-[11px] ${checklistStatus[item.key] ? 'text-emerald-400' : 'text-white/50'}`}>
-                  {checklistStatus[item.key] ? <CheckCircle2 className="w-3.5 h-3.5" /> : <Circle className="w-3.5 h-3.5" />}
-                  <span className={`truncate ${checklistStatus[item.key] ? 'line-through' : ''}`}>{item.label}</span>
-                </div>
-              ))}
-            </div>
           </div>
 
           {/* Control Buttons */}
