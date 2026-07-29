@@ -9,27 +9,32 @@ interface EmployeeLoginModalProps {
 }
 
 export const EmployeeLoginModal: React.FC<EmployeeLoginModalProps> = ({ onSave, currentInfo, isOpen }) => {
-  const [employeeId, setEmployeeId] = useState(currentInfo?.employeeId || '');
+  const [nameInput, setNameInput] = useState(currentInfo?.name || '');
   const [error, setError] = useState('');
 
   if (!isOpen) return null;
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!employeeId.trim()) { setError('사번을 입력해 주세요.'); return; }
+    if (!nameInput.trim()) { setError('이름을 입력해 주세요.'); return; }
     setError('');
-    onSave({ employeeId: employeeId.trim(), name: employeeId.trim(), department: 'LG화학 영업본부' });
+    onSave({ employeeId: nameInput.trim(), name: nameInput.trim(), department: 'LG화학 영업본부' });
   };
 
   return (
     <div className="fixed inset-0 z-50 flex flex-col items-center justify-center p-4 bg-white animate-fadeIn">
+      {/* Top Right Badge */}
+      <div className="absolute top-6 right-6 md:top-8 md:right-8">
+        <span className="px-3 py-1.5 bg-slate-100 text-slate-500 text-[11px] font-extrabold rounded-full border border-slate-200">사내교육용</span>
+      </div>
+
       <div className="w-full max-w-sm space-y-10">
         
         <div className="flex flex-col items-center text-center space-y-4">
           <img 
             src="/images/detail_go_logo.png" 
             alt="디테일 GO" 
-            className="w-48 md:w-56 object-contain drop-shadow-md animate-float"
+            className="w-48 md:w-56 object-contain mix-blend-multiply animate-float"
           />
         </div>
 
@@ -38,9 +43,9 @@ export const EmployeeLoginModal: React.FC<EmployeeLoginModalProps> = ({ onSave, 
             <div className="relative">
               <input 
                 type="text" 
-                value={employeeId} 
-                onChange={(e) => setEmployeeId(e.target.value)}
-                placeholder="사번을 입력하세요" 
+                value={nameInput} 
+                onChange={(e) => setNameInput(e.target.value)}
+                placeholder="이름을 입력하세요" 
                 autoFocus
                 className="w-full px-5 py-4 bg-slate-50 border-2 border-slate-100 rounded-2xl text-base font-bold text-slate-900 focus:outline-none focus:border-blue-500 focus:bg-white transition-all placeholder:text-slate-400 shadow-inner" 
               />
@@ -60,8 +65,8 @@ export const EmployeeLoginModal: React.FC<EmployeeLoginModalProps> = ({ onSave, 
       </div>
       
       {/* Footer */}
-      <div className="absolute bottom-6 left-0 right-0 text-center">
-        <p className="text-[11px] font-bold text-slate-400">개발자: 신채영</p>
+      <div className="absolute bottom-6 left-0 right-0 text-center px-4">
+        <p className="text-[11px] font-bold text-slate-400">본 앱은 LG화학 영업사원 사내교육용으로 제작되었습니다.</p>
       </div>
     </div>
   );
