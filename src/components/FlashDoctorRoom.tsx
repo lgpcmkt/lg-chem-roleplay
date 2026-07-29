@@ -152,6 +152,7 @@ export const FlashDoctorRoom: React.FC<FlashDoctorRoomProps> = ({
             : isOldMale
             ? "어, 담당자님 왔어요? 오늘은 무슨 일로 왔나."
             : "네 담당자님, 오랜만이네요. 오늘은 어떤 일로 오셨나요?"
+        }
       });
     } catch (err) {
       console.error('Failed to start call:', err);
