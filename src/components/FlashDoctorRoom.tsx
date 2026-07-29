@@ -134,8 +134,8 @@ export const FlashDoctorRoom: React.FC<FlashDoctorRoomProps> = ({
       await navigator.mediaDevices.getUserMedia({ audio: true });
       setIsMuted(false);
 
-      const isFemale = scenario.personaImage.includes('female');
-      const isOldMale = !isFemale && (scenario.name.includes('교수') || scenario.name.includes('보수') || scenario.name.includes('네폭') || scenario.personaImage.includes('older'));
+      const isFemale = scenario.name.includes('이학술') || scenario.name.includes('최안전');
+      const isOldMale = scenario.name.includes('김제미') || scenario.name.includes('박보수') || scenario.name.includes('김비모') || scenario.name.includes('한네폭');
 
       await conversation.startSession({
         agentId: AGENT_ID,
