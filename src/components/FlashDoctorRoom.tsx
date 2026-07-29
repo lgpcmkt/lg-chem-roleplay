@@ -17,7 +17,7 @@ interface FlashDoctorRoomProps {
 }
 
 // TODO: Replace with your actual ElevenLabs Agent ID
-const AGENT_ID = 'YOUR_ELEVENLABS_AGENT_ID';
+const AGENT_ID = 'agent_6501kymkvp51eb68k1m589abc18s';
 
 export const FlashDoctorRoom: React.FC<FlashDoctorRoomProps> = ({
   product, scenario, employeeInfo, checklistStatus, setChecklistStatus, checklistItems,
