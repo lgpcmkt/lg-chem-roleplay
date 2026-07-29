@@ -152,16 +152,6 @@ export const FlashDoctorRoom: React.FC<FlashDoctorRoomProps> = ({
             : isOldMale
             ? "어, 담당자님 왔어요? 오늘은 무슨 일로 왔나."
             : "네 담당자님, 오랜만이네요. 오늘은 어떤 일로 오셨나요?"
-        },
-        overrides: {
-          tts: {
-            voiceId: isFemale 
-              ? (import.meta.env.VITE_ELEVENLABS_VOICE_ID_FEMALE || "YDseIkMzKtO5bK1Ehnev") 
-              : isOldMale
-              ? (import.meta.env.VITE_ELEVENLABS_VOICE_ID_MALE_OLD || "SWu2lWaUX4JBPKyh7h1p")
-              : (import.meta.env.VITE_ELEVENLABS_VOICE_ID_MALE || "sQ3a15DhENXU8pKTHlcc")
-          }
-        }
       });
     } catch (err) {
       console.error('Failed to start call:', err);
