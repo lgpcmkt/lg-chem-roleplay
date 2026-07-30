@@ -205,10 +205,34 @@ export default function App() {
               if (data.analysis && data.analysis.evaluation_criteria_results) {
                 const rpCriteria = data.analysis.evaluation_criteria_results.rp || Object.values(data.analysis.evaluation_criteria_results)[0] as any;
                 if (rpCriteria) {
+                  const dc = data.analysis.data_collection_results || {};
+                  const getDcVal = (key: string) => {
+                    if (!dc[key]) return undefined;
+                    return (typeof dc[key] === 'object' && 'value' in dc[key]) ? dc[key].value : dc[key];
+                  };
+
+                  const toArray = (val: any) => {
+                    if (Array.isArray(val)) return val;
+                    if (typeof val === 'string') return val.split('\n').filter(s => s.trim().length > 0).map(s => s.replace(/^[-*•]\s*/, '').trim());
+                    return [];
+                  };
+
+                  const totalScore = Number(getDcVal('total_score')) || (rpCriteria.result === 'success' ? 100 : 50);
+                  const grade = totalScore >= 90 ? 'S' : totalScore >= 80 ? 'A' : totalScore >= 70 ? 'B' : 'C';
+
                   elevenLabsData = {
                     isSuccess: rpCriteria.result === 'success',
-                    rationale: rpCriteria.rationale || '평가 결과가 성공적으로 수집되었습니다.',
-                    transcript_summary: data.analysis.transcript_summary
+                    reasoning: rpCriteria.rationale || '평가 결과가 성공적으로 수집되었습니다.',
+                    summary: data.analysis.transcript_summary || '',
+                    strengths: toArray(getDcVal('strengths')),
+                    weaknesses: toArray(getDcVal('weaknesses')),
+                    scores: [],
+                    detailedFeedback: rpCriteria.rationale,
+                    totalScore: totalScore,
+                    grade: grade,
+                    turnByTurnAnalysis: [],
+                    recommendedScript: getDcVal('recommended_script') || '',
+                    keyChecklistStatus: {}
                   };
                   break;
                 }
@@ -224,39 +248,22 @@ export default function App() {
       let evalResult: RoleplayEvaluationResult;
 
       if (elevenLabsData) {
-        // Bypass Gemini completely and use ElevenLabs data directly
+        evalResult = elevenLabsData;
+      } else {
+        // 일레븐랩스 분석 실패 시 기본값 처리
         evalResult = {
-          isSuccess: elevenLabsData.isSuccess,
-          reasoning: elevenLabsData.rationale,
-          summary: elevenLabsData.transcript_summary || '',
+          isSuccess: false,
+          reasoning: '분석에 실패했거나 대화 시간이 너무 짧습니다.',
+          summary: '데이터 분석 불가',
           strengths: [],
           weaknesses: [],
           scores: [],
-          detailedFeedback: elevenLabsData.rationale,
-          totalScore: elevenLabsData.isSuccess ? 100 : 50,
-          grade: elevenLabsData.isSuccess ? 'S' : 'C',
+          detailedFeedback: '일레븐랩스 서버에서 분석 데이터를 반환하지 않았습니다.',
+          totalScore: 50,
+          grade: 'C',
           turnByTurnAnalysis: [],
-          recommendedScript: '',
+          recommendedScript: '충분한 대화를 나누지 않았습니다.',
           keyChecklistStatus: {}
-        };
-      } else {
-        // Fetch from backend as fallback if elevenLabsData is somehow missing or ElevenLabs polling failed
-        const historyForApi = chatHistory.map(m => ({ role: m.role, content: m.content }));
-        const res = await fetch('/api/evaluate', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            productId: selectedProductId,
-            scenarioTitle: selectedScenario?.title || selectedScenarioId,
-            chatHistory: historyForApi,
-          }),
-        });
-
-        const data = await res.json();
-        evalResult = {
-          ...data,
-          isSuccess: data.isSuccess ?? false,
-          reasoning: data.reasoning ?? (data.isSuccess ? '선생님의 처방변경 이유: 설득력 있는 어필이었습니다.' : '선생님의 Unmet needs: 전달력이 부족했습니다.')
         };
       }
 
