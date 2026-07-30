@@ -30,27 +30,27 @@ export const FlashDoctorRoom: React.FC<FlashDoctorRoomProps> = ({
     let hashtags = scenario.hashtags || [];
 
     if (persona.includes('까칠한')) {
-      personaImage = '/images/doctor_z1.png';
+      personaImage = '/images/korean_doctor_strict_clinic_1785413940376.png';
       missionMsg = `[Tip] 까칠한 원장님이니 핵심 위주로 빠르고 간결하게 디테일하세요!`;
       hashtags = [...hashtags, '#핵심위주', '#시간엄수'];
     } else if (persona.includes('학술적인')) {
-      personaImage = '/images/doctor_z2.png';
+      personaImage = '/images/korean_doctor_academic_hospital_1785413957051.png';
       missionMsg = `[Tip] 학술적인 원장님이니 구체적인 임상 데이터와 근거를 중심으로 설득하세요!`;
       hashtags = [...hashtags, '#임상데이터', '#근거중심'];
     } else if (persona.includes('상업적인')) {
-      personaImage = '/images/doctor_z3.png';
+      personaImage = '/images/korean_doctor_commercial_clinic_1785413972356.png';
       missionMsg = `[Tip] 상업적인 원장님이니 환자 만족도와 병원 수익에 도움이 되는 방향을 강조하세요!`;
       hashtags = [...hashtags, '#수익증대', '#환자유치'];
     } else if (persona.includes('거절형')) {
-      personaImage = '/images/doctor_z4.png';
+      personaImage = '/images/korean_doctor_rejecting_hospital_1785413986354.png';
       missionMsg = `[Tip] 무뚝뚝한 원장님이니 가벼운 인사로 시작하며 자연스럽게 라포를 형성하세요!`;
       hashtags = [...hashtags, '#라포형성', '#짧은면담'];
     } else {
       // 기본 성향일 때도 POV 이미지를 맵핑
-      if (scenario.id === 'z1' || scenario.id === 'v2') personaImage = '/images/doctor_z1.png';
-      else if (scenario.id === 'z2' || scenario.id === 'v3') personaImage = '/images/doctor_z2.png';
-      else if (scenario.id === 'z3' || scenario.id === 'v1') personaImage = '/images/doctor_z3.png';
-      else personaImage = '/images/doctor_z4.png';
+      if (scenario.id === 'z1' || scenario.id === 'v2') personaImage = '/images/korean_doctor_strict_clinic_1785413940376.png';
+      else if (scenario.id === 'z2' || scenario.id === 'v3') personaImage = '/images/korean_doctor_academic_hospital_1785413957051.png';
+      else if (scenario.id === 'z3' || scenario.id === 'v1') personaImage = '/images/korean_doctor_commercial_clinic_1785413972356.png';
+      else personaImage = '/images/korean_doctor_rejecting_hospital_1785413986354.png';
     }
 
     return { personaImage, missionMsg, hashtags };
