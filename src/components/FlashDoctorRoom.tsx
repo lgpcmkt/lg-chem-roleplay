@@ -45,6 +45,12 @@ export const FlashDoctorRoom: React.FC<FlashDoctorRoomProps> = ({
       personaImage = '/images/doctor_z4.png';
       missionMsg = `[Tip] 무뚝뚝한 원장님이니 가벼운 인사로 시작하며 자연스럽게 라포를 형성하세요!`;
       hashtags = [...hashtags, '#라포형성', '#짧은면담'];
+    } else {
+      // 기본 성향일 때도 POV 이미지를 맵핑
+      if (scenario.id === 'z1' || scenario.id === 'v2') personaImage = '/images/doctor_z1.png';
+      else if (scenario.id === 'z2' || scenario.id === 'v3') personaImage = '/images/doctor_z2.png';
+      else if (scenario.id === 'z3' || scenario.id === 'v1') personaImage = '/images/doctor_z3.png';
+      else personaImage = '/images/doctor_z4.png';
     }
 
     return { personaImage, missionMsg, hashtags };
