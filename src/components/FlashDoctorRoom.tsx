@@ -166,13 +166,14 @@ export const FlashDoctorRoom: React.FC<FlashDoctorRoomProps> = ({
     try {
       setIsMuted(false);
 
-      await conversation.startSession({
+      const conversationId = await conversation.startSession({
         agentId: AGENT_ID,
         dynamicVariables: {
           doctor_persona: persona,
           product_name: product.name,
           scenario_title: scenario.title,
-          mission: personaData.missionMsg
+          mission: personaData.missionMsg,
+          first_message: "아 담당자님, 오랜만이에요. 오늘은 어떤 일로 오셨어요?"
         },
       });
       clearTimeout(timeoutId);
