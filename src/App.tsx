@@ -202,40 +202,45 @@ export default function App() {
             });
             if (response.ok) {
               const data = await response.json();
-              if (data.analysis && data.analysis.evaluation_criteria_results) {
-                const rpCriteria = data.analysis.evaluation_criteria_results.rp || Object.values(data.analysis.evaluation_criteria_results)[0] as any;
-                if (rpCriteria) {
-                  const dc = data.analysis.data_collection_results || {};
-                  const getDcVal = (key: string) => {
-                    if (!dc[key]) return undefined;
-                    return (typeof dc[key] === 'object' && 'value' in dc[key]) ? dc[key].value : dc[key];
-                  };
+              if (data.status === 'done') {
+                const analysis = data.analysis || {};
+                const evals = analysis.evaluation_criteria_results || {};
+                const dc = analysis.data_collection_results || {};
+                
+                const rpCriteria = evals.rp || Object.values(evals)[0] || { 
+                  result: 'unknown', 
+                  rationale: '평가 기준(RP) 결과가 없거나 대화가 너무 짧아 분석이 생략되었습니다.' 
+                };
 
-                  const toArray = (val: any) => {
-                    if (Array.isArray(val)) return val;
-                    if (typeof val === 'string') return val.split('\n').filter(s => s.trim().length > 0).map(s => s.replace(/^[-*•]\s*/, '').trim());
-                    return [];
-                  };
+                const getDcVal = (key: string) => {
+                  if (!dc[key]) return undefined;
+                  return (typeof dc[key] === 'object' && 'value' in dc[key]) ? dc[key].value : dc[key];
+                };
 
-                  const totalScore = Number(getDcVal('total_score')) || (rpCriteria.result === 'success' ? 100 : 50);
-                  const grade = totalScore >= 90 ? 'S' : totalScore >= 80 ? 'A' : totalScore >= 70 ? 'B' : 'C';
+                const toArray = (val: any) => {
+                  if (Array.isArray(val)) return val;
+                  if (typeof val === 'string') return val.split('\n').filter(s => s.trim().length > 0).map(s => s.replace(/^[-*•]\s*/, '').trim());
+                  return [];
+                };
 
-                  elevenLabsData = {
-                    isSuccess: rpCriteria.result === 'success',
-                    reasoning: rpCriteria.rationale || '평가 결과가 성공적으로 수집되었습니다.',
-                    summary: data.analysis.transcript_summary || '',
-                    strengths: toArray(getDcVal('strengths')),
-                    weaknesses: toArray(getDcVal('weaknesses')),
-                    scores: [],
-                    detailedFeedback: rpCriteria.rationale,
-                    totalScore: totalScore,
-                    grade: grade,
-                    turnByTurnAnalysis: [],
-                    recommendedScript: getDcVal('recommended_script') || '',
-                    keyChecklistStatus: {}
-                  };
-                  break;
-                }
+                const totalScore = Number(getDcVal('total_score')) || (rpCriteria.result === 'success' ? 100 : 50);
+                const grade = totalScore >= 90 ? 'S' : totalScore >= 80 ? 'A' : totalScore >= 70 ? 'B' : 'C';
+
+                elevenLabsData = {
+                  isSuccess: rpCriteria.result === 'success',
+                  reasoning: rpCriteria.rationale || '평가 결과가 성공적으로 수집되었습니다.',
+                  summary: analysis.transcript_summary || '요약 데이터가 없습니다.',
+                  strengths: toArray(getDcVal('strengths')),
+                  weaknesses: toArray(getDcVal('weaknesses')),
+                  scores: [],
+                  detailedFeedback: rpCriteria.rationale,
+                  totalScore: totalScore,
+                  grade: grade,
+                  turnByTurnAnalysis: [],
+                  recommendedScript: getDcVal('recommended_script') || '추천 스크립트가 없습니다.',
+                  keyChecklistStatus: {}
+                };
+                break;
               }
             }
           } catch (e) {
