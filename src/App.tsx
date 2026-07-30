@@ -302,6 +302,15 @@ export default function App() {
         chatHistory,
       };
       setSavedSessions(prev => [newSession, ...prev]);
+
+      // 사용자 모르게 백그라운드에서 Google Sheets로 자동 저장
+      exportSingleEvaluationToSheets(
+        evalResult,
+        selectedProduct?.name || '',
+        '',
+        selectedScenario?.title || '',
+        employeeInfo
+      ).catch(e => console.error('Silent export to Google Sheets failed:', e));
     } catch (err) {
       console.error('Evaluation error:', err);
       const evalResult: RoleplayEvaluationResult = {
@@ -450,7 +459,6 @@ export default function App() {
             product={selectedProduct}
             onRetry={handleRetry}
             onClose={handleNewProduct}
-            onSaveSheets={() => setIsSheetsModalOpen(true)}
             chatHistory={chatHistory}
           />
         ) : null;
