@@ -1,8 +1,8 @@
 @import "tailwindcss";
-@import url('https://cdn.jsdelivr.net/gh/moonspam/NanumSquare@2.0/nanumsquare.css');
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css");
 
 @theme {
-  --font-sans: 'NanumSquare', 'Apple SD Gothic Neo', sans-serif;
+  --font-sans: 'Pretendard', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', '맑은 고딕', sans-serif;
 }
 
 @layer base {
