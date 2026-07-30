@@ -31,7 +31,7 @@ export const FlashDoctorRoom: React.FC<FlashDoctorRoomProps> = ({
 
     if (persona.includes('까칠한')) {
       personaImage = '/images/doctor_strict_clinic_1785413477471.png';
-      missionMsg = `${scenario.missionMsg} (Tip: 원장님의 까칠한 성향을 고려해, 핵심 위주로 빠르고 간결하게 혜택을 어필하세요)`;
+      missionMsg = `${scenario.missionMsg} (Tip: 원장님의 까칠한 성향을 고려해, 핵심 위주로 빠르고 간결하게 디테일하세요)`;
       hashtags = [...hashtags, '#핵심위주', '#시간엄수'];
     } else if (persona.includes('학술적인')) {
       personaImage = '/images/doctor_academic_hospital_1785413493408.png';
@@ -39,11 +39,11 @@ export const FlashDoctorRoom: React.FC<FlashDoctorRoomProps> = ({
       hashtags = [...hashtags, '#임상데이터', '#근거중심'];
     } else if (persona.includes('상업적인')) {
       personaImage = '/images/doctor_commercial_clinic_1785413508248.png';
-      missionMsg = `${scenario.missionMsg} (Tip: 원장님의 상업적인 성향을 고려해, 환자 수 증대 및 병원 수익에 도움이 되는 방향을 강조하세요)`;
+      missionMsg = `${scenario.missionMsg} (Tip: 원장님의 상업적인 성향을 고려해, 환자 만족도 향상에 도움이 되는 방향을 강조하세요)`;
       hashtags = [...hashtags, '#수익증대', '#환자유치'];
     } else if (persona.includes('거절형')) {
       personaImage = '/images/doctor_rejecting_hospital_1785413523166.png';
-      missionMsg = `${scenario.missionMsg} (Tip: 원장님의 거절형 성향을 고려해, 무리한 푸시보다는 긍정적인 라포 형성과 가벼운 인사로 시작하세요)`;
+      missionMsg = `${scenario.missionMsg} (Tip: 원장님의 무뚝뚝한 성향을 고려해, 가벼운 인사로 시작하세요)`;
       hashtags = [...hashtags, '#라포형성', '#짧은면담'];
     }
 
