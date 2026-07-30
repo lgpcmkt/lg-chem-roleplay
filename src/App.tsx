@@ -8,8 +8,9 @@ import { FlashDoctorRoom } from './components/FlashDoctorRoom';
 import { EvaluationReport } from './components/EvaluationReport';
 import { Sidebar } from './components/Sidebar';
 import { MyGradebook } from './components/MyGradebook';
-import { GoogleSheetsModal } from './components/GoogleSheetsModal';
 import { ConversationProvider } from '@elevenlabs/react';
+import { exportSingleEvaluationToSheets } from './lib/googleSheets';
+import { evaluateRoleplayWithGemini } from './lib/geminiEvaluation';
 
 // ── 정적 데이터 (클라이언트용) ──
 const PRODUCTS: Record<string, Product> = {
@@ -121,7 +122,6 @@ export default function App() {
 
   // Chat
   const [chatHistory, setChatHistory] = useState<ChatMessage[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
   const [checklistStatus, setChecklistStatus] = useState<Record<string, boolean>>({});
 
   // Evaluation
@@ -129,7 +129,6 @@ export default function App() {
   const [isEvaluating, setIsEvaluating] = useState(false);
 
   // Sessions
-  const [isSheetsModalOpen, setIsSheetsModalOpen] = useState(false);
   const [savedSessions, setSavedSessions] = useState<SavedSession[]>(() => {
     try {
       const stored = localStorage.getItem('lg_roleplay_sessions');
@@ -186,108 +185,22 @@ export default function App() {
     setScreen('roleplay');
   };
 
-  const handleEndRoleplay = useCallback(async (conversationId?: string) => {
+  const handleEndRoleplay = useCallback(async (_conversationId?: string) => {
     setIsEvaluating(true);
     setScreen('evaluation');
 
     try {
-      let elevenLabsData = undefined;
-      const apiKey = import.meta.env.VITE_ELEVENLABS_API_KEY;
-
-      if (conversationId && apiKey) {
-        // 120초 대기 (60 * 2s)
-        for (let i = 0; i < 60; i++) {
-          try {
-            const response = await fetch(`https://api.elevenlabs.io/v1/convai/conversations/${conversationId}`, {
-              headers: { 'xi-api-key': apiKey }
-            });
-            if (response.ok) {
-              const data = await response.json();
-              // Check if evaluation_criteria_results AND data_collection_results exist to ensure analysis is completely finished
-              if (data.status === 'done' || data.status === 'completed' || data.status === 'success' || 
-                  (data.analysis && 
-                   data.analysis.evaluation_criteria_results && Object.keys(data.analysis.evaluation_criteria_results).length > 0 &&
-                   data.analysis.data_collection_results && Object.keys(data.analysis.data_collection_results).length > 0)) {
-                const analysis = data.analysis || {};
-                const evals = analysis.evaluation_criteria_results || {};
-                const dc = analysis.data_collection_results || {};
-                
-                const rpCriteria = evals.rp || evals.RP || Object.values(evals)[0] || { 
-                  result: 'unknown', 
-                  rationale: '평가 기준(RP) 결과가 없거나 대화가 너무 짧아 분석이 생략되었습니다.' 
-                };
-
-                const getDcVal = (key: string) => {
-                  if (!dc[key]) return undefined;
-                  return (typeof dc[key] === 'object' && 'value' in dc[key]) ? dc[key].value : dc[key];
-                };
-
-                const toArray = (val: any) => {
-                  if (Array.isArray(val)) return val;
-                  if (typeof val === 'string') return val.split('\n').filter(s => s.trim().length > 0).map(s => s.replace(/^[-*•]\s*/, '').trim());
-                  return [];
-                };
-
-                let isSuccess = false;
-                let parsedScore = 50;
-
-                // Handle both Binary (success/failure) and Numeric (0-100) evaluation criteria
-                if (typeof rpCriteria.result === 'number') {
-                  parsedScore = rpCriteria.result;
-                  isSuccess = parsedScore >= 60; // 60점 이상이면 성공으로 간주
-                } else if (typeof rpCriteria.result === 'string') {
-                  isSuccess = rpCriteria.result.toLowerCase() === 'success';
-                  parsedScore = isSuccess ? 100 : 50;
-                }
-
-                const totalScore = Number(getDcVal('total_score')) || parsedScore;
-                const grade = totalScore >= 90 ? 'S' : totalScore >= 80 ? 'A' : totalScore >= 70 ? 'B' : 'C';
-
-                elevenLabsData = {
-                  isSuccess: isSuccess,
-                  reasoning: rpCriteria.rationale || '평가 결과가 성공적으로 수집되었습니다.',
-                  summary: analysis.transcript_summary || '요약 데이터가 없습니다.',
-                  strengths: toArray(getDcVal('strengths')),
-                  weaknesses: toArray(getDcVal('weaknesses')),
-                  scores: [],
-                  detailedFeedback: rpCriteria.rationale,
-                  totalScore: totalScore,
-                  grade: grade,
-                  turnByTurnAnalysis: [],
-                  recommendedScript: getDcVal('recommended_script') || '추천 스크립트가 없습니다.',
-                  keyChecklistStatus: {}
-                };
-                break;
-              }
-            }
-          } catch (e) {
-            console.error('ElevenLabs poll error:', e);
-          }
-          await new Promise(resolve => setTimeout(resolve, 2000));
-        }
+      if (!selectedProduct || !selectedScenario) {
+        throw new Error('선택된 약품 또는 시나리오가 없습니다.');
       }
 
-      let evalResult: RoleplayEvaluationResult;
-
-      if (elevenLabsData) {
-        evalResult = elevenLabsData;
-      } else {
-        // 일레븐랩스 분석 실패 시 기본값 처리
-        evalResult = {
-          isSuccess: false,
-          reasoning: '분석에 실패했거나 대화 시간이 너무 짧습니다.',
-          summary: '데이터 분석 불가',
-          strengths: [],
-          weaknesses: [],
-          scores: [],
-          detailedFeedback: '일레븐랩스 서버에서 분석 데이터를 반환하지 않았습니다.',
-          totalScore: 50,
-          grade: 'C',
-          turnByTurnAnalysis: [],
-          recommendedScript: '충분한 대화를 나누지 않았습니다.',
-          keyChecklistStatus: {}
-        };
-      }
+      // 구글 Gemini 1.5 Flash API로 1.5초 만에 초고속 평가 수행
+      const evalResult = await evaluateRoleplayWithGemini(
+        selectedProduct,
+        selectedScenario,
+        selectedPersona,
+        chatHistory
+      );
 
       setEvaluation(evalResult);
 
@@ -315,25 +228,19 @@ export default function App() {
       console.error('Evaluation error:', err);
       const evalResult: RoleplayEvaluationResult = {
         isSuccess: false,
-        reasoning: '선생님의 Unmet needs: 평가 중 오류가 발생했습니다. 좀 더 명확한 데이터 어필이 필요합니다.',
+        reasoning: '평가 처리 중 오류가 발생했습니다. 다시 시도해 주세요.',
+        totalScore: 50,
+        grade: 'C',
+        summary: '평가 오류',
+        strengths: [],
+        weaknesses: [],
+        recommendedScript: ''
       };
       setEvaluation(evalResult);
-      
-      const newSession: SavedSession = {
-        id: generateId(),
-        date: new Date().toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' }),
-        productId: selectedProductId,
-        productName: selectedProduct?.name || '',
-        specialtyName: '',
-        doctorTypeName: selectedScenario?.title || '',
-        evaluation: evalResult,
-        chatHistory,
-      };
-      setSavedSessions(prev => [newSession, ...prev]);
     } finally {
       setIsEvaluating(false);
     }
-  }, [chatHistory, selectedProductId, selectedScenarioId, selectedProduct, selectedScenario]);
+  }, [chatHistory, selectedProductId, selectedScenarioId, selectedProduct, selectedScenario, selectedPersona, employeeInfo]);
 
   const handleRetry = () => {
     handleSelectScenario(selectedScenarioId);
