@@ -202,7 +202,7 @@ export default function App() {
             });
             if (response.ok) {
               const data = await response.json();
-              if (data.status === 'done') {
+              if (data.status === 'done' || data.status === 'completed' || data.status === 'success' || (data.analysis && Object.keys(data.analysis).length > 0)) {
                 const analysis = data.analysis || {};
                 const evals = analysis.evaluation_criteria_results || {};
                 const dc = analysis.data_collection_results || {};

@@ -170,7 +170,9 @@ export const FlashDoctorRoom: React.FC<FlashDoctorRoomProps> = ({
         agentId: AGENT_ID,
         dynamicVariables: {
           doctor_persona: persona,
-          first_message: "아 담당자님, 오랜만이에요. 오늘은 어떤 일로 오셨어요?"
+          product_name: product.name,
+          scenario_title: scenario.title,
+          mission: personaData.missionMsg
         },
       });
       clearTimeout(timeoutId);
