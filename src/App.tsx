@@ -195,14 +195,19 @@ export default function App() {
       const apiKey = import.meta.env.VITE_ELEVENLABS_API_KEY;
 
       if (conversationId && apiKey) {
-        for (let i = 0; i < 15; i++) {
+        // 120초 대기 (60 * 2s)
+        for (let i = 0; i < 60; i++) {
           try {
             const response = await fetch(`https://api.elevenlabs.io/v1/convai/conversations/${conversationId}`, {
               headers: { 'xi-api-key': apiKey }
             });
             if (response.ok) {
               const data = await response.json();
-              if (data.status === 'done' || data.status === 'completed' || data.status === 'success' || (data.analysis && Object.keys(data.analysis).length > 0)) {
+              // Check if evaluation_criteria_results AND data_collection_results exist to ensure analysis is completely finished
+              if (data.status === 'done' || data.status === 'completed' || data.status === 'success' || 
+                  (data.analysis && 
+                   data.analysis.evaluation_criteria_results && Object.keys(data.analysis.evaluation_criteria_results).length > 0 &&
+                   data.analysis.data_collection_results && Object.keys(data.analysis.data_collection_results).length > 0)) {
                 const analysis = data.analysis || {};
                 const evals = analysis.evaluation_criteria_results || {};
                 const dc = analysis.data_collection_results || {};
