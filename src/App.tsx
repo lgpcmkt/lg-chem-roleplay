@@ -212,7 +212,7 @@ export default function App() {
                 const evals = analysis.evaluation_criteria_results || {};
                 const dc = analysis.data_collection_results || {};
                 
-                const rpCriteria = evals.rp || Object.values(evals)[0] || { 
+                const rpCriteria = evals.rp || evals.RP || Object.values(evals)[0] || { 
                   result: 'unknown', 
                   rationale: '평가 기준(RP) 결과가 없거나 대화가 너무 짧아 분석이 생략되었습니다.' 
                 };
@@ -228,11 +228,23 @@ export default function App() {
                   return [];
                 };
 
-                const totalScore = Number(getDcVal('total_score')) || (rpCriteria.result === 'success' ? 100 : 50);
+                let isSuccess = false;
+                let parsedScore = 50;
+
+                // Handle both Binary (success/failure) and Numeric (0-100) evaluation criteria
+                if (typeof rpCriteria.result === 'number') {
+                  parsedScore = rpCriteria.result;
+                  isSuccess = parsedScore >= 60; // 60점 이상이면 성공으로 간주
+                } else if (typeof rpCriteria.result === 'string') {
+                  isSuccess = rpCriteria.result.toLowerCase() === 'success';
+                  parsedScore = isSuccess ? 100 : 50;
+                }
+
+                const totalScore = Number(getDcVal('total_score')) || parsedScore;
                 const grade = totalScore >= 90 ? 'S' : totalScore >= 80 ? 'A' : totalScore >= 70 ? 'B' : 'C';
 
                 elevenLabsData = {
-                  isSuccess: rpCriteria.result === 'success',
+                  isSuccess: isSuccess,
                   reasoning: rpCriteria.rationale || '평가 결과가 성공적으로 수집되었습니다.',
                   summary: analysis.transcript_summary || '요약 데이터가 없습니다.',
                   strengths: toArray(getDcVal('strengths')),
