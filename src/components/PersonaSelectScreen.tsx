@@ -11,10 +11,10 @@ interface PersonaSelectScreenProps {
 }
 
 const PERSONAS = [
-  "다소 까칠한 고객 / 병의원",
-  "학술적인 고객 / 종병",
-  "상업적인 고객 / 병의원",
-  "면담 거절형 고객 / 종병",
+  "김까칠 원장 (다소 까칠한 고객 / 병의원)",
+  "이학술 교수 (학술적인 고객 / 종병)",
+  "나부자 원장 (상업적인 고객 / 병의원)",
+  "최내향 교수 (면담 거절형 고객 / 종병)",
 ];
 
 export const PersonaSelectScreen: React.FC<PersonaSelectScreenProps> = ({ product, scenario, onSelectPersona, onBack }) => {

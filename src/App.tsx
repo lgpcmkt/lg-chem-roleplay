@@ -38,17 +38,17 @@ const PRODUCTS: Record<string, Product> = {
 
 const SCENARIOS: Record<string, Scenario[]> = {
   zemidapa: [
-    { id: 'z1', title: '시다프비아 선호 고객', name: '김제미 원장', description: '', difficulty: '중급', personaImage: '/images/waiting_room_clinic.png', hashtags: ['#스위칭연구', '#혈당강하 효과', '#작은 약제크기'], missionMsg: '시다프비아 선호 고객에게 제미다파의 이점을 설명하고, 처방을 유도해내세요!' },
+    { id: 'z1', title: '시다프비아 선호 고객', name: '김까칠 원장', description: '', difficulty: '중급', personaImage: '/images/waiting_room_clinic.png', hashtags: ['#스위칭연구', '#혈당강하 효과', '#작은 약제크기'], missionMsg: '시다프비아 선호 고객에게 제미다파의 이점을 설명하고, 처방을 유도해내세요!' },
     { id: 'z2', title: '에스글리토 선호 고객', name: '이학술 교수', description: '', difficulty: '고급', personaImage: '/images/waiting_room_hospital.jpg', hashtags: ['#스위칭연구', '#혈당강하 효과', '#작은 약제크기'], missionMsg: '에스글리토 선호 고객에게 제미다파의 임상 데이터를 설명하고, 처방을 유도해내세요!' },
-    { id: 'z3', title: '타 MET/DPP-4i 복합제 선호 고객', name: '박보수 원장', description: '', difficulty: '초급', personaImage: '/images/waiting_room_clinic.png', hashtags: ['#스위칭연구', '#혈당강하 효과', '#작은 약제크기'], missionMsg: '타 약제 선호 고객에게 제미다파 스위칭의 이점을 설명하고, 처방을 유도해내세요!' }
+    { id: 'z3', title: '타 MET/DPP-4i 복합제 선호 고객', name: '나부자 원장', description: '', difficulty: '초급', personaImage: '/images/waiting_room_clinic.png', hashtags: ['#스위칭연구', '#혈당강하 효과', '#작은 약제크기'], missionMsg: '타 약제 선호 고객에게 제미다파 스위칭의 이점을 설명하고, 처방을 유도해내세요!' }
   ],
   vimovo: [
-    { id: 'v1', title: '낙소졸 선호 고객', name: '김비모 원장', description: '', difficulty: '중급', personaImage: '/images/waiting_room_clinic.png', hashtags: ['#복합제이점', '#심혈관안전성', '#오리지널'], missionMsg: '낙소졸 선호 고객에게 비모보의 이점을 설명하고, 처방을 유도해내세요!' },
-    { id: 'v2', title: '쎄레브렉스 선호 고객', name: '최안전 교수', description: '', difficulty: '고급', personaImage: '/images/waiting_room_hospital.jpg', hashtags: ['#복합제이점', '#심혈관안전성', '#오리지널'], missionMsg: '쎄레브렉스 선호 교수에게 비모보의 위장관 안전성을 설명하고, 처방을 유도해내세요!' },
-    { id: 'v3', title: 'SYSADOA 선호 고객', name: '이순응 원장', description: '', difficulty: '초급', personaImage: '/images/waiting_room_clinic.png', hashtags: ['#복합제이점', '#심혈관안전성', '#오리지널'], missionMsg: 'SYSADOA 선호 고객에게 비모보 1정 복합제의 이점을 설명하고, 처방을 유도해내세요!' }
+    { id: 'v1', title: '낙소졸 선호 고객', name: '김까칠 원장', description: '', difficulty: '중급', personaImage: '/images/waiting_room_clinic.png', hashtags: ['#복합제이점', '#심혈관안전성', '#오리지널'], missionMsg: '낙소졸 선호 고객에게 비모보의 이점을 설명하고, 처방을 유도해내세요!' },
+    { id: 'v2', title: '쎄레브렉스 선호 고객', name: '최내향 교수', description: '', difficulty: '고급', personaImage: '/images/waiting_room_hospital.jpg', hashtags: ['#복합제이점', '#심혈관안전성', '#오리지널'], missionMsg: '쎄레브렉스 선호 교수에게 비모보의 위장관 안전성을 설명하고, 처방을 유도해내세요!' },
+    { id: 'v3', title: 'SYSADOA 선호 고객', name: '나부자 원장', description: '', difficulty: '초급', personaImage: '/images/waiting_room_clinic.png', hashtags: ['#복합제이점', '#심혈관안전성', '#오리지널'], missionMsg: 'SYSADOA 선호 고객에게 비모보 1정 복합제의 이점을 설명하고, 처방을 유도해내세요!' }
   ],
   nephoxil: [
-    { id: 'n1', title: '세벨라머 처방 유지 고객 (가상)', name: '한네폭 원장', description: '', difficulty: '중급', personaImage: '/images/waiting_room_clinic.png', hashtags: ['#변비부작용완화'], missionMsg: '세벨라머 처방 유지 고객에게 네폭실의 차별화된 인결합 능력을 설명하고, 처방을 유도해내세요!' }
+    { id: 'n1', title: '세벨라머 처방 유지 고객 (가상)', name: '김까칠 원장', description: '', difficulty: '중급', personaImage: '/images/waiting_room_clinic.png', hashtags: ['#변비부작용완화'], missionMsg: '세벨라머 처방 유지 고객에게 네폭실의 차별화된 인결합 능력을 설명하고, 처방을 유도해내세요!' }
   ]
 };
 const PRODUCT_CHECKLIST: Record<string, { key: string; label: string; regex: RegExp }[]> = {
