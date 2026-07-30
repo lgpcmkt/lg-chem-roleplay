@@ -164,7 +164,6 @@ export const FlashDoctorRoom: React.FC<FlashDoctorRoomProps> = ({
     }, 15000);
 
     try {
-      await navigator.mediaDevices.getUserMedia({ audio: true });
       setIsMuted(false);
 
       await conversation.startSession({
