@@ -170,14 +170,11 @@ export const FlashDoctorRoom: React.FC<FlashDoctorRoomProps> = ({
         agentId: AGENT_ID,
         dynamicVariables: {
           product_name: product.name,
-          product_name_en: product.nameEn,
-          product_composition: product.composition,
-          product_indication: product.indication,
-          scenario_title: scenario.title,
-          doctor_name: scenario.name,
-          doctor_persona: persona,
+          persona: scenario.title,
           user_name: employeeInfo.name,
-          company: 'LG화학',
+          doctor_persona: persona,
+          voice_instruction: "당신은 한국 의사입니다. 기본 보이스를 사용하세요. 사용자(MR)의 말을 길게 요약하지 마세요. 요약이나 반복 없이, 곧바로 본론에 대한 짧은 꼬리 질문을 던지거나 반론을 제기하세요.",
+          first_message: "아 담당자님, 오랜만이에요. 오늘은 어떤 일로 오셨어요?"
         },
       });
       clearTimeout(timeoutId);
