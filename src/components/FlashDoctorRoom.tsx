@@ -24,6 +24,31 @@ export const FlashDoctorRoom: React.FC<FlashDoctorRoomProps> = ({
   product, scenario, employeeInfo, checklistStatus, setChecklistStatus, checklistItems,
   onEndRoleplay, chatHistory, setChatHistory, onBack, persona
 }) => {
+  const personaData = React.useMemo(() => {
+    let personaImage = scenario.personaImage || '/images/doctor_z1_1785320119267.png';
+    let missionMsg = scenario.missionMsg;
+    let hashtags = scenario.hashtags || [];
+
+    if (persona.includes('까칠한')) {
+      personaImage = '/images/doctor_strict_clinic_1785413477471.png';
+      missionMsg = `${scenario.missionMsg} (Tip: 원장님의 까칠한 성향을 고려해, 핵심 위주로 빠르고 간결하게 혜택을 어필하세요)`;
+      hashtags = [...hashtags, '#핵심위주', '#시간엄수'];
+    } else if (persona.includes('학술적인')) {
+      personaImage = '/images/doctor_academic_hospital_1785413493408.png';
+      missionMsg = `${scenario.missionMsg} (Tip: 원장님의 학술적인 성향을 고려해, 구체적인 임상 데이터와 근거를 중심으로 설득하세요)`;
+      hashtags = [...hashtags, '#임상데이터', '#근거중심'];
+    } else if (persona.includes('상업적인')) {
+      personaImage = '/images/doctor_commercial_clinic_1785413508248.png';
+      missionMsg = `${scenario.missionMsg} (Tip: 원장님의 상업적인 성향을 고려해, 환자 수 증대 및 병원 수익에 도움이 되는 방향을 강조하세요)`;
+      hashtags = [...hashtags, '#수익증대', '#환자유치'];
+    } else if (persona.includes('거절형')) {
+      personaImage = '/images/doctor_rejecting_hospital_1785413523166.png';
+      missionMsg = `${scenario.missionMsg} (Tip: 원장님의 거절형 성향을 고려해, 무리한 푸시보다는 긍정적인 라포 형성과 가벼운 인사로 시작하세요)`;
+      hashtags = [...hashtags, '#라포형성', '#짧은면담'];
+    }
+
+    return { personaImage, missionMsg, hashtags };
+  }, [persona, scenario]);
   const [elapsedTime, setElapsedTime] = useState(0);
   const [micVolume, setMicVolume] = useState(0);
   const [isMuted, setIsMuted] = useState(false);
@@ -149,16 +174,18 @@ export const FlashDoctorRoom: React.FC<FlashDoctorRoomProps> = ({
           company: 'LG화학',
         },
       });
-    } catch (err) {
+      // 성공 시 setIsConnecting(false)는 호출하지 않음. 
+      // conversation.status === 'connected' 가 되면서 자연스럽게 화면이 전환됨.
+    } catch (err: any) {
       console.error('Failed to start call:', err);
-      alert('마이크 접근을 허용하거나 에이전트 설정(AGENT_ID)을 확인해주세요.');
-    } finally {
+      alert('연결 실패: ' + (err.message || '마이크 접근 허용 및 설정을 확인해주세요.'));
       setIsConnecting(false);
     }
-  }, [conversation, product.name, scenario.title, employeeInfo.name, scenario.personaImage]);
+  }, [conversation, product, scenario, employeeInfo, persona]);
 
   const handleEndCall = useCallback(async () => {
     const cid = conversation.getId();
+    setIsConnecting(false);
     await conversation.endSession();
     onEndRoleplay(cid);
   }, [conversation, onEndRoleplay]);
@@ -218,7 +245,7 @@ export const FlashDoctorRoom: React.FC<FlashDoctorRoomProps> = ({
       {/* Main Video/Avatar Area */}
       <div className="absolute inset-0 flex items-center justify-center">
         <img 
-          src={scenario.personaImage || '/images/doctor_z1_1785320119267.png'} 
+          src={personaData.personaImage} 
           alt={scenario.title} 
           className="w-full h-full object-cover opacity-80"
         />
@@ -226,9 +253,9 @@ export const FlashDoctorRoom: React.FC<FlashDoctorRoomProps> = ({
       </div>
 
       {/* Loading Overlay when isConnecting */}
-      {isConnecting && conversation.status !== 'connected' && (
+      {(isConnecting || conversation.status === 'connecting') && conversation.status !== 'connected' && (
         <div className="absolute inset-0 z-50 flex flex-col items-center justify-center bg-slate-900 overflow-hidden">
-          <img src={scenario.personaImage || '/images/doctor_z1_1785320119267.png'} className="absolute inset-0 w-full h-full object-cover opacity-30 scale-110 blur-xl" alt="blur-bg" />
+          <img src={personaData.personaImage} className="absolute inset-0 w-full h-full object-cover opacity-30 scale-110 blur-xl" alt="blur-bg" />
           <div className="absolute inset-0 bg-slate-900/60" />
           <div className="z-10 flex flex-col items-center gap-6 animate-fadeIn">
             <div className="w-16 h-16 border-4 border-blue-400 border-t-transparent rounded-full animate-spin shadow-[0_0_15px_rgba(96,165,250,0.5)]" />
@@ -314,9 +341,9 @@ export const FlashDoctorRoom: React.FC<FlashDoctorRoomProps> = ({
 
           <div className="text-white">
             <h2 className="text-3xl font-extrabold drop-shadow-lg">{scenario.name}</h2>
-            {scenario.hashtags && scenario.hashtags.length > 0 && (
+            {personaData.hashtags && personaData.hashtags.length > 0 && (
               <div className="flex flex-wrap gap-2 mt-3">
-                {scenario.hashtags.map((tag, i) => (
+                {personaData.hashtags.map((tag, i) => (
                   <span key={i} className="text-sm font-semibold text-white/90 bg-white/20 px-3 py-1 rounded-full drop-shadow-md backdrop-blur-md border border-white/30">
                     {tag}
                   </span>
@@ -335,7 +362,7 @@ export const FlashDoctorRoom: React.FC<FlashDoctorRoomProps> = ({
               <AlertCircle className="w-4 h-4" /> 핵심 키워드를 활용해 보세요!
             </h4>
             <p className="text-sm font-medium text-slate-700 leading-relaxed">
-              "{scenario.missionMsg}"
+              "{personaData.missionMsg}"
             </p>
           </div>
 
