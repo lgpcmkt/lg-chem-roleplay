@@ -248,7 +248,7 @@ export const FlashDoctorRoom: React.FC<FlashDoctorRoomProps> = ({
       {/* Main Video/Avatar Area */}
       <div className="absolute inset-0 flex items-center justify-center">
         <img
-          src={personaData.personaImage}
+          src={conversation.status === 'connected' ? personaData.personaImage : scenario.personaImage}
           alt={scenario.title}
           className="w-full h-full object-cover opacity-80"
         />
@@ -258,7 +258,7 @@ export const FlashDoctorRoom: React.FC<FlashDoctorRoomProps> = ({
       {/* Loading Overlay when isConnecting */}
       {(isConnecting || conversation.status === 'connecting') && conversation.status !== 'connected' && (
         <div className="absolute inset-0 z-50 flex flex-col items-center justify-center bg-slate-900 overflow-hidden">
-          <img src={personaData.personaImage} className="absolute inset-0 w-full h-full object-cover opacity-30 scale-110 blur-xl" alt="blur-bg" />
+          <img src={scenario.personaImage} className="absolute inset-0 w-full h-full object-cover opacity-30 scale-110 blur-xl" alt="blur-bg" />
           <div className="absolute inset-0 bg-slate-900/60" />
           <div className="z-10 flex flex-col items-center gap-6 animate-fadeIn">
             <div className="w-16 h-16 border-4 border-blue-400 border-t-transparent rounded-full animate-spin shadow-[0_0_15px_rgba(96,165,250,0.5)]" />

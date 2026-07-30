@@ -29,7 +29,7 @@ export const MyGradebook: React.FC<MyGradebookProps> = ({ sessions, onDeleteSess
               onClick={onSaveBulkSheets}
               className="px-4 py-2.5 bg-emerald-50 text-emerald-700 text-xs font-bold rounded-xl border border-emerald-200 hover:bg-emerald-100 transition-colors shadow-sm"
             >
-              📊 시트로 전체 내보내기
+              📊 기록 제출하기
             </button>
           )}
         </div>

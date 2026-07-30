@@ -77,7 +77,7 @@ export const EvaluationReport: React.FC<EvaluationReportProps> = ({
                 onClick={onSaveSheets}
                 className="w-full py-3.5 rounded-2xl bg-emerald-50 text-emerald-700 font-bold hover:bg-emerald-100 border border-emerald-200 transition-all flex items-center justify-center gap-2"
               >
-                📊 구글 시트에 성적표 저장
+                📊 기록 제출하기
               </button>
             )}
             <div className="flex gap-3">
