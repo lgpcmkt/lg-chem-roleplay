@@ -8,6 +8,7 @@ import { FlashDoctorRoom } from './components/FlashDoctorRoom';
 import { EvaluationReport } from './components/EvaluationReport';
 import { Sidebar } from './components/Sidebar';
 import { MyGradebook } from './components/MyGradebook';
+import { GoogleSheetsModal } from './components/GoogleSheetsModal';
 import { ConversationProvider } from '@elevenlabs/react';
 import { exportSingleEvaluationToSheets } from './lib/googleSheets';
 import { evaluateRoleplayWithGemini } from './lib/geminiEvaluation';
@@ -129,6 +130,7 @@ export default function App() {
   const [isEvaluating, setIsEvaluating] = useState(false);
 
   // Sessions
+  const [isSheetsModalOpen, setIsSheetsModalOpen] = useState(false);
   const [savedSessions, setSavedSessions] = useState<SavedSession[]>(() => {
     try {
       const stored = localStorage.getItem('lg_roleplay_sessions');
