@@ -24,36 +24,43 @@ export const FlashDoctorRoom: React.FC<FlashDoctorRoomProps> = ({
   product, scenario, employeeInfo, checklistStatus, setChecklistStatus, checklistItems,
   onEndRoleplay, chatHistory, setChatHistory, onBack, persona
 }) => {
+  const doctorName = persona ? persona.split(' (')[0] : scenario.name;
+
   const personaData = React.useMemo(() => {
-    let personaImage = scenario.personaImage || '/images/doctor_z1_1785320119267.png';
+    let doctorImage = scenario.personaImage || '/images/doctor_z1_1785320119267.png';
+    let waitingRoomImage = scenario.personaImage || '/images/waiting_room_clinic.png';
     let missionMsg = scenario.missionMsg;
     let hashtags = scenario.hashtags || [];
 
     if (persona.includes('까칠한')) {
-      personaImage = '/images/korean_doctor_strict_clinic_1785413940376.png';
+      doctorImage = '/images/korean_doctor_strict_clinic_1785413940376.png';
+      waitingRoomImage = '/images/waiting_room_clinic.png';
       missionMsg = `[Tip] 까칠한 원장님이니 핵심 위주로 빠르고 간결하게 디테일하세요!`;
       hashtags = [...hashtags, '#핵심위주', '#시간엄수'];
     } else if (persona.includes('학술적인')) {
-      personaImage = '/images/korean_doctor_academic_hospital_1785413957051.png';
+      doctorImage = '/images/korean_doctor_academic_hospital_1785413957051.png';
+      waitingRoomImage = '/images/waiting_room_hospital.jpg';
       missionMsg = `[Tip] 학술적인 원장님이니 구체적인 임상 데이터와 근거를 중심으로 설득하세요!`;
       hashtags = [...hashtags, '#임상데이터', '#근거중심'];
     } else if (persona.includes('상업적인')) {
-      personaImage = '/images/korean_doctor_commercial_clinic_1785413972356.png';
+      doctorImage = '/images/korean_doctor_commercial_clinic_1785413972356.png';
+      waitingRoomImage = '/images/waiting_room_clinic.png';
       missionMsg = `[Tip] 상업적인 원장님이니 환자 만족도와 병원 수익에 도움이 되는 방향을 강조하세요!`;
       hashtags = [...hashtags, '#수익증대', '#환자유치'];
     } else if (persona.includes('거절형')) {
-      personaImage = '/images/korean_doctor_rejecting_hospital_1785413986354.png';
+      doctorImage = '/images/korean_doctor_rejecting_hospital_1785413986354.png';
+      waitingRoomImage = '/images/waiting_room_hospital.jpg';
       missionMsg = `[Tip] 무뚝뚝한 원장님이니 가벼운 인사로 시작하며 자연스럽게 라포를 형성하세요!`;
       hashtags = [...hashtags, '#라포형성', '#짧은면담'];
     } else {
       // 기본 성향일 때도 POV 이미지를 맵핑
-      if (scenario.id === 'z1' || scenario.id === 'v2') personaImage = '/images/korean_doctor_strict_clinic_1785413940376.png';
-      else if (scenario.id === 'z2' || scenario.id === 'v3') personaImage = '/images/korean_doctor_academic_hospital_1785413957051.png';
-      else if (scenario.id === 'z3' || scenario.id === 'v1') personaImage = '/images/korean_doctor_commercial_clinic_1785413972356.png';
-      else personaImage = '/images/korean_doctor_rejecting_hospital_1785413986354.png';
+      if (scenario.id === 'z1' || scenario.id === 'v2') doctorImage = '/images/korean_doctor_strict_clinic_1785413940376.png';
+      else if (scenario.id === 'z2' || scenario.id === 'v3') doctorImage = '/images/korean_doctor_academic_hospital_1785413957051.png';
+      else if (scenario.id === 'z3' || scenario.id === 'v1') doctorImage = '/images/korean_doctor_commercial_clinic_1785413972356.png';
+      else doctorImage = '/images/korean_doctor_rejecting_hospital_1785413986354.png';
     }
 
-    return { personaImage, missionMsg, hashtags };
+    return { doctorImage, waitingRoomImage, missionMsg, hashtags };
   }, [persona, scenario]);
   const [elapsedTime, setElapsedTime] = useState(0);
   const [micVolume, setMicVolume] = useState(0);
@@ -228,9 +235,9 @@ export const FlashDoctorRoom: React.FC<FlashDoctorRoomProps> = ({
           <button onClick={onBack} className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center text-white hover:bg-white/20 transition-all">
             <ArrowLeft className="w-5 h-5" />
           </button>
-          <div className="mt-2 text-white">
-            <h1 className="text-xl md:text-2xl font-bold tracking-tight drop-shadow-md">{product.name} 디테일링</h1>
-            <p className="text-sm font-medium text-white/80 drop-shadow-md">{scenario.title}</p>
+          <div className="text-center md:text-left drop-shadow-md">
+            <h2 className="text-3xl font-extrabold drop-shadow-lg">{doctorName}</h2>
+            <p className="text-base font-medium text-white/90 drop-shadow-md">{scenario.title}</p>
           </div>
         </div>
 
@@ -252,30 +259,44 @@ export const FlashDoctorRoom: React.FC<FlashDoctorRoomProps> = ({
       </div>
 
       {/* Main Video/Avatar Area */}
-      <div className="absolute inset-0 flex items-center justify-center">
+      <div className="absolute inset-0 z-0">
         <img
-          src={conversation.status === 'connected' ? personaData.personaImage : scenario.personaImage}
-          alt={scenario.title}
+          src={conversation.status === 'connected' ? personaData.doctorImage : personaData.waitingRoomImage}
+          alt="Doctor"
           className="w-full h-full object-cover opacity-80"
         />
+        {conversation.status !== 'connected' && (
+          <div className="absolute inset-0 flex flex-col items-center justify-center bg-slate-900/95 backdrop-blur-sm z-10 p-6 text-center">
+            <div className="w-24 h-24 rounded-full bg-blue-500/20 flex items-center justify-center mb-6 animate-pulse">
+              <div className="w-16 h-16 rounded-full bg-blue-500 flex items-center justify-center">
+                <Mic className="w-8 h-8 text-white animate-bounce" />
+              </div>
+            </div>
+            <h2 className="text-2xl md:text-3xl font-extrabold text-white mb-3">
+              {isConnecting ? '연결 중입니다...' : '준비 완료'}
+            </h2>
+            <p className="text-blue-200 text-sm md:text-base font-medium">
+              잠시만 기다려주세요. 곧 {doctorName}님과의 롤플레이가 시작됩니다.
+            </p>
+          </div>
+        )}
         <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-slate-900/40" />
       </div>
 
       {/* Loading Overlay when isConnecting */}
       {(isConnecting || conversation.status === 'connecting') && conversation.status !== 'connected' && (
         <div className="absolute inset-0 z-50 flex flex-col items-center justify-center bg-slate-900 overflow-hidden">
-          <img src={scenario.personaImage} className="absolute inset-0 w-full h-full object-cover opacity-30 scale-110 blur-xl" alt="blur-bg" />
+          <img src={personaData.waitingRoomImage} className="absolute inset-0 w-full h-full object-cover opacity-30 scale-110 blur-xl" alt="blur-bg" />
           <div className="absolute inset-0 bg-slate-900/60" />
           <div className="z-10 flex flex-col items-center gap-6 animate-fadeIn">
             <div className="w-16 h-16 border-4 border-blue-400 border-t-transparent rounded-full animate-spin shadow-[0_0_15px_rgba(96,165,250,0.5)]" />
             <div className="text-center">
               <h2 className="text-2xl md:text-3xl font-extrabold text-white mb-3 tracking-tight drop-shadow-lg">진료실 문을 열고 들어가는 중입니다...</h2>
-              <p className="text-blue-200 text-sm md:text-base font-medium">잠시만 기다려주세요. 곧 {scenario.name} 원장님과의 롤플레이가 시작됩니다.</p>
+              <p className="text-blue-200 text-sm md:text-base font-medium">잠시만 기다려주세요. 곧 {doctorName}님과의 롤플레이가 시작됩니다.</p>
             </div>
           </div>
         </div>
       )}
-
       {/* Floating Chat Panel */}
       {showChat && conversation.status === 'connected' && (
         <div className="absolute right-4 top-20 bottom-40 w-80 md:w-96 z-30 flex flex-col bg-black/70 backdrop-blur-xl rounded-2xl border border-white/10 shadow-2xl overflow-hidden animate-fadeIn">
