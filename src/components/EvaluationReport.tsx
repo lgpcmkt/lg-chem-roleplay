@@ -43,6 +43,11 @@ export const EvaluationReport: React.FC<EvaluationReportProps> = ({
           <h1 className={`text-2xl md:text-3xl font-black ${textColor}`}>
             {mainMessage}
           </h1>
+
+          <div className="flex justify-center items-end gap-2 pb-2">
+            <span className={`text-5xl font-black ${textColor}`}>{evaluation.totalScore || 0}</span>
+            <span className="text-2xl font-bold text-slate-400 mb-1">/ 100</span>
+          </div>
           
           <div className={`text-left p-5 rounded-2xl border ${bgColor} ${borderColor} shadow-inner`}>
             <p className="text-slate-800 font-medium leading-relaxed whitespace-pre-wrap">
@@ -70,16 +75,16 @@ export const EvaluationReport: React.FC<EvaluationReportProps> = ({
               </ul>
             </div>
           )}
+          {(evaluation.recommendedScript && evaluation.recommendedScript.trim().length > 0) && (
+            <div className="text-left bg-blue-50 rounded-2xl p-5 border border-blue-100">
+              <h3 className="font-bold text-blue-800 mb-2">🗣️ 추천 스크립트</h3>
+              <p className="text-sm text-blue-700 font-medium whitespace-pre-wrap leading-relaxed">
+                {evaluation.recommendedScript}
+              </p>
+            </div>
+          )}
 
           <div className="pt-6 flex flex-col gap-3">
-            {onSaveSheets && (
-              <button
-                onClick={onSaveSheets}
-                className="w-full py-3.5 rounded-2xl bg-emerald-50 text-emerald-700 font-bold hover:bg-emerald-100 border border-emerald-200 transition-all flex items-center justify-center gap-2"
-              >
-                📊 기록 제출하기
-              </button>
-            )}
             <div className="flex gap-3">
               <button
                 onClick={onRetry}
