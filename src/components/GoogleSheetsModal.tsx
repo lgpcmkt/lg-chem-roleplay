@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { X, FileSpreadsheet, ExternalLink, Loader2, CheckCircle2 } from 'lucide-react';
-import { googleSignIn, getAccessToken } from '../lib/googleAuth';
 import { exportSingleEvaluationToSheets, exportAllSessionsToSheets, ExportResult } from '../lib/googleSheets';
 import { RoleplayEvaluationResult, SavedSession, EmployeeInfo } from '../types';
 
@@ -20,7 +19,7 @@ export const GoogleSheetsModal: React.FC<GoogleSheetsModalProps> = ({
   isOpen, onClose, evaluation, productName, specialtyName, doctorTypeName,
   employeeInfo, savedSessions = [], mode = 'single',
 }) => {
-  const [status, setStatus] = useState<'idle' | 'signing' | 'exporting' | 'success' | 'error'>('idle');
+  const [status, setStatus] = useState<'idle' | 'exporting' | 'success' | 'error'>('idle');
   const [result, setResult] = useState<ExportResult | null>(null);
   const [errorMsg, setErrorMsg] = useState('');
 
@@ -28,22 +27,14 @@ export const GoogleSheetsModal: React.FC<GoogleSheetsModalProps> = ({
 
   const handleExport = async () => {
     try {
-      let accessToken = getAccessToken();
-      if (!accessToken) {
-        setStatus('signing');
-        const signInResult = await googleSignIn();
-        if (!signInResult) { setStatus('error'); setErrorMsg('Google 로그인 취소'); return; }
-        accessToken = signInResult.accessToken;
-      }
-
       setStatus('exporting');
 
       let exportResult: ExportResult;
       if (mode === 'bulk' && savedSessions.length > 0) {
-        exportResult = await exportAllSessionsToSheets(accessToken, savedSessions, employeeInfo);
+        exportResult = await exportAllSessionsToSheets(savedSessions, employeeInfo);
       } else if (evaluation) {
         exportResult = await exportSingleEvaluationToSheets(
-          accessToken, evaluation, productName, specialtyName, doctorTypeName, employeeInfo
+          evaluation, productName, specialtyName, doctorTypeName, employeeInfo
         );
       } else {
         throw new Error('내보낼 데이터 없음');
@@ -84,11 +75,11 @@ export const GoogleSheetsModal: React.FC<GoogleSheetsModalProps> = ({
           </div>
         )}
 
-        {(status === 'signing' || status === 'exporting') && (
+        {(status === 'exporting') && (
           <div className="flex flex-col items-center py-8 space-y-3">
             <Loader2 className="w-8 h-8 text-emerald-500 animate-spin" />
             <p className="text-sm text-slate-600 font-medium">
-              {status === 'signing' ? 'Google 로그인 중...' : '데이터 저장 중...'}
+              데이터 저장 중...
             </p>
           </div>
         )}
@@ -98,13 +89,12 @@ export const GoogleSheetsModal: React.FC<GoogleSheetsModalProps> = ({
             <CheckCircle2 className="w-12 h-12 text-emerald-500 mx-auto" />
             <div>
               <p className="text-sm font-bold text-slate-900">저장 완료! ✨</p>
-              <p className="text-xs text-slate-500 mt-1">{result.rowsAdded}건이 저장되었습니다.</p>
+              <p className="text-xs text-slate-500 mt-1">{result.rowsAdded}건이 시트에 안전하게 기록되었습니다.</p>
             </div>
-            <a href={result.spreadsheetUrl} target="_blank" rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 px-4 py-2.5 bg-blue-50 text-blue-700 rounded-xl text-xs font-bold border border-blue-100 hover:bg-blue-100 transition-colors">
-              <ExternalLink className="w-3.5 h-3.5" />
-              Google Sheets 열기
-            </a>
+            <button onClick={onClose}
+              className="inline-flex items-center justify-center w-full py-3.5 bg-slate-100 text-slate-700 rounded-2xl text-sm font-bold hover:bg-slate-200 transition-colors mt-2">
+              닫기
+            </button>
           </div>
         )}
 

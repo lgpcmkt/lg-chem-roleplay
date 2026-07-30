@@ -10,15 +10,19 @@ interface EmployeeLoginModalProps {
 
 export const EmployeeLoginModal: React.FC<EmployeeLoginModalProps> = ({ onSave, currentInfo, isOpen }) => {
   const [nameInput, setNameInput] = useState(currentInfo?.name || '');
+  const [empIdInput, setEmpIdInput] = useState(currentInfo?.employeeId || '');
   const [error, setError] = useState('');
 
   if (!isOpen) return null;
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!empIdInput.trim()) { setError('사번을 입력해 주세요.'); return; }
+    if (!/^\d{6,7}$/.test(empIdInput.trim())) { setError('사번은 6~7자리 숫자로 입력해 주세요.'); return; }
     if (!nameInput.trim()) { setError('이름을 입력해 주세요.'); return; }
+    
     setError('');
-    onSave({ employeeId: nameInput.trim(), name: nameInput.trim(), department: 'LG화학 영업본부' });
+    onSave({ employeeId: empIdInput.trim(), name: nameInput.trim(), department: 'LG화학 영업본부' });
   };
 
   return (
@@ -38,15 +42,25 @@ export const EmployeeLoginModal: React.FC<EmployeeLoginModalProps> = ({ onSave, 
           />
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-5">
+        <form onSubmit={handleSubmit} className="space-y-4">
           <div>
+            <div className="relative mb-3">
+              <input 
+                type="text" 
+                value={empIdInput} 
+                onChange={(e) => setEmpIdInput(e.target.value)}
+                placeholder="사번을 입력하세요 (ex. 123456)" 
+                autoFocus
+                className="w-full px-5 py-4 bg-slate-50 border-2 border-slate-100 rounded-2xl text-base font-bold text-slate-900 focus:outline-none focus:border-blue-500 focus:bg-white transition-all placeholder:text-slate-400 shadow-inner" 
+              />
+              <User className="absolute right-4 top-4 w-5 h-5 text-slate-400 pointer-events-none" />
+            </div>
             <div className="relative">
               <input 
                 type="text" 
                 value={nameInput} 
                 onChange={(e) => setNameInput(e.target.value)}
                 placeholder="이름을 입력하세요" 
-                autoFocus
                 className="w-full px-5 py-4 bg-slate-50 border-2 border-slate-100 rounded-2xl text-base font-bold text-slate-900 focus:outline-none focus:border-blue-500 focus:bg-white transition-all placeholder:text-slate-400 shadow-inner" 
               />
               <User className="absolute right-4 top-4 w-5 h-5 text-slate-400 pointer-events-none" />
@@ -55,7 +69,7 @@ export const EmployeeLoginModal: React.FC<EmployeeLoginModalProps> = ({ onSave, 
           {error && <p className="text-xs text-rose-500 font-bold text-center animate-knock">{error}</p>}
           <button 
             type="submit" 
-            className="w-full py-4 bg-blue-600 hover:bg-blue-700 active:scale-[0.98] text-white font-black text-base rounded-2xl shadow-lg shadow-blue-600/30 transition-all flex items-center justify-center gap-2"
+            className="w-full py-4 bg-blue-600 hover:bg-blue-700 active:scale-[0.98] text-white font-black text-base rounded-2xl shadow-lg shadow-blue-600/30 transition-all flex items-center justify-center gap-2 mt-2"
           >
             <span>시작하기</span>
             <ArrowRight className="w-5 h-5" />

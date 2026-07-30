@@ -3,10 +3,12 @@ import { Product, Scenario, ChatMessage, RoleplayEvaluationResult, SavedSession,
 import { EmployeeLoginModal } from './components/EmployeeLoginModal';
 import { ProductSelectScreen } from './components/ProductSelectScreen';
 import { ScenarioSelectScreen } from './components/ScenarioSelectScreen';
+import { PersonaSelectScreen } from './components/PersonaSelectScreen';
 import { FlashDoctorRoom } from './components/FlashDoctorRoom';
 import { EvaluationReport } from './components/EvaluationReport';
 import { Sidebar } from './components/Sidebar';
 import { MyGradebook } from './components/MyGradebook';
+import { GoogleSheetsModal } from './components/GoogleSheetsModal';
 import { ConversationProvider } from '@elevenlabs/react';
 
 // ── 정적 데이터 (클라이언트용) ──
@@ -94,7 +96,7 @@ const PRODUCT_EVAL_CRITERIA: Record<string, { key: string; label: string; maxSco
   ],
 };
 
-type AppScreen = 'login' | 'productSelect' | 'scenarioSelect' | 'roleplay' | 'evaluation';
+type AppScreen = 'login' | 'productSelect' | 'scenarioSelect' | 'personaSelect' | 'roleplay' | 'evaluation';
 type SideView = 'dashboard' | 'gradebook';
 
 function generateId() {
@@ -105,11 +107,17 @@ export default function App() {
   // ── State ──
   const [screen, setScreen] = useState<AppScreen>('login');
   const [sideView, setSideView] = useState<SideView>('dashboard');
-  const [employeeInfo, setEmployeeInfo] = useState<EmployeeInfo | null>(null);
+  const [employeeInfo, setEmployeeInfo] = useState<EmployeeInfo | null>(() => {
+    try {
+      const stored = localStorage.getItem('lg_roleplay_user');
+      return stored ? JSON.parse(stored) : null;
+    } catch { return null; }
+  });
 
   // Selection
   const [selectedProductId, setSelectedProductId] = useState<string>('');
   const [selectedScenarioId, setSelectedScenarioId] = useState<string>('');
+  const [selectedPersona, setSelectedPersona] = useState<string>('');
 
   // Chat
   const [chatHistory, setChatHistory] = useState<ChatMessage[]>([]);
@@ -121,6 +129,7 @@ export default function App() {
   const [isEvaluating, setIsEvaluating] = useState(false);
 
   // Sessions
+  const [isSheetsModalOpen, setIsSheetsModalOpen] = useState(false);
   const [savedSessions, setSavedSessions] = useState<SavedSession[]>(() => {
     try {
       const stored = localStorage.getItem('lg_roleplay_sessions');
@@ -142,8 +151,15 @@ export default function App() {
   // ── Handlers ──
   const handleLogin = (info: EmployeeInfo) => {
     setEmployeeInfo(info);
+    localStorage.setItem('lg_roleplay_user', JSON.stringify(info));
     setScreen('productSelect');
   };
+
+  useEffect(() => {
+    if (employeeInfo && screen === 'login') {
+      setScreen('productSelect');
+    }
+  }, [employeeInfo, screen]);
 
   const handleSelectProduct = (productId: string) => {
     setSelectedProductId(productId);
@@ -152,6 +168,11 @@ export default function App() {
 
   const handleSelectScenario = (scenarioId: string) => {
     setSelectedScenarioId(scenarioId);
+    setScreen('personaSelect');
+  };
+
+  const handleSelectPersona = (persona: string) => {
+    setSelectedPersona(persona);
     
     // Reset chat
     setChatHistory([]);
@@ -210,7 +231,7 @@ export default function App() {
           summary: elevenLabsData.transcript_summary || '',
           strengths: [],
           weaknesses: [],
-          scores: {},
+          scores: [],
           detailedFeedback: elevenLabsData.rationale,
           totalScore: elevenLabsData.isSuccess ? 100 : 50,
           grade: elevenLabsData.isSuccess ? 'S' : 'C',
@@ -289,9 +310,11 @@ export default function App() {
   };
 
   const handleLogout = () => {
+    localStorage.removeItem('lg_roleplay_user');
     setEmployeeInfo(null);
     setSelectedProductId('');
     setSelectedScenarioId('');
+    setSelectedPersona('');
     setChatHistory([]);
     setEvaluation(null);
     setScreen('login');
@@ -316,11 +339,12 @@ export default function App() {
   }
 
   const renderMainContent = () => {
-    if (sideView === 'gradebook') {
+      if (sideView === 'gradebook') {
       return (
         <MyGradebook
           sessions={savedSessions}
           onDeleteSession={handleDeleteSession}
+          onSaveBulkSheets={() => setIsSheetsModalOpen(true)}
         />
       );
     }
@@ -343,6 +367,15 @@ export default function App() {
             onBack={() => setScreen('productSelect')}
           />
         ) : null;
+      case 'personaSelect':
+        return selectedProduct && selectedScenario ? (
+          <PersonaSelectScreen
+            product={selectedProduct}
+            scenario={selectedScenario}
+            onSelectPersona={handleSelectPersona}
+            onBack={() => setScreen('scenarioSelect')}
+          />
+        ) : null;
       case 'roleplay':
         return selectedProduct && selectedScenario ? (
           <ConversationProvider>
@@ -359,10 +392,12 @@ export default function App() {
               onBack={() => {
                 setSelectedProductId('');
                 setSelectedScenarioId('');
+                setSelectedPersona('');
                 setChatHistory([]);
                 setChecklistStatus({});
                 setScreen('productSelect');
               }}
+              persona={selectedPersona}
             />
           </ConversationProvider>
         ) : null;
@@ -386,6 +421,7 @@ export default function App() {
             product={selectedProduct}
             onRetry={handleRetry}
             onClose={handleNewProduct}
+            onSaveSheets={() => setIsSheetsModalOpen(true)}
             chatHistory={chatHistory}
           />
         ) : null;
@@ -405,6 +441,19 @@ export default function App() {
       <main className="flex-1 flex flex-col min-w-0 overflow-hidden relative pb-[env(safe-area-inset-bottom)]">
         {renderMainContent()}
       </main>
+
+      {/* Modals */}
+      <GoogleSheetsModal
+        isOpen={isSheetsModalOpen}
+        onClose={() => setIsSheetsModalOpen(false)}
+        evaluation={evaluation}
+        productName={selectedProduct?.name || ''}
+        specialtyName={''}
+        doctorTypeName={selectedPersona || selectedScenario?.title || ''}
+        employeeInfo={employeeInfo}
+        savedSessions={savedSessions}
+        mode={screen === 'evaluation' ? 'single' : 'bulk'}
+      />
     </div>
   );
 }

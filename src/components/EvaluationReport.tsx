@@ -7,6 +7,7 @@ interface EvaluationReportProps {
   product: Product;
   onRetry: () => void;
   onClose: () => void;
+  onSaveSheets?: () => void;
   chatHistory: ChatMessage[];
 }
 
@@ -15,6 +16,7 @@ export const EvaluationReport: React.FC<EvaluationReportProps> = ({
   product,
   onRetry,
   onClose,
+  onSaveSheets,
 }) => {
   const isSuccess = evaluation.isSuccess;
   const mainMessage = isSuccess 
@@ -69,20 +71,30 @@ export const EvaluationReport: React.FC<EvaluationReportProps> = ({
             </div>
           )}
 
-          <div className="pt-6 flex gap-3">
-            <button
-              onClick={onRetry}
-              className="flex-1 py-3.5 rounded-2xl bg-slate-100 text-slate-700 font-bold hover:bg-slate-200 transition-all flex items-center justify-center gap-2"
-            >
-              <RefreshCw className="w-5 h-5" />
-              다시 도전
-            </button>
-            <button
-              onClick={onClose}
-              className={`flex-1 py-3.5 rounded-2xl text-white font-bold transition-all flex items-center justify-center gap-2 shadow-lg ${isSuccess ? 'bg-blue-600 hover:bg-blue-700 shadow-blue-500/30' : 'bg-red-500 hover:bg-red-600 shadow-red-500/30'}`}
-            >
-              다른 상황 선택
-            </button>
+          <div className="pt-6 flex flex-col gap-3">
+            {onSaveSheets && (
+              <button
+                onClick={onSaveSheets}
+                className="w-full py-3.5 rounded-2xl bg-emerald-50 text-emerald-700 font-bold hover:bg-emerald-100 border border-emerald-200 transition-all flex items-center justify-center gap-2"
+              >
+                📊 구글 시트에 성적표 저장
+              </button>
+            )}
+            <div className="flex gap-3">
+              <button
+                onClick={onRetry}
+                className="flex-1 py-3.5 rounded-2xl bg-slate-100 text-slate-700 font-bold hover:bg-slate-200 transition-all flex items-center justify-center gap-2"
+              >
+                <RefreshCw className="w-5 h-5" />
+                다시 도전
+              </button>
+              <button
+                onClick={onClose}
+                className={`flex-1 py-3.5 rounded-2xl text-white font-bold transition-all flex items-center justify-center gap-2 shadow-lg ${isSuccess ? 'bg-blue-600 hover:bg-blue-700 shadow-blue-500/30' : 'bg-red-500 hover:bg-red-600 shadow-red-500/30'}`}
+              >
+                다른 상황 선택
+              </button>
+            </div>
           </div>
         </div>
       </div>

@@ -15,13 +15,14 @@ interface FlashDoctorRoomProps {
   chatHistory: ChatMessage[];
   setChatHistory: React.Dispatch<React.SetStateAction<ChatMessage[]>>;
   onBack: () => void;
+  persona: string;
 }
 
 const AGENT_ID = 'agent_6501kymkvp51eb68k1m589abc18s';
 
 export const FlashDoctorRoom: React.FC<FlashDoctorRoomProps> = ({
   product, scenario, employeeInfo, checklistStatus, setChecklistStatus, checklistItems,
-  onEndRoleplay, chatHistory, setChatHistory, onBack
+  onEndRoleplay, chatHistory, setChatHistory, onBack, persona
 }) => {
   const [elapsedTime, setElapsedTime] = useState(0);
   const [micVolume, setMicVolume] = useState(0);
@@ -138,11 +139,15 @@ export const FlashDoctorRoom: React.FC<FlashDoctorRoomProps> = ({
         agentId: AGENT_ID,
         dynamicVariables: {
           product_name: product.name,
-          persona: scenario.title,
+          product_name_en: product.nameEn,
+          product_composition: product.composition,
+          product_indication: product.indication,
+          scenario_title: scenario.title,
+          doctor_name: scenario.name,
+          doctor_persona: persona,
           user_name: employeeInfo.name,
-          voice_instruction: "당신은 남성 의사입니다. 기본 보이스를 사용하세요. 절대 사용자의 말을 길게 요약하지 마세요. 요약이나 반복 없이, 곧바로 본론에 대한 짧은 꼬리 질문을 던지거나 반론을 제기하세요.",
-          first_message: "네 담당자님, 오랜만이네요. 오늘은 어떤 일로 오셨나요?"
-        }
+          company: 'LG화학',
+        },
       });
     } catch (err) {
       console.error('Failed to start call:', err);
@@ -220,6 +225,21 @@ export const FlashDoctorRoom: React.FC<FlashDoctorRoomProps> = ({
         <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-slate-900/40" />
       </div>
 
+      {/* Loading Overlay when isConnecting */}
+      {isConnecting && conversation.status !== 'connected' && (
+        <div className="absolute inset-0 z-50 flex flex-col items-center justify-center bg-slate-900 overflow-hidden">
+          <img src={scenario.personaImage || '/images/doctor_z1_1785320119267.png'} className="absolute inset-0 w-full h-full object-cover opacity-30 scale-110 blur-xl" alt="blur-bg" />
+          <div className="absolute inset-0 bg-slate-900/60" />
+          <div className="z-10 flex flex-col items-center gap-6 animate-fadeIn">
+            <div className="w-16 h-16 border-4 border-blue-400 border-t-transparent rounded-full animate-spin shadow-[0_0_15px_rgba(96,165,250,0.5)]" />
+            <div className="text-center">
+              <h2 className="text-2xl md:text-3xl font-extrabold text-white mb-3 tracking-tight drop-shadow-lg">진료실 문을 열고 들어가는 중입니다...</h2>
+              <p className="text-blue-200 text-sm md:text-base font-medium">잠시만 기다려주세요. 곧 {scenario.name} 원장님과의 롤플레이가 시작됩니다.</p>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Floating Chat Panel */}
       {showChat && conversation.status === 'connected' && (
         <div className="absolute right-4 top-20 bottom-40 w-80 md:w-96 z-30 flex flex-col bg-black/70 backdrop-blur-xl rounded-2xl border border-white/10 shadow-2xl overflow-hidden animate-fadeIn">
@@ -273,14 +293,14 @@ export const FlashDoctorRoom: React.FC<FlashDoctorRoomProps> = ({
         <div className="flex-1 max-w-2xl w-full">
           {/* Active Speaking Indicator */}
           <div className={`transition-opacity duration-300 ${conversation.status === 'connected' ? 'opacity-100' : 'opacity-0'}`}>
-            <div className="flex items-center gap-2 mb-2">
-              <div className="flex gap-1">
-                <span className="w-1.5 h-1.5 rounded-full bg-white animate-bounce" style={{ animationDelay: '0ms' }} />
-                <span className="w-1.5 h-1.5 rounded-full bg-white animate-bounce" style={{ animationDelay: '150ms' }} />
-                <span className="w-1.5 h-1.5 rounded-full bg-white animate-bounce" style={{ animationDelay: '300ms' }} />
+            <div className="flex items-center gap-3 mb-4 bg-black/40 backdrop-blur-sm w-fit px-5 py-2.5 rounded-full border border-white/20 shadow-[0_0_15px_rgba(255,255,255,0.2)]">
+              <div className="flex gap-1.5">
+                <span className={`w-2 h-2 rounded-full ${conversation.isSpeaking ? 'bg-green-400 animate-bounce' : 'bg-white/50 animate-pulse'}`} style={{ animationDelay: '0ms' }} />
+                <span className={`w-2 h-2 rounded-full ${conversation.isSpeaking ? 'bg-green-400 animate-bounce' : 'bg-white/50 animate-pulse'}`} style={{ animationDelay: '150ms' }} />
+                <span className={`w-2 h-2 rounded-full ${conversation.isSpeaking ? 'bg-green-400 animate-bounce' : 'bg-white/50 animate-pulse'}`} style={{ animationDelay: '300ms' }} />
               </div>
-              <span className="text-xs text-white/80 font-medium">
-                {conversation.isSpeaking ? '원장님이 말씀 중입니다...' : '원장님이 듣고 생각 중입니다...'}
+              <span className={`text-base md:text-lg font-bold tracking-wide ${conversation.isSpeaking ? 'text-green-400 drop-shadow-[0_0_8px_rgba(74,222,128,0.8)]' : 'text-white/90'}`}>
+                {conversation.isSpeaking ? '🗣️ 원장님이 말씀 중입니다...' : '🤔 원장님이 듣고 생각 중입니다...'}
               </span>
             </div>
           </div>

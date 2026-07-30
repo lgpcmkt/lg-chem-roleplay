@@ -5,9 +5,10 @@ import { Award, Calendar, Trash2 } from 'lucide-react';
 interface MyGradebookProps {
   sessions: SavedSession[];
   onDeleteSession: (id: string) => void;
+  onSaveBulkSheets?: () => void;
 }
 
-export const MyGradebook: React.FC<MyGradebookProps> = ({ sessions, onDeleteSession }) => {
+export const MyGradebook: React.FC<MyGradebookProps> = ({ sessions, onDeleteSession, onSaveBulkSheets }) => {
   const gradeColors: Record<string, string> = {
     S: 'bg-amber-100 text-amber-700 border-amber-200',
     A: 'bg-blue-100 text-blue-700 border-blue-200',
@@ -23,6 +24,14 @@ export const MyGradebook: React.FC<MyGradebookProps> = ({ sessions, onDeleteSess
             <h1 className="text-xl font-extrabold text-slate-900">나의 성적표</h1>
             <p className="text-xs text-slate-500 mt-1">총 {sessions.length}건의 디테일링 기록</p>
           </div>
+          {onSaveBulkSheets && sessions.length > 0 && (
+            <button
+              onClick={onSaveBulkSheets}
+              className="px-4 py-2.5 bg-emerald-50 text-emerald-700 text-xs font-bold rounded-xl border border-emerald-200 hover:bg-emerald-100 transition-colors shadow-sm"
+            >
+              📊 시트로 전체 내보내기
+            </button>
+          )}
         </div>
 
         {sessions.length === 0 ? (
