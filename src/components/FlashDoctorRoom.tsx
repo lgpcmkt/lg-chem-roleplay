@@ -369,8 +369,12 @@ export const FlashDoctorRoom: React.FC<FlashDoctorRoomProps> = ({
             {conversation.status === 'connected' ? (
               <>
                 {/* Active Mic Indicator with Ripple */}
-                <div className="relative flex items-center justify-center w-14 h-14">
-                  {micVolume > 0.05 && (
+                <div 
+                  className="relative flex items-center justify-center w-14 h-14 cursor-pointer hover:scale-105 transition-transform"
+                  onClick={handleToggleMute}
+                  title={isMuted ? "마이크 켜기" : "마이크 끄기 (주변 소음 차단)"}
+                >
+                  {micVolume > 0.05 && !isMuted && (
                     <div 
                       className="absolute inset-0 bg-emerald-500 rounded-full opacity-40 transition-transform duration-75 will-change-transform"
                       style={{ transform: `scale(${1 + micVolume * 2.5})` }} 
@@ -378,6 +382,7 @@ export const FlashDoctorRoom: React.FC<FlashDoctorRoomProps> = ({
                   )}
                   <div 
                     className={`relative z-10 w-12 h-12 rounded-full border-2 flex items-center justify-center transition-colors duration-200 ${
+                      isMuted ? 'bg-red-500/20 border-red-500 text-red-500' :
                       micVolume > 0.05 
                         ? 'bg-slate-800 border-emerald-500 text-emerald-400' 
                         : 'bg-white/20 border-white/40 text-white/60'
