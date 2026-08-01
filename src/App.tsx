@@ -4,11 +4,12 @@ import { EmployeeLoginModal } from './components/EmployeeLoginModal';
 import { HomeScreen } from './components/HomeScreen';
 import { RoleplayRoom } from './components/RoleplayRoom';
 import { EvaluationReport } from './components/EvaluationReport';
+import { ScenarioSelectScreen } from './components/ScenarioSelectScreen';
 import { evaluateRoleplayWithGemini } from './lib/geminiEvaluation';
 import { ConversationProvider } from '@elevenlabs/react';
 import { SCENARIOS } from './data';
 
-type AppScreen = 'login' | 'home' | 'roleplay' | 'evaluation';
+type AppScreen = 'login' | 'home' | 'scenario' | 'roleplay' | 'evaluation';
 
 export default function App() {
   const [screen, setScreen] = useState<AppScreen>('login');
@@ -55,21 +56,12 @@ export default function App() {
 
   const handleSelectTrack = async (track: 'hospital' | 'local') => {
     setSelectedTrack(track);
-    // Fetch progress to determine next scenario
-    try {
-      const res = await fetch(`/api/progress/${employeeInfo?.employeeId}`);
-      if (res.ok) {
-        const progress: UserProgress = await res.json();
-        const nextIndex = Math.min(progress[track], 4); // max index 4
-        setCurrentScenario(SCENARIOS[track][nextIndex]);
-        setScreen('roleplay');
-      }
-    } catch (e) {
-      console.error('Failed to start track', e);
-      // Fallback
-      setCurrentScenario(SCENARIOS[track][0]);
-      setScreen('roleplay');
-    }
+    setScreen('scenario');
+  };
+
+  const handleSelectScenario = (scenario: Scenario) => {
+    setCurrentScenario(scenario);
+    setScreen('roleplay');
   };
 
   const handleEndRoleplay = useCallback(async (chatHistory: ChatMessage[]) => {
@@ -128,6 +120,14 @@ export default function App() {
             onSelectTrack={handleSelectTrack} 
           />
         )}
+        {screen === 'scenario' && employeeInfo && (
+          <ScenarioSelectScreen 
+            employeeInfo={employeeInfo}
+            track={selectedTrack}
+            onSelect={handleSelectScenario}
+            onBack={() => setScreen('home')}
+          />
+        )}
         
         {screen === 'roleplay' && currentScenario && employeeInfo && (
           <ConversationProvider>
@@ -135,7 +135,7 @@ export default function App() {
               scenario={currentScenario} 
               employeeInfo={employeeInfo} 
               onEndRoleplay={handleEndRoleplay} 
-              onBack={() => setScreen('home')} 
+              onBack={() => setScreen('scenario')} 
             />
           </ConversationProvider>
         )}
@@ -144,7 +144,6 @@ export default function App() {
           isEvaluating ? (
             <div className="flex-1 flex flex-col items-center justify-center bg-white border-x-2 border-black max-w-md mx-auto w-full">
               <div className="pixel-box p-8 flex flex-col items-center text-center animate-pulse">
-                <div className="text-4xl mb-4">🤔</div>
                 <div className="font-bold text-lg">원장님의 속마음을 분석 중입니다...</div>
               </div>
             </div>

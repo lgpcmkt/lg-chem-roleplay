@@ -171,7 +171,7 @@ export const RoleplayRoom: React.FC<RoleplayRoomProps> = ({
             <button onClick={() => setShowHint(false)} className="absolute top-2 right-2 border-2 border-black p-1 hover:bg-gray-200">
               <X className="w-4 h-4" />
             </button>
-            <h3 className="font-bold mb-3 flex items-center gap-2">💡 힌트</h3>
+            <h3 className="font-bold mb-3 flex items-center gap-2">힌트</h3>
             <p className="text-sm leading-relaxed whitespace-pre-wrap">{scenario.hint}</p>
           </div>
         </div>
@@ -186,7 +186,7 @@ export const RoleplayRoom: React.FC<RoleplayRoomProps> = ({
             onClick={() => setShowHint(true)}
             className="border-2 border-black bg-yellow-300 px-3 py-1 text-xs font-bold shadow-[2px_2px_0_rgba(0,0,0,1)] active:shadow-none active:translate-y-[2px] active:translate-x-[2px]"
           >
-            💡 힌트 보기
+            힌트 보기
           </button>
           
           <div className="flex gap-2">

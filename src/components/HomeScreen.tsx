@@ -114,7 +114,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ employeeInfo, onLogout, 
                style={{ imageRendering: 'pixelated' }}
              />
              {currentProgress === 5 && (
-               <div className="absolute top-2 right-2 text-xl animate-bounce">👑</div>
+               <div className="absolute top-2 right-2 text-xl animate-bounce border-2 border-black bg-yellow-300 px-2 font-bold shadow-[2px_2px_0_rgba(0,0,0,1)]">마스터</div>
              )}
           </div>
 
@@ -126,7 +126,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ employeeInfo, onLogout, 
             className="w-full py-4 bg-black text-white font-bold text-lg rounded-xl border-4 border-black hover:bg-white hover:text-black transition-colors flex items-center justify-center gap-2 relative shadow-[4px_4px_0px_rgba(0,0,0,0.3)] active:shadow-none active:translate-y-1 active:translate-x-1"
             onClick={() => onSelectTrack(selectedTrack)}
           >
-            {selectedTrack === 'hospital' ? '종병' : '로컬'} 롤플레이 시작 ▶
+            {selectedTrack === 'hospital' ? '종병' : '로컬'} 롤플레이 시작
           </button>
         </div>
       </div>

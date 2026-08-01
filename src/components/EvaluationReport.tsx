@@ -11,15 +11,7 @@ interface EvaluationReportProps {
 export const EvaluationReport: React.FC<EvaluationReportProps> = ({
   evaluation, onRetry, onClose
 }) => {
-  const getGradeIcon = (grade?: string) => {
-    switch (grade) {
-      case 'S': return '🌟'; // 성공
-      case 'A': return '💡'; // 아하
-      case 'B': return '📉'; // 데이터/보완
-      case 'C': return '😖'; // 좌절/실수
-      default: return '❓';
-    }
-  };
+  // Emojis removed
 
   const getGradeColor = (grade?: string) => {
     switch (grade) {
@@ -37,9 +29,6 @@ export const EvaluationReport: React.FC<EvaluationReportProps> = ({
       <div className="w-full pixel-box p-6 flex flex-col items-center shadow-[6px_6px_0px_rgba(0,0,0,1)] bg-white text-center animate-slideUp">
         <h2 className="text-xl font-bold mb-6">롤플레이 결과 리포트</h2>
 
-        <div className="text-6xl mb-4 animate-pop-bounce">
-          {getGradeIcon(evaluation.grade)}
-        </div>
 
         <div className={`text-5xl font-black mb-2 ${getGradeColor(evaluation.grade)}`}>
           {evaluation.grade} 등급
@@ -74,7 +63,7 @@ export const EvaluationReport: React.FC<EvaluationReportProps> = ({
 
         {evaluation.recommendedScript && (
           <div className="w-full text-left bg-yellow-50 p-4 border-2 border-black rounded-lg mb-8 text-sm">
-            <h3 className="font-bold mb-2">💡 추천 스크립트</h3>
+            <h3 className="font-bold mb-2">추천 스크립트</h3>
             <p className="italic leading-relaxed">{evaluation.recommendedScript}</p>
           </div>
         )}
