@@ -105,24 +105,33 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ employeeInfo, onLogout, 
             />
           </div>
 
-          {/* Character Image */}
-          <div 
-            className="relative mb-4 w-40 h-40 border-2 border-black flex items-center justify-center rounded-xl overflow-hidden group bg-cover bg-center"
-            style={{
-              backgroundImage: selectedTrack === 'hospital' 
-                ? "url('/images/pixel_hospital_lg.png')" 
-                : "url('/images/pixel_clinic_lg.png')"
-            }}
-          >
-             <img 
-               src={getCharImage(currentProgress)} 
-               alt="캐릭터" 
-               className="object-contain w-[120%] h-[120%] image-rendering-pixelated group-hover:scale-110 transition-transform relative z-10" 
-               style={{ imageRendering: 'pixelated' }}
-             />
-             {currentProgress === 5 && (
-               <div className="absolute top-2 right-2 text-xl animate-bounce border-2 border-black bg-yellow-300 px-2 font-bold shadow-[2px_2px_0_rgba(0,0,0,1)] z-20">마스터</div>
-             )}
+          {/* Images Row */}
+          <div className="flex gap-4 mb-4 w-full justify-center">
+            {/* Hospital Building Image */}
+            <div className="relative w-32 h-32 border-2 border-black bg-white flex items-center justify-center rounded-xl overflow-hidden">
+               <img 
+                 src={selectedTrack === 'hospital' ? '/images/pixel_hospital_lg.png' : '/images/pixel_clinic_lg.png'} 
+                 alt="병원 배경" 
+                 className="object-contain w-[90%] h-[90%] image-rendering-pixelated"
+                 style={{ imageRendering: 'pixelated' }}
+               />
+               <div className="absolute bottom-0 inset-x-0 bg-black text-white text-[10px] text-center py-0.5 font-bold">
+                 {selectedTrack === 'hospital' ? '종합병원 출동' : '로컬 병의원 출동'}
+               </div>
+            </div>
+
+            {/* Character Image */}
+            <div className="relative w-32 h-32 border-2 border-black bg-gray-50 flex items-center justify-center rounded-xl overflow-hidden group">
+               <img 
+                 src={getCharImage(currentProgress)} 
+                 alt="캐릭터" 
+                 className="object-contain w-[120%] h-[120%] image-rendering-pixelated group-hover:scale-110 transition-transform" 
+                 style={{ imageRendering: 'pixelated' }}
+               />
+               {currentProgress === 5 && (
+                 <div className="absolute top-1 right-1 text-[10px] animate-bounce border-2 border-black bg-yellow-300 px-1 font-bold shadow-[1px_1px_0_rgba(0,0,0,1)] z-20">마스터</div>
+               )}
+            </div>
           </div>
 
           <div className="text-sm font-bold mb-8 h-6">
