@@ -126,7 +126,7 @@ export const RoleplayRoom: React.FC<RoleplayRoomProps> = ({
       </div>
 
       {/* Chat Area */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50 pb-32">
+      <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50">
         {chatHistory.map((msg, idx) => (
           <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
             {msg.role === 'assistant' && (
@@ -147,7 +147,7 @@ export const RoleplayRoom: React.FC<RoleplayRoomProps> = ({
               음성 입력 중입니다...
             </div>
           </div>
-        ) : (conversation.status === 'connected' && !conversation.isSpeaking) ? (
+        ) : (conversation.status === 'connected' && !conversation.isSpeaking && chatHistory.length > 0 && chatHistory[chatHistory.length - 1].role === 'user') ? (
           <div className="flex justify-start">
              <div className="w-8 h-8 rounded-full border-2 border-black bg-white mr-2 flex items-center justify-center overflow-hidden flex-shrink-0">
                <img src="/images/korean_doctor_strict_clinic_1785413940376.png" alt="doc" className="w-full h-full object-cover" />
@@ -174,7 +174,7 @@ export const RoleplayRoom: React.FC<RoleplayRoomProps> = ({
       )}
 
       {/* Bottom Controls */}
-      <div className="absolute bottom-0 inset-x-0 border-t-2 border-black bg-white p-3 z-10 flex flex-col gap-2">
+      <div className="border-t-2 border-black bg-white p-3 z-10 flex flex-col gap-2 shrink-0">
         
         {/* Call Controls */}
         <div className="flex justify-between items-center gap-2 mb-1 px-1">
