@@ -197,7 +197,7 @@ export const RoleplayRoom: React.FC<RoleplayRoomProps> = ({
                </div>
             )}
             <div className={`max-w-[75%] pixel-box px-4 py-3 text-sm leading-relaxed ${
-              msg.role === 'user' ? 'bg-black text-white ml-2' : 'bg-white text-black'
+              msg.role === 'user' ? 'bg-gray-200 text-black border-2 border-black ml-2' : 'bg-white text-black'
             }`}>
               {msg.role === 'assistant' ? <TypewriterText text={msg.content} speed={20} /> : msg.content}
             </div>
@@ -205,7 +205,7 @@ export const RoleplayRoom: React.FC<RoleplayRoomProps> = ({
         ))}
         {interimText && (
           <div className="flex justify-end">
-            <div className="max-w-[75%] pixel-box px-4 py-3 text-sm leading-relaxed bg-black text-white ml-2 opacity-70">
+            <div className="max-w-[75%] pixel-box px-4 py-3 text-sm leading-relaxed bg-gray-200 text-black border-2 border-black ml-2 opacity-70">
               {interimText}
             </div>
           </div>
@@ -292,7 +292,7 @@ export const RoleplayRoom: React.FC<RoleplayRoomProps> = ({
             onChange={(e) => setTextInput(e.target.value)}
             onKeyDown={handleTextKeyDown}
             placeholder="텍스트로 입력..."
-            className="flex-1 bg-transparent text-sm outline-none"
+            className="flex-1 bg-transparent text-black text-sm outline-none"
           />
           <button
             onClick={handleSendText}
