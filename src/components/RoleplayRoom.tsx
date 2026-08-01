@@ -19,7 +19,9 @@ export const RoleplayRoom: React.FC<RoleplayRoomProps> = ({
   const [textInput, setTextInput] = useState('');
   const [isConnecting, setIsConnecting] = useState(false);
   const [showHint, setShowHint] = useState(false);
+  const [isMicPressed, setIsMicPressed] = useState(false);
   const chatEndRef = useRef<HTMLDivElement>(null);
+  const hasAutoStarted = useRef(false);
 
   // Initialize with first message
   useEffect(() => {
@@ -51,6 +53,13 @@ export const RoleplayRoom: React.FC<RoleplayRoomProps> = ({
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [chatHistory]);
 
+  // Handle Push-to-Talk (Mute when not pressed)
+  useEffect(() => {
+    if (conversation.status === 'connected') {
+      conversation.setMuted(!isMicPressed);
+    }
+  }, [isMicPressed, conversation.status]);
+
   const handleStartCall = async () => {
     if (isConnecting) return;
     setIsConnecting(true);
@@ -65,11 +74,19 @@ export const RoleplayRoom: React.FC<RoleplayRoomProps> = ({
       });
     } catch (err) {
       console.error('Failed to start call:', err);
-      alert('연결 실패. 권한을 확인해주세요.');
+      alert('연결 실패. 마이크 권한을 확인해주세요.');
     } finally {
       setIsConnecting(false);
     }
   };
+
+  // Auto-connect on mount
+  useEffect(() => {
+    if (!hasAutoStarted.current && conversation.status === 'disconnected') {
+      hasAutoStarted.current = true;
+      handleStartCall();
+    }
+  }, [conversation.status]);
 
   const handleEndCall = async () => {
     if (conversation.status === 'connected') {
@@ -175,19 +192,24 @@ export const RoleplayRoom: React.FC<RoleplayRoomProps> = ({
           <div className="flex gap-2">
             {conversation.status === 'connected' ? (
               <button
-                onClick={handleEndCall}
-                className="border-2 border-black bg-red-500 text-white w-10 h-10 flex items-center justify-center shadow-[2px_2px_0_rgba(0,0,0,1)] active:shadow-none active:translate-y-[2px] active:translate-x-[2px]"
+                onMouseDown={() => setIsMicPressed(true)}
+                onMouseUp={() => setIsMicPressed(false)}
+                onMouseLeave={() => setIsMicPressed(false)}
+                onTouchStart={() => setIsMicPressed(true)}
+                onTouchEnd={() => setIsMicPressed(false)}
+                className={`border-2 border-black flex items-center justify-center px-4 py-1 text-sm font-bold shadow-[2px_2px_0_rgba(0,0,0,1)] transition-colors select-none ${
+                  isMicPressed 
+                    ? 'bg-red-500 text-white shadow-none translate-y-[2px] translate-x-[2px]' 
+                    : 'bg-green-400 text-black'
+                }`}
               >
-                <Phone className="w-4 h-4 rotate-[135deg]" />
+                <Mic className="w-4 h-4 mr-1" />
+                {isMicPressed ? '듣고 있습니다...' : '누르고 말하기 (PTT)'}
               </button>
             ) : (
-              <button
-                onClick={handleStartCall}
-                disabled={isConnecting}
-                className="border-2 border-black bg-blue-500 text-white px-3 py-1 text-xs font-bold shadow-[2px_2px_0_rgba(0,0,0,1)] active:shadow-none active:translate-y-[2px] active:translate-x-[2px] disabled:opacity-50"
-              >
-                {isConnecting ? '연결 중...' : '🎙️ 음성 시작'}
-              </button>
+              <div className="px-3 py-1 text-xs font-bold text-gray-500 border-2 border-transparent">
+                {isConnecting ? '연결 중...' : '연결 대기 중'}
+              </div>
             )}
           </div>
         </div>
