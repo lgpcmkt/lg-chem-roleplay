@@ -8,5 +8,7 @@ services:
     envVars:
       - key: NODE_ENV
         value: production
+      - key: NODE_VERSION
+        value: "20.10.0"
       # - key: VITE_GEMINI_API_KEY
       #   value: "ENTER_YOUR_GEMINI_API_KEY_HERE"
