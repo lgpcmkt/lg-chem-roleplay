@@ -24,7 +24,7 @@ export const EvaluationReport: React.FC<EvaluationReportProps> = ({
   };
 
   return (
-    <div className="flex-1 flex flex-col items-center justify-center bg-white text-black font-sans min-h-screen p-4 border-x-2 border-black max-w-md mx-auto">
+    <div className="flex-1 flex flex-col items-center justify-center bg-white text-black font-sans h-[100dvh] p-4 border-x-2 border-black max-w-md mx-auto">
       
       <div className="w-full pixel-box p-6 flex flex-col items-center shadow-[6px_6px_0px_rgba(0,0,0,1)] bg-white text-center animate-slideUp">
         <h2 className="text-xl font-bold mb-6">롤플레이 결과 리포트</h2>

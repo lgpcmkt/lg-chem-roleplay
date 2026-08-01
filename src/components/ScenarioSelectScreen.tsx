@@ -16,7 +16,7 @@ export const ScenarioSelectScreen: React.FC<ScenarioSelectScreenProps> = ({
   const scenarios = SCENARIOS[track];
 
   return (
-    <div className="flex-1 flex flex-col bg-white text-black font-sans min-h-screen relative overflow-hidden max-w-md mx-auto border-x-2 border-black">
+    <div className="flex-1 flex flex-col bg-white text-black font-sans h-[100dvh] relative overflow-hidden max-w-md mx-auto border-x-2 border-black">
       {/* Header */}
       <div className="px-4 py-3 border-b-2 border-black flex justify-between items-center bg-white z-10 shadow-[0_2px_0_rgba(0,0,0,1)]">
         <button onClick={onBack} className="w-8 h-8 rounded-full border-2 border-black flex items-center justify-center hover:bg-gray-100 transition-colors">

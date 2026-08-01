@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { Scenario, EmployeeInfo, ChatMessage } from '../types';
 import { ArrowLeft, Mic, Phone, Send, Info, X } from 'lucide-react';
 import { useConversation } from '@elevenlabs/react';
+import { TypewriterText } from './TypewriterText';
 
 interface RoleplayRoomProps {
   scenario: Scenario;
@@ -23,17 +24,6 @@ export const RoleplayRoom: React.FC<RoleplayRoomProps> = ({
   const chatEndRef = useRef<HTMLDivElement>(null);
   const hasAutoStarted = useRef(false);
 
-  // Initialize with first message
-  useEffect(() => {
-    setChatHistory([
-      {
-        id: 'initial',
-        role: 'assistant',
-        content: scenario.firstMessage,
-        timestamp: new Date().toISOString()
-      }
-    ]);
-  }, [scenario]);
 
   const conversation = useConversation({
     onMessage: (message) => {
@@ -121,7 +111,7 @@ export const RoleplayRoom: React.FC<RoleplayRoomProps> = ({
   };
 
   return (
-    <div className="flex-1 flex flex-col bg-white text-black font-sans min-h-screen relative overflow-hidden max-w-md mx-auto border-x-2 border-black">
+    <div className="flex-1 flex flex-col bg-white text-black font-sans h-[100dvh] relative overflow-hidden max-w-md mx-auto border-x-2 border-black">
       
       {/* Header */}
       <div className="px-4 py-3 border-b-2 border-black flex justify-between items-center bg-white z-10 shadow-[0_2px_0_rgba(0,0,0,1)]">
@@ -147,11 +137,17 @@ export const RoleplayRoom: React.FC<RoleplayRoomProps> = ({
             <div className={`max-w-[75%] pixel-box px-4 py-3 text-sm leading-relaxed ${
               msg.role === 'user' ? 'bg-black text-white ml-2' : 'bg-white text-black'
             }`}>
-              {msg.content}
+              {msg.role === 'assistant' ? <TypewriterText text={msg.content} speed={20} /> : msg.content}
             </div>
           </div>
         ))}
-        {conversation.isSpeaking && (
+        {isMicPressed ? (
+          <div className="flex justify-end">
+            <div className="pixel-box px-4 py-3 bg-red-100 text-red-600 text-xs font-bold animate-pulse border-red-400">
+              음성 입력 중입니다...
+            </div>
+          </div>
+        ) : conversation.isSpeaking ? (
           <div className="flex justify-start">
              <div className="w-8 h-8 rounded-full border-2 border-black bg-white mr-2 flex items-center justify-center overflow-hidden flex-shrink-0">
                <img src="/images/korean_doctor_strict_clinic_1785413940376.png" alt="doc" className="w-full h-full object-cover" />
@@ -160,7 +156,16 @@ export const RoleplayRoom: React.FC<RoleplayRoomProps> = ({
               원장님이 말씀 중...
             </div>
           </div>
-        )}
+        ) : conversation.status === 'connected' ? (
+          <div className="flex justify-start">
+             <div className="w-8 h-8 rounded-full border-2 border-black bg-white mr-2 flex items-center justify-center overflow-hidden flex-shrink-0">
+               <img src="/images/korean_doctor_strict_clinic_1785413940376.png" alt="doc" className="w-full h-full object-cover" />
+             </div>
+            <div className="pixel-box px-4 py-3 bg-gray-100 text-gray-500 text-xs font-bold animate-pulse">
+              원장님이 생각중입니다...
+            </div>
+          </div>
+        ) : null}
         <div ref={chatEndRef} />
       </div>
 
@@ -192,11 +197,7 @@ export const RoleplayRoom: React.FC<RoleplayRoomProps> = ({
           <div className="flex gap-2">
             {conversation.status === 'connected' ? (
               <button
-                onMouseDown={() => setIsMicPressed(true)}
-                onMouseUp={() => setIsMicPressed(false)}
-                onMouseLeave={() => setIsMicPressed(false)}
-                onTouchStart={() => setIsMicPressed(true)}
-                onTouchEnd={() => setIsMicPressed(false)}
+                onClick={() => setIsMicPressed(prev => !prev)}
                 className={`border-2 border-black flex items-center justify-center px-4 py-1 text-sm font-bold shadow-[2px_2px_0_rgba(0,0,0,1)] transition-colors select-none ${
                   isMicPressed 
                     ? 'bg-red-500 text-white shadow-none translate-y-[2px] translate-x-[2px]' 
@@ -204,7 +205,7 @@ export const RoleplayRoom: React.FC<RoleplayRoomProps> = ({
                 }`}
               >
                 <Mic className="w-4 h-4 mr-1" />
-                {isMicPressed ? '듣고 있습니다...' : '누르고 말하기 (PTT)'}
+                {isMicPressed ? '음성 입력 완료하기' : '마이크 켜기 (토글)'}
               </button>
             ) : (
               <div className="px-3 py-1 text-xs font-bold text-gray-500 border-2 border-transparent">

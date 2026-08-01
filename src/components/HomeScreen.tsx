@@ -56,7 +56,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ employeeInfo, onLogout, 
   const currentProgress = progress[selectedTrack];
 
   return (
-    <div className="flex-1 flex flex-col items-center justify-start bg-white text-black font-sans min-h-screen pt-10">
+    <div className="flex-1 flex flex-col items-center justify-start bg-white text-black font-sans h-[100dvh] pt-10">
       
       {/* Header Info */}
       <div className="w-full max-w-sm px-6 flex justify-between items-center mb-8">
