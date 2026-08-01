@@ -98,11 +98,14 @@ export interface RoleplayConfig {
 // ── Scenario ──
 export interface Scenario {
   id: string;
+  track: 'hospital' | 'local';
   title: string;
-  name: string;
-  description: string;
-  difficulty: '초급' | '중급' | '고급';
-  personaImage: string;
-  hashtags: string[];
-  missionMsg: string;
+  firstMessage: string;
+  hint: string;
+  missionMsg?: string;
+}
+
+export interface UserProgress {
+  hospital: number;
+  local: number;
 }

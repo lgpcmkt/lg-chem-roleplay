@@ -16,3 +16,9 @@ pnpm-debug.log*
 
 # system files
 .DS_Store
+
+# ignore sqlite databases
+*.db
+
+# ignore gemini artifacts
+.gemini/

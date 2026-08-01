@@ -1,405 +1,162 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { Product, Scenario, ChatMessage, RoleplayEvaluationResult, SavedSession, EmployeeInfo, ScoreItem } from './types';
+import { EmployeeInfo, ChatMessage, RoleplayEvaluationResult, UserProgress, Scenario } from './types';
 import { EmployeeLoginModal } from './components/EmployeeLoginModal';
-import { ProductSelectScreen } from './components/ProductSelectScreen';
-import { ScenarioSelectScreen } from './components/ScenarioSelectScreen';
-import { PersonaSelectScreen } from './components/PersonaSelectScreen';
-import { FlashDoctorRoom } from './components/FlashDoctorRoom';
+import { HomeScreen } from './components/HomeScreen';
+import { RoleplayRoom } from './components/RoleplayRoom';
 import { EvaluationReport } from './components/EvaluationReport';
-import { Sidebar } from './components/Sidebar';
-import { MyGradebook } from './components/MyGradebook';
-import { GoogleSheetsModal } from './components/GoogleSheetsModal';
-import { ConversationProvider } from '@elevenlabs/react';
-import { exportSingleEvaluationToSheets } from './lib/googleSheets';
 import { evaluateRoleplayWithGemini } from './lib/geminiEvaluation';
+import { ConversationProvider } from '@elevenlabs/react';
+import { SCENARIOS } from './data';
 
-// ── 정적 데이터 (클라이언트용) ──
-const PRODUCTS: Record<string, Product> = {
-  zemidapa: {
-    id: 'zemidapa', name: '제미다파', nameEn: 'Zemidapa',
-    composition: '제미글립틴 50 mg + 다파글리플로진 10 mg',
-    indication: '2형 당뇨병 치료 (복합제)', tagline: 'SWITCHING 연구 기반 혈당 조절 전략',
-    color: 'from-blue-600 to-indigo-700', icon: '💊', imageUrl: '/images/zemidapa.jpg',
-    specialties: [], 
-  },
-  vimovo: {
-    id: 'vimovo', name: '비모보', nameEn: 'VIMOVO',
-    composition: '나프록센 500mg + 에스오메프라졸 20mg',
-    indication: 'NSAID 위궤양 위험 관절염 환자', tagline: '5중 코팅으로 위장 보호 + 강력 소염진통',
-    color: 'from-emerald-600 to-teal-700', icon: '🛡️', imageUrl: '/images/vimovo.jpg',
-    specialties: [],
-  },
-  nephoxil: {
-    id: 'nephoxil', name: '네폭실', nameEn: 'Nephoxil',
-    composition: 'Ferric citrate hydrate (구연산제이철수화물)',
-    indication: '고인산혈증 및 철결핍성 빈혈', tagline: '인 감소와 철분 보충을 동시에',
-    color: 'from-orange-600 to-amber-700', icon: '🩸', imageUrl: '/images/nephoxil.jpg',
-    specialties: [],
-  }
-};
-
-const SCENARIOS: Record<string, Scenario[]> = {
-  zemidapa: [
-    { id: 'z1', title: '시다프비아 선호 고객', name: '김까칠 원장', description: '', difficulty: '중급', personaImage: '/images/waiting_room_clinic.png', hashtags: ['#스위칭연구', '#혈당강하 효과', '#작은 약제크기'], missionMsg: '시다프비아 선호 고객에게 제미다파의 이점을 설명하고, 처방을 유도해내세요!' },
-    { id: 'z2', title: '에스글리토 선호 고객', name: '이학술 교수', description: '', difficulty: '고급', personaImage: '/images/waiting_room_hospital.jpg', hashtags: ['#스위칭연구', '#혈당강하 효과', '#작은 약제크기'], missionMsg: '에스글리토 선호 고객에게 제미다파의 임상 데이터를 설명하고, 처방을 유도해내세요!' },
-    { id: 'z3', title: '타 MET/DPP-4i 복합제 선호 고객', name: '나부자 원장', description: '', difficulty: '초급', personaImage: '/images/waiting_room_clinic.png', hashtags: ['#스위칭연구', '#혈당강하 효과', '#작은 약제크기'], missionMsg: '타 약제 선호 고객에게 제미다파 스위칭의 이점을 설명하고, 처방을 유도해내세요!' }
-  ],
-  vimovo: [
-    { id: 'v1', title: '낙소졸 선호 고객', name: '김까칠 원장', description: '', difficulty: '중급', personaImage: '/images/waiting_room_clinic.png', hashtags: ['#복합제이점', '#심혈관안전성', '#오리지널'], missionMsg: '낙소졸 선호 고객에게 비모보의 이점을 설명하고, 처방을 유도해내세요!' },
-    { id: 'v2', title: '쎄레브렉스 선호 고객', name: '최내향 교수', description: '', difficulty: '고급', personaImage: '/images/waiting_room_hospital.jpg', hashtags: ['#복합제이점', '#심혈관안전성', '#오리지널'], missionMsg: '쎄레브렉스 선호 교수에게 비모보의 위장관 안전성을 설명하고, 처방을 유도해내세요!' },
-    { id: 'v3', title: 'SYSADOA 선호 고객', name: '나부자 원장', description: '', difficulty: '초급', personaImage: '/images/waiting_room_clinic.png', hashtags: ['#복합제이점', '#심혈관안전성', '#오리지널'], missionMsg: 'SYSADOA 선호 고객에게 비모보 1정 복합제의 이점을 설명하고, 처방을 유도해내세요!' }
-  ],
-  nephoxil: [
-    { id: 'n1', title: '세벨라머 처방 유지 고객 (가상)', name: '김까칠 원장', description: '', difficulty: '중급', personaImage: '/images/waiting_room_clinic.png', hashtags: ['#변비부작용완화'], missionMsg: '세벨라머 처방 유지 고객에게 네폭실의 차별화된 인결합 능력을 설명하고, 처방을 유도해내세요!' }
-  ]
-};
-const PRODUCT_CHECKLIST: Record<string, { key: string; label: string; regex: RegExp }[]> = {
-  zemidapa: [
-    { key: 'switchingStudy', label: 'SWITCHING 연구 디자인을 소개하세요.', regex: /switching|스위칭|교체|switch/i },
-    { key: 'hba1c', label: '각 군별 HbA1c 감소 효과를 자세히 언급하세요.', regex: /hba1c|혈당|강하|당화혈색소/i },
-    { key: 'safety', label: '각 군별 안전성 결과도 언급하세요.', regex: /안전|저혈당|부작용|내약성/i },
-    { key: 'tabletSize', label: '타 경쟁품 대비 작은 알약 크기 강조하세요.', regex: /크기|목넘김|시다프비아|순응도|작은|알약/i },
-    { key: 'closing', label: '클로징으로 제미다파 처방을 유도하세요.', regex: /처방|추천|권유|사용|적용/i },
-  ],
-  vimovo: [
-    { key: 'coating', label: '5중 코팅 기전의 특장점을 상세히 설명하세요.', regex: /코팅|속방|장용|에스오메프라졸|방출/i },
-    { key: 'ulcerData', label: 'PN400 연구 기반 위궤양 예방 데이터를 언급하세요.', regex: /위궤양|4\.1|23\.1|PN400|위장관/i },
-    { key: 'compliance', label: '1정 복합제로 인한 환자 복약 순응도 개선을 강조하세요.', regex: /1정|복합|ppi|편의|순응도/i },
-    { key: 'safety', label: '장기 복용 시의 심혈관 및 위장관 안전성을 설명하세요.', regex: /안전|부작용|심혈관|위장/i },
-    { key: 'closing', label: '클로징으로 비모보 처방을 적극 유도하세요.', regex: /처방|추천|권유|사용|적용/i },
-  ],
-  nephoxil: [
-    { key: 'phosphate', label: '비칼슘계 인결합제로서의 인 감소 효과를 설명하세요.', regex: /인결합|인산|phosphate|인 감소|비칼슘/i },
-    { key: 'iron', label: '철분 보충 효과로 인한 ESA 주사제 절감 이점을 언급하세요.', regex: /철분|iron|ferric|esa|주사제|보충/i },
-    { key: 'kdigo', label: 'KDIGO 가이드라인에 기반한 네폭실의 적합성을 강조하세요.', regex: /kdigo|가이드라인|빈혈|모니터링/i },
-    { key: 'competitor', label: '세벨라머 등 타 경쟁품 대비 차별점을 논리적으로 제시하세요.', regex: /세벨라머|칼슘계|석회화|경쟁/i },
-    { key: 'closing', label: '클로징으로 네폭실 처방을 적극 유도하세요.', regex: /처방|추천|권유|사용|적용/i },
-  ],
-};
-
-const PRODUCT_EVAL_CRITERIA: Record<string, { key: string; label: string; maxScore: number }[]> = {
-  zemidapa: [
-    { key: 'switchingStudy', label: 'SWITCHING 연구 전달', maxScore: 30 },
-    { key: 'same3DrugSwitch', label: '동일 3제 교체 HbA1c', maxScore: 30 },
-    { key: 'competitorSize', label: '알약 크기/순응도', maxScore: 20 },
-    { key: 'closing', label: '클로징 및 대응', maxScore: 20 },
-  ],
-  vimovo: [
-    { key: 'coatingTech', label: '5중 코팅 기전', maxScore: 30 },
-    { key: 'ulcerReduction', label: '위궤양 감소 데이터', maxScore: 30 },
-    { key: 'competitorAdvantage', label: '경쟁 NSAID 장점', maxScore: 20 },
-    { key: 'closing', label: '클로징 및 대응', maxScore: 20 },
-  ],
-  nephoxil: [
-    { key: 'phosphateBinding', label: '인결합 기전/효과', maxScore: 30 },
-    { key: 'ironSupplement', label: '철분 보충 효과', maxScore: 30 },
-    { key: 'kdigoGuideline', label: 'KDIGO 가이드라인', maxScore: 20 },
-    { key: 'closing', label: '클로징 및 대응', maxScore: 20 },
-  ],
-};
-
-type AppScreen = 'login' | 'productSelect' | 'scenarioSelect' | 'personaSelect' | 'roleplay' | 'evaluation';
-type SideView = 'dashboard' | 'gradebook';
-
-function generateId() {
-  return Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
-}
+type AppScreen = 'login' | 'home' | 'roleplay' | 'evaluation';
 
 export default function App() {
-  // ── State ──
   const [screen, setScreen] = useState<AppScreen>('login');
-  const [sideView, setSideView] = useState<SideView>('dashboard');
-  const [employeeInfo, setEmployeeInfo] = useState<EmployeeInfo | null>(() => {
-    try {
-      const stored = localStorage.getItem('lg_roleplay_user');
-      return stored ? JSON.parse(stored) : null;
-    } catch { return null; }
-  });
-
-  // Selection
-  const [selectedProductId, setSelectedProductId] = useState<string>('');
-  const [selectedScenarioId, setSelectedScenarioId] = useState<string>('');
-  const [selectedPersona, setSelectedPersona] = useState<string>('');
-
-  // Chat
-  const [chatHistory, setChatHistory] = useState<ChatMessage[]>([]);
-  const [checklistStatus, setChecklistStatus] = useState<Record<string, boolean>>({});
-
-  // Evaluation
+  const [employeeInfo, setEmployeeInfo] = useState<EmployeeInfo | null>(null);
+  
+  const [selectedTrack, setSelectedTrack] = useState<'hospital' | 'local'>('hospital');
+  const [currentScenario, setCurrentScenario] = useState<Scenario | null>(null);
+  
   const [evaluation, setEvaluation] = useState<RoleplayEvaluationResult | null>(null);
   const [isEvaluating, setIsEvaluating] = useState(false);
 
-  // Sessions
-  const [isSheetsModalOpen, setIsSheetsModalOpen] = useState(false);
-  const [savedSessions, setSavedSessions] = useState<SavedSession[]>(() => {
-    try {
-      const stored = localStorage.getItem('lg_roleplay_sessions');
-      return stored ? JSON.parse(stored) : [];
-    } catch { return []; }
-  });
-
-  // Save sessions to localStorage
+  // Auto-login check
   useEffect(() => {
-    localStorage.setItem('lg_roleplay_sessions', JSON.stringify(savedSessions));
-  }, [savedSessions]);
-
-  // ── Derived ──
-  const selectedProduct = PRODUCTS[selectedProductId] || null;
-  const scenarios = SCENARIOS[selectedProductId] || [];
-  const selectedScenario = scenarios.find(s => s.id === selectedScenarioId) || null;
-  const checklistItems = PRODUCT_CHECKLIST[selectedProductId] || [];
-
-  // ── Handlers ──
-  const handleLogin = (info: EmployeeInfo) => {
-    setEmployeeInfo(info);
-    localStorage.setItem('lg_roleplay_user', JSON.stringify(info));
-    setScreen('productSelect');
-  };
-
-  useEffect(() => {
-    if (employeeInfo && screen === 'login') {
-      setScreen('productSelect');
+    const stored = localStorage.getItem('lg_roleplay_user');
+    if (stored) {
+      setEmployeeInfo(JSON.parse(stored));
+      setScreen('home');
     }
-  }, [employeeInfo, screen]);
+  }, []);
 
-  const handleSelectProduct = (productId: string) => {
-    setSelectedProductId(productId);
-    setScreen('scenarioSelect');
-  };
-
-  const handleSelectScenario = (scenarioId: string) => {
-    setSelectedScenarioId(scenarioId);
-    setScreen('personaSelect');
-  };
-
-  const handleSelectPersona = (persona: string) => {
-    setSelectedPersona(persona);
-    
-    // Reset chat
-    setChatHistory([]);
-    setEvaluation(null);
-
-    // Initialize checklist
-    const initialChecklist: Record<string, boolean> = {};
-    (PRODUCT_CHECKLIST[selectedProductId] || []).forEach(item => { initialChecklist[item.key] = false; });
-    setChecklistStatus(initialChecklist);
-
-    setScreen('roleplay');
-  };
-
-  const handleEndRoleplay = useCallback(async (_conversationId?: string) => {
-    setIsEvaluating(true);
-    setScreen('evaluation');
-
+  const handleLogin = async (info: EmployeeInfo) => {
     try {
-      if (!selectedProduct || !selectedScenario) {
-        throw new Error('선택된 약품 또는 시나리오가 없습니다.');
+      const res = await fetch('/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: info.employeeId, name: info.name })
+      });
+      if (res.ok) {
+        setEmployeeInfo(info);
+        localStorage.setItem('lg_roleplay_user', JSON.stringify(info));
+        setScreen('home');
       }
-
-      // 구글 Gemini 1.5 Flash API로 1.5초 만에 초고속 평가 수행
-      const evalResult = await evaluateRoleplayWithGemini(
-        selectedProduct,
-        selectedScenario,
-        selectedPersona,
-        chatHistory
-      );
-
-      setEvaluation(evalResult);
-
-      const newSession: SavedSession = {
-        id: generateId(),
-        date: new Date().toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' }),
-        productId: selectedProductId,
-        productName: selectedProduct?.name || '',
-        specialtyName: '',
-        doctorTypeName: selectedScenario?.title || '',
-        evaluation: evalResult,
-        chatHistory,
-      };
-      setSavedSessions(prev => [newSession, ...prev]);
-
-      // 사용자 모르게 백그라운드에서 Google Sheets로 자동 저장
-      exportSingleEvaluationToSheets(
-        evalResult,
-        selectedProduct?.name || '',
-        '',
-        selectedScenario?.title || '',
-        employeeInfo
-      ).catch(e => console.error('Silent export to Google Sheets failed:', e));
-    } catch (err) {
-      console.error('Evaluation error:', err);
-      const evalResult: RoleplayEvaluationResult = {
-        isSuccess: false,
-        reasoning: '평가 처리 중 오류가 발생했습니다. 다시 시도해 주세요.',
-        totalScore: 50,
-        grade: 'C',
-        summary: '평가 오류',
-        strengths: [],
-        weaknesses: [],
-        recommendedScript: ''
-      };
-      setEvaluation(evalResult);
-    } finally {
-      setIsEvaluating(false);
+    } catch (e) {
+      console.error('Login failed', e);
+      alert('로그인에 실패했습니다.');
     }
-  }, [chatHistory, selectedProductId, selectedScenarioId, selectedProduct, selectedScenario, selectedPersona, employeeInfo]);
-
-  const handleRetry = () => {
-    handleSelectScenario(selectedScenarioId);
-  };
-
-  const handleNewProduct = () => {
-    setScreen('productSelect');
-    setSelectedProductId('');
-    setSelectedScenarioId('');
-    setChatHistory([]);
-    setEvaluation(null);
   };
 
   const handleLogout = () => {
     localStorage.removeItem('lg_roleplay_user');
     setEmployeeInfo(null);
-    setSelectedProductId('');
-    setSelectedScenarioId('');
-    setSelectedPersona('');
-    setChatHistory([]);
-    setEvaluation(null);
     setScreen('login');
   };
 
-  const handleNavigate = (view: string) => {
-    setSideView(view as SideView);
-    if (view === 'dashboard' && screen === 'evaluation') {
-      handleNewProduct();
-    } else if (view === 'dashboard') {
-      if (screen !== 'roleplay') setScreen('productSelect');
+  const handleSelectTrack = async (track: 'hospital' | 'local') => {
+    setSelectedTrack(track);
+    // Fetch progress to determine next scenario
+    try {
+      const res = await fetch(`/api/progress/${employeeInfo?.employeeId}`);
+      if (res.ok) {
+        const progress: UserProgress = await res.json();
+        const nextIndex = Math.min(progress[track], 4); // max index 4
+        setCurrentScenario(SCENARIOS[track][nextIndex]);
+        setScreen('roleplay');
+      }
+    } catch (e) {
+      console.error('Failed to start track', e);
+      // Fallback
+      setCurrentScenario(SCENARIOS[track][0]);
+      setScreen('roleplay');
     }
   };
 
-  const handleDeleteSession = (id: string) => {
-    setSavedSessions(prev => prev.filter(s => s.id !== id));
-  };
+  const handleEndRoleplay = useCallback(async (chatHistory: ChatMessage[]) => {
+    if (!currentScenario || !employeeInfo) return;
+    
+    setIsEvaluating(true);
+    setScreen('evaluation');
 
-  // ── Render ──
+    try {
+      // Evaluate
+      const evalResult = await evaluateRoleplayWithGemini(
+        { name: '제미다파', indication: '당뇨복합제' } as any,
+        currentScenario,
+        '',
+        chatHistory
+      );
+      
+      setEvaluation(evalResult);
+
+      // Save to backend
+      await fetch('/api/session', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          id: Date.now().toString(),
+          userId: employeeInfo.employeeId,
+          track: currentScenario.track,
+          scenarioId: currentScenario.id,
+          grade: evalResult.grade
+        })
+      });
+
+    } catch (err) {
+      console.error('Evaluation error:', err);
+      setEvaluation({
+        isSuccess: false,
+        grade: 'C',
+        reasoning: '평가 처리 중 오류가 발생했습니다.',
+      });
+    } finally {
+      setIsEvaluating(false);
+    }
+  }, [currentScenario, employeeInfo]);
+
   if (screen === 'login') {
     return <EmployeeLoginModal isOpen={true} onSave={handleLogin} currentInfo={employeeInfo} />;
   }
 
-  const renderMainContent = () => {
-      if (sideView === 'gradebook') {
-      return (
-        <MyGradebook
-          sessions={savedSessions}
-          onDeleteSession={handleDeleteSession}
-          onSaveBulkSheets={() => setIsSheetsModalOpen(true)}
-        />
-      );
-    }
-
-    switch (screen) {
-      case 'productSelect':
-        return (
-          <ProductSelectScreen
-            products={Object.values(PRODUCTS)}
-            onSelectProduct={handleSelectProduct}
-            employeeName={employeeInfo?.name || 'MR'}
+  return (
+    <div className="fixed inset-0 flex bg-gray-100 overflow-hidden justify-center font-sans">
+      <main className="w-full max-w-md bg-white shadow-xl flex flex-col relative overflow-hidden">
+        {screen === 'home' && employeeInfo && (
+          <HomeScreen 
+            employeeInfo={employeeInfo} 
+            onLogout={handleLogout} 
+            onSelectTrack={handleSelectTrack} 
           />
-        );
-      case 'scenarioSelect':
-        return selectedProduct ? (
-          <ScenarioSelectScreen
-            product={selectedProduct}
-            scenarios={scenarios}
-            onSelectScenario={handleSelectScenario}
-            onBack={() => setScreen('productSelect')}
-          />
-        ) : null;
-      case 'personaSelect':
-        return selectedProduct && selectedScenario ? (
-          <PersonaSelectScreen
-            product={selectedProduct}
-            scenario={selectedScenario}
-            onSelectPersona={handleSelectPersona}
-            onBack={() => setScreen('scenarioSelect')}
-          />
-        ) : null;
-      case 'roleplay':
-        return selectedProduct && selectedScenario ? (
+        )}
+        
+        {screen === 'roleplay' && currentScenario && employeeInfo && (
           <ConversationProvider>
-            <FlashDoctorRoom
-              product={selectedProduct}
-              scenario={selectedScenario}
-              employeeInfo={employeeInfo!}
-              checklistStatus={checklistStatus}
-              setChecklistStatus={setChecklistStatus}
-              checklistItems={checklistItems.map(i => ({ key: i.key, label: i.label, regex: i.regex }))}
-              onEndRoleplay={handleEndRoleplay}
-              chatHistory={chatHistory}
-              setChatHistory={setChatHistory}
-              onBack={() => {
-                setSelectedProductId('');
-                setSelectedScenarioId('');
-                setSelectedPersona('');
-                setChatHistory([]);
-                setChecklistStatus({});
-                setScreen('productSelect');
-              }}
-              persona={selectedPersona}
+            <RoleplayRoom 
+              scenario={currentScenario} 
+              employeeInfo={employeeInfo} 
+              onEndRoleplay={handleEndRoleplay} 
+              onBack={() => setScreen('home')} 
             />
           </ConversationProvider>
-        ) : null;
-      case 'evaluation':
-        if (isEvaluating) {
-          return (
-            <div className="flex-1 flex items-center justify-center bg-gradient-to-b from-slate-50 to-slate-100">
-              <div className="text-center space-y-4 animate-fadeIn">
-                <div className="w-16 h-16 mx-auto border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin" />
-                <div>
-                  <p className="text-base font-extrabold text-slate-900">원장님의 속마음을 분석 중입니다...</p>
-                  <p className="text-xs text-slate-500 mt-1">디테일링 내용을 분석하고 있습니다.</p>
-                </div>
+        )}
+
+        {screen === 'evaluation' && (
+          isEvaluating ? (
+            <div className="flex-1 flex flex-col items-center justify-center bg-white border-x-2 border-black max-w-md mx-auto w-full">
+              <div className="pixel-box p-8 flex flex-col items-center text-center animate-pulse">
+                <div className="text-4xl mb-4">🤔</div>
+                <div className="font-bold text-lg">원장님의 속마음을 분석 중입니다...</div>
               </div>
             </div>
-          );
-        }
-        return evaluation && selectedProduct && selectedScenario ? (
-          <EvaluationReport
-            evaluation={evaluation}
-            product={selectedProduct}
-            onRetry={handleRetry}
-            onClose={handleNewProduct}
-            chatHistory={chatHistory}
-          />
-        ) : null;
-      default:
-        return null;
-    }
-  };
-
-  return (
-    <div className="fixed inset-0 flex flex-col-reverse md:flex-row bg-slate-50 overflow-hidden">
-      <Sidebar
-        employeeInfo={employeeInfo}
-        currentView={sideView === 'gradebook' ? 'gradebook' : 'dashboard'}
-        onNavigate={handleNavigate}
-        onLogout={handleLogout}
-      />
-      <main className="flex-1 flex flex-col min-w-0 overflow-hidden relative pb-[env(safe-area-inset-bottom)]">
-        {renderMainContent()}
+          ) : evaluation && (
+            <EvaluationReport 
+              evaluation={evaluation} 
+              onRetry={() => setScreen('roleplay')} 
+              onClose={() => setScreen('home')} 
+            />
+          )
+        )}
       </main>
-
-      {/* Modals */}
-      <GoogleSheetsModal
-        isOpen={isSheetsModalOpen}
-        onClose={() => setIsSheetsModalOpen(false)}
-        evaluation={evaluation}
-        productName={selectedProduct?.name || ''}
-        specialtyName={''}
-        doctorTypeName={selectedPersona || selectedScenario?.title || ''}
-        employeeInfo={employeeInfo}
-        savedSessions={savedSessions}
-        mode={screen === 'evaluation' ? 'single' : 'bulk'}
-      />
     </div>
   );
 }

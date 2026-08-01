@@ -24,17 +24,21 @@ export async function evaluateRoleplayWithGemini(
 ${formattedTranscript || '(대화 내용 없음)'}
 
 [평가 가이드라인]
-1. totalScore: 0 ~ 100점 사이의 정수 (대화의 충실도, 설득력, 미션 달성도 종합 평가).
-2. isSuccess: totalScore가 60점 이상이거나 의사를 설득한 경우 true, 그렇지 않으면 false.
-3. reasoning: 의사의 처방 변경 이유 또는 Unmet needs (의사 입장에서 느낀 총평 2~3문장).
-4. strengths: 영업사원이 잘 설명하거나 잘한 점 2~3가지 (문장 배열).
-5. weaknesses: 영업사원이 아쉽거나 보완해야 할 점 1~2가지 (문장 배열).
+1. grade: S, A, B, C 중 하나의 등급 부여.
+  - S: 핵심 소구 포인트를 완벽하게 전달하고 성공적으로 설득함.
+  - A: 주요 내용을 잘 전달하여 처방을 유도함.
+  - B: 핵심 키워드가 일부 누락되어 설득이 다소 부족함.
+  - C: 엉뚱한 내용을 말하거나 의사를 전혀 설득하지 못함.
+2. isSuccess: grade가 S 또는 A이면 true, B 또는 C이면 false.
+3. reasoning: 의사의 입장에서 느낀 총평 (왜 이런 등급을 주었는지, 어떤 점이 아쉬웠는지 2~3문장).
+4. strengths: 영업사원이 잘한 점 2~3가지 (문장 배열).
+5. weaknesses: 영업사원이 보완해야 할 핵심 키워드 누락 등 아쉬운 점 1~2가지 (문장 배열).
 6. recommendedScript: 다음 대화 시 활용할 수 있는 1~2문장의 모범 스크립트.
 
 [반환 형식]
 오직 아래 구조의 JSON만 반환하세요:
 {
-  "totalScore": 85,
+  "grade": "A",
   "isSuccess": true,
   "reasoning": "...",
   "strengths": ["...", "..."],
@@ -72,12 +76,11 @@ ${formattedTranscript || '(대화 내용 없음)'}
   }
 
   const parsed = JSON.parse(rawText);
-  const score = Number(parsed.totalScore) || 75;
-  const grade = score >= 90 ? 'S' : score >= 80 ? 'A' : score >= 70 ? 'B' : 'C';
+  const grade = parsed.grade || 'C';
+  const isSuccess = grade === 'S' || grade === 'A';
 
   return {
-    isSuccess: typeof parsed.isSuccess === 'boolean' ? parsed.isSuccess : score >= 60,
-    totalScore: score,
+    isSuccess: isSuccess,
     grade: grade,
     reasoning: parsed.reasoning || '성공적으로 디테일링을 마쳤습니다.',
     summary: `${product.name} 디테일링 평가 완료`,

@@ -1,14 +1,27 @@
 @import "tailwindcss";
-@import url('https://hangeul.pstatic.net/hangeul_static/css/nanum-square.css');
 
 @theme {
-  --font-sans: 'NanumSquare', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', '맑은 고딕', sans-serif;
+  --font-sans: 'Galmuri11', 'Galmuri9', sans-serif;
 }
 
 @layer base {
   html, body {
-    @apply text-slate-900 bg-slate-50 antialiased;
+    @apply text-black bg-white antialiased;
     overscroll-behavior: none;
+    font-family: 'Galmuri11', sans-serif;
+  }
+}
+
+@layer utilities {
+  .pixel-borders {
+    box-shadow: 
+      inset 0 0 0 2px black,
+      0 0 0 2px black;
+  }
+  .pixel-box {
+    border: 2px solid black;
+    border-radius: 4px;
+    background-color: white;
   }
 }
 

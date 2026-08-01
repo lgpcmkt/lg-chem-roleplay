@@ -1,107 +1,101 @@
 import React from 'react';
-import { RoleplayEvaluationResult, Product, ChatMessage } from '../types';
-import { ArrowLeft, RefreshCw } from 'lucide-react';
+import { RoleplayEvaluationResult } from '../types';
+import { RotateCcw, Home } from 'lucide-react';
 
 interface EvaluationReportProps {
   evaluation: RoleplayEvaluationResult;
-  product: Product;
   onRetry: () => void;
   onClose: () => void;
-  onSaveSheets?: () => void;
-  chatHistory: ChatMessage[];
 }
 
 export const EvaluationReport: React.FC<EvaluationReportProps> = ({
-  evaluation,
-  product,
-  onRetry,
-  onClose,
-  onSaveSheets,
+  evaluation, onRetry, onClose
 }) => {
-  const isSuccess = evaluation.isSuccess;
-  const mainMessage = isSuccess 
-    ? `${product.name} 처방 유도에 성공하셨습니다!` 
-    : `${product.name} 처방 유도에 실패하였습니다.`;
-  
-  const textColor = isSuccess ? 'text-blue-600' : 'text-red-500';
-  const bgColor = isSuccess ? 'bg-blue-50' : 'bg-red-50';
-  const borderColor = isSuccess ? 'border-blue-200' : 'border-red-200';
+  const getGradeIcon = (grade?: string) => {
+    switch (grade) {
+      case 'S': return '🌟'; // 성공
+      case 'A': return '💡'; // 아하
+      case 'B': return '📉'; // 데이터/보완
+      case 'C': return '😖'; // 좌절/실수
+      default: return '❓';
+    }
+  };
+
+  const getGradeColor = (grade?: string) => {
+    switch (grade) {
+      case 'S': return 'text-yellow-500';
+      case 'A': return 'text-blue-500';
+      case 'B': return 'text-orange-500';
+      case 'C': return 'text-red-500';
+      default: return 'text-black';
+    }
+  };
 
   return (
-    <div className="flex-1 flex flex-col bg-slate-50 h-full relative overflow-y-auto">
-      {/* Top Header */}
-      <div className="sticky top-0 z-20 bg-white/80 backdrop-blur-md border-b border-slate-200 p-4 flex items-center justify-between shadow-sm">
-        <button onClick={onClose} className="p-2 -ml-2 rounded-full hover:bg-slate-100 text-slate-500 transition-colors">
-          <ArrowLeft className="w-5 h-5" />
-        </button>
-        <h2 className="text-base font-extrabold text-slate-800">결과 리포트</h2>
-        <div className="w-9" />
-      </div>
+    <div className="flex-1 flex flex-col items-center justify-center bg-white text-black font-sans min-h-screen p-4 border-x-2 border-black max-w-md mx-auto">
+      
+      <div className="w-full pixel-box p-6 flex flex-col items-center shadow-[6px_6px_0px_rgba(0,0,0,1)] bg-white text-center animate-slideUp">
+        <h2 className="text-xl font-bold mb-6">롤플레이 결과 리포트</h2>
 
-      <div className="flex-1 p-6 flex items-center justify-center">
-        <div className="max-w-md w-full bg-white rounded-3xl p-8 shadow-xl border border-slate-200 text-center space-y-6 animate-fadeIn">
-          <h1 className={`text-2xl md:text-3xl font-black ${textColor}`}>
-            {mainMessage}
-          </h1>
-
-          <div className="flex justify-center items-end gap-2 pb-2">
-            <span className={`text-5xl font-black ${textColor}`}>{evaluation.totalScore || 0}</span>
-            <span className="text-2xl font-bold text-slate-400 mb-1">/ 100</span>
-          </div>
-          
-          <div className={`text-left p-5 rounded-2xl border ${bgColor} ${borderColor} shadow-inner`}>
-            <p className="text-slate-800 font-medium leading-relaxed whitespace-pre-wrap">
-              <span className="font-bold text-slate-900 block mb-2">
-                {isSuccess ? "선생님의 처방변경 이유:" : "선생님의 Unmet needs:"}
-              </span>
-              {evaluation.reasoning}
-            </p>
-          </div>
-
-          {(evaluation.strengths && evaluation.strengths.length > 0) && (
-            <div className="text-left bg-emerald-50 rounded-2xl p-5 border border-emerald-100">
-              <h3 className="font-bold text-emerald-800 mb-2">💡 잘 설명된 부분</h3>
-              <ul className="list-disc pl-5 space-y-1 text-sm text-emerald-700 font-medium">
-                {evaluation.strengths.map((s, idx) => <li key={idx}>{s}</li>)}
-              </ul>
-            </div>
-          )}
-
-          {(evaluation.weaknesses && evaluation.weaknesses.length > 0) && (
-            <div className="text-left bg-orange-50 rounded-2xl p-5 border border-orange-100">
-              <h3 className="font-bold text-orange-800 mb-2">⚠️ 다소 아쉬웠던 부분</h3>
-              <ul className="list-disc pl-5 space-y-1 text-sm text-orange-700 font-medium">
-                {evaluation.weaknesses.map((s, idx) => <li key={idx}>{s}</li>)}
-              </ul>
-            </div>
-          )}
-          {(evaluation.recommendedScript && evaluation.recommendedScript.trim().length > 0) && (
-            <div className="text-left bg-blue-50 rounded-2xl p-5 border border-blue-100">
-              <h3 className="font-bold text-blue-800 mb-2">🗣️ 추천 스크립트</h3>
-              <p className="text-sm text-blue-700 font-medium whitespace-pre-wrap leading-relaxed">
-                {evaluation.recommendedScript}
-              </p>
-            </div>
-          )}
-
-          <div className="pt-6 flex flex-col gap-3">
-            <div className="flex gap-3">
-              <button
-                onClick={onRetry}
-                className="flex-1 py-3.5 rounded-2xl bg-slate-100 text-slate-700 font-bold hover:bg-slate-200 transition-all flex items-center justify-center gap-2"
-              >
-                <RefreshCw className="w-5 h-5" />
-                다시 도전
-              </button>
-              <button
-                onClick={onClose}
-                className={`flex-1 py-3.5 rounded-2xl text-white font-bold transition-all flex items-center justify-center gap-2 shadow-lg ${isSuccess ? 'bg-blue-600 hover:bg-blue-700 shadow-blue-500/30' : 'bg-red-500 hover:bg-red-600 shadow-red-500/30'}`}
-              >
-                다른 상황 선택
-              </button>
-            </div>
-          </div>
+        <div className="text-6xl mb-4 animate-pop-bounce">
+          {getGradeIcon(evaluation.grade)}
         </div>
+
+        <div className={`text-5xl font-black mb-2 ${getGradeColor(evaluation.grade)}`}>
+          {evaluation.grade} 등급
+        </div>
+        
+        <div className="text-lg font-bold mb-6">
+          {evaluation.isSuccess ? '퀘스트 클리어 성공!' : '퀘스트 클리어 실패...'}
+        </div>
+
+        <div className="w-full text-left bg-gray-100 p-4 border-2 border-black rounded-lg mb-6 text-sm">
+          <h3 className="font-bold mb-2">원장님의 코멘트</h3>
+          <p className="leading-relaxed mb-4">{evaluation.reasoning}</p>
+
+          {evaluation.strengths && evaluation.strengths.length > 0 && (
+            <div className="mb-4">
+              <h4 className="font-bold text-blue-600">장점 (Strengths)</h4>
+              <ul className="list-disc pl-4 mt-1 space-y-1">
+                {evaluation.strengths.map((s, i) => <li key={i}>{s}</li>)}
+              </ul>
+            </div>
+          )}
+
+          {evaluation.weaknesses && evaluation.weaknesses.length > 0 && (
+            <div>
+              <h4 className="font-bold text-red-600">보완점 (Weaknesses)</h4>
+              <ul className="list-disc pl-4 mt-1 space-y-1">
+                {evaluation.weaknesses.map((w, i) => <li key={i}>{w}</li>)}
+              </ul>
+            </div>
+          )}
+        </div>
+
+        {evaluation.recommendedScript && (
+          <div className="w-full text-left bg-yellow-50 p-4 border-2 border-black rounded-lg mb-8 text-sm">
+            <h3 className="font-bold mb-2">💡 추천 스크립트</h3>
+            <p className="italic leading-relaxed">{evaluation.recommendedScript}</p>
+          </div>
+        )}
+
+        <div className="flex gap-4 w-full">
+          {!evaluation.isSuccess && (
+            <button 
+              onClick={onRetry}
+              className="flex-1 py-3 border-2 border-black bg-white hover:bg-gray-100 font-bold shadow-[2px_2px_0_rgba(0,0,0,1)] active:shadow-none active:translate-y-[2px] active:translate-x-[2px] flex items-center justify-center gap-2 transition-colors"
+            >
+              <RotateCcw className="w-4 h-4" /> 재도전
+            </button>
+          )}
+          <button 
+            onClick={onClose}
+            className="flex-1 py-3 border-2 border-black bg-black text-white hover:bg-gray-800 font-bold shadow-[2px_2px_0_rgba(0,0,0,1)] active:shadow-none active:translate-y-[2px] active:translate-x-[2px] flex items-center justify-center gap-2 transition-colors"
+          >
+            <Home className="w-4 h-4" /> 홈으로
+          </button>
+        </div>
+
       </div>
     </div>
   );
