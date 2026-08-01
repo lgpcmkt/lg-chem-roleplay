@@ -23,72 +23,10 @@ export const RoleplayRoom: React.FC<RoleplayRoomProps> = ({
   const [isMicPressed, setIsMicPressed] = useState(false);
   const chatEndRef = useRef<HTMLDivElement>(null);
   const hasAutoStarted = useRef(false);
-  const recognitionRef = useRef<any>(null);
-  const [interimText, setInterimText] = useState('');
-
-  // Initialize Speech Recognition
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
-      if (SpeechRecognition) {
-        const recognition = new SpeechRecognition();
-        recognition.continuous = true;
-        recognition.interimResults = true;
-        recognition.lang = 'ko-KR';
-        
-        recognition.onresult = (event: any) => {
-          let finalTranscript = '';
-          let currentInterim = '';
-          for (let i = event.resultIndex; i < event.results.length; ++i) {
-            if (event.results[i].isFinal) {
-              finalTranscript += event.results[i][0].transcript;
-            } else {
-              currentInterim += event.results[i][0].transcript;
-            }
-          }
-          
-          if (finalTranscript) {
-            setChatHistory(prev => [...prev, {
-              id: Date.now().toString(),
-              role: 'user',
-              content: finalTranscript,
-              timestamp: new Date().toISOString()
-            }]);
-          }
-          setInterimText(currentInterim);
-        };
-        recognitionRef.current = recognition;
-      }
-    }
-  }, []);
-
-  // Handle Speech Recognition Start/Stop
-  useEffect(() => {
-    if (!recognitionRef.current) return;
-    if (isMicPressed) {
-      setInterimText('');
-      try { recognitionRef.current.start(); } catch (e) {}
-    } else {
-      try { recognitionRef.current.stop(); } catch (e) {}
-      if (interimText.trim()) {
-        setChatHistory(prev => [...prev, {
-          id: Date.now().toString(),
-          role: 'user',
-          content: interimText,
-          timestamp: new Date().toISOString()
-        }]);
-        setInterimText('');
-      }
-    }
-  }, [isMicPressed]);
-
 
   const conversation = useConversation({
     onMessage: (message: any) => {
       const role = message.source === 'user' || message.role === 'user' ? 'user' : 'assistant';
-      // Ignore ElevenLabs user transcripts if we have SpeechRecognition initialized, to avoid duplicates.
-      // But if it's an assistant message, always show it.
-      if (role === 'user' && recognitionRef.current) return;
 
       setChatHistory(prev => [...prev, {
         id: Date.now().toString(),
@@ -203,29 +141,13 @@ export const RoleplayRoom: React.FC<RoleplayRoomProps> = ({
             </div>
           </div>
         ))}
-        {interimText && (
-          <div className="flex justify-end">
-            <div className="max-w-[75%] pixel-box px-4 py-3 text-sm leading-relaxed bg-gray-200 text-black border-2 border-black ml-2 opacity-70">
-              {interimText}
-            </div>
-          </div>
-        )}
         {isMicPressed ? (
           <div className="flex justify-end">
             <div className="pixel-box px-4 py-3 bg-red-100 text-red-600 text-xs font-bold animate-pulse border-red-400">
               음성 입력 중입니다...
             </div>
           </div>
-        ) : conversation.isSpeaking ? (
-          <div className="flex justify-start">
-             <div className="w-8 h-8 rounded-full border-2 border-black bg-white mr-2 flex items-center justify-center overflow-hidden flex-shrink-0">
-               <img src="/images/korean_doctor_strict_clinic_1785413940376.png" alt="doc" className="w-full h-full object-cover" />
-             </div>
-            <div className="pixel-box px-4 py-3 bg-white text-black text-xs font-bold animate-pulse">
-              원장님이 말씀 중...
-            </div>
-          </div>
-        ) : conversation.status === 'connected' ? (
+        ) : (conversation.status === 'connected' && !conversation.isSpeaking) ? (
           <div className="flex justify-start">
              <div className="w-8 h-8 rounded-full border-2 border-black bg-white mr-2 flex items-center justify-center overflow-hidden flex-shrink-0">
                <img src="/images/korean_doctor_strict_clinic_1785413940376.png" alt="doc" className="w-full h-full object-cover" />
