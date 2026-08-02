@@ -1,6 +1,6 @@
 import { RoleplayEvaluationResult, Product, Scenario, ChatMessage } from '../types';
 
-const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY || 'AIzaSyB6L2Z1hUpFpw6_e4mmH3Xm74zErCaN_HU';
+const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
 
 export async function evaluateRoleplayWithGemini(
   product: Product,
@@ -8,6 +8,10 @@ export async function evaluateRoleplayWithGemini(
   persona: string,
   chatHistory: ChatMessage[]
 ): Promise<RoleplayEvaluationResult> {
+  if (!GEMINI_API_KEY) {
+    throw new Error('Gemini API 키가 설정되지 않았습니다. .env 파일에 VITE_GEMINI_API_KEY를 추가해주세요.');
+  }
+
   const formattedTranscript = chatHistory
     .map(msg => `${msg.role === 'user' ? '영업사원(MR)' : '의사(AI)'}: ${msg.content}`)
     .join('\n');
@@ -47,7 +51,7 @@ ${formattedTranscript || '(대화 내용 없음)'}
 }
 `;
 
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`;
   
   const response = await fetch(url, {
     method: 'POST',
