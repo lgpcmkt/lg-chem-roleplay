@@ -1,27 +1,16 @@
-import Database from 'better-sqlite3';
-import path from 'path';
+import { createClient } from '@supabase/supabase-js';
+import dotenv from 'dotenv';
 
-// Define DB path
-const dbPath = path.join(process.cwd(), 'lg_roleplay.db');
-const db = new Database(dbPath);
+dotenv.config();
 
-// Initialize Tables
-db.exec(`
-  CREATE TABLE IF NOT EXISTS users (
-    id TEXT PRIMARY KEY,
-    name TEXT NOT NULL
-  );
+const supabaseUrl = process.env.SUPABASE_URL || '';
+const supabaseKey = process.env.SUPABASE_KEY || '';
 
-  CREATE TABLE IF NOT EXISTS sessions (
-    id TEXT PRIMARY KEY,
-    userId TEXT NOT NULL,
-    track TEXT NOT NULL,
-    scenarioId TEXT NOT NULL,
-    grade TEXT NOT NULL,
-    timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY(userId) REFERENCES users(id)
-  );
-`);
+if (!supabaseUrl || !supabaseKey) {
+  console.warn('Supabase URL or Key is missing from .env');
+}
+
+export const supabase = createClient(supabaseUrl, supabaseKey);
 
 export interface User {
   id: string;
@@ -39,42 +28,73 @@ export interface Session {
 
 export const dbService = {
   // Login / Create User
-  loginUser: (id: string, name: string): User => {
-    const stmt = db.prepare('INSERT OR IGNORE INTO users (id, name) VALUES (?, ?)');
-    stmt.run(id, name);
-    // Fetch the user to ensure we return the stored name
-    return db.prepare('SELECT * FROM users WHERE id = ?').get(id) as User;
+  loginUser: async (id: string, name: string): Promise<User> => {
+    // upsert will insert or update the user based on the id primary key
+    const { data, error } = await supabase
+      .from('users')
+      .upsert({ id, name }, { onConflict: 'id' })
+      .select()
+      .single();
+
+    if (error) {
+      console.error('Error logging in user:', error);
+      throw error;
+    }
+    
+    return data as User;
   },
 
   // Save a roleplay session
-  saveSession: (session: Session) => {
-    const stmt = db.prepare(
-      'INSERT INTO sessions (id, userId, track, scenarioId, grade) VALUES (?, ?, ?, ?, ?)'
-    );
-    stmt.run(session.id, session.userId, session.track, session.scenarioId, session.grade);
+  saveSession: async (session: Session) => {
+    const { error } = await supabase
+      .from('sessions')
+      .insert({
+        id: session.id,
+        user_id: session.userId,
+        track: session.track,
+        scenario_id: session.scenarioId,
+        grade: session.grade
+      });
+
+    if (error) {
+      console.error('Error saving session:', error);
+      throw error;
+    }
   },
 
   // Get user progress (count of A or S grades per track)
-  getUserProgress: (userId: string) => {
-    // A grade or S grade counts as a clear.
-    const stmt = db.prepare(`
-      SELECT track, COUNT(DISTINCT scenarioId) as clearCount 
-      FROM sessions 
-      WHERE userId = ? AND grade IN ('S', 'A') 
-      GROUP BY track
-    `);
-    const rows = stmt.all(userId) as { track: string; clearCount: number }[];
-    
+  getUserProgress: async (userId: string) => {
+    const { data, error } = await supabase
+      .from('sessions')
+      .select('track, scenario_id')
+      .eq('user_id', userId)
+      .in('grade', ['S', 'A']);
+
+    if (error) {
+      console.error('Error getting progress:', error);
+      throw error;
+    }
+
     const progress = {
       hospital: 0,
       local: 0
     };
-    
-    rows.forEach(r => {
-      if (r.track === 'hospital' || r.track === 'local') {
-        progress[r.track] = r.clearCount;
-      }
-    });
+
+    if (data) {
+      const hospitalScenarios = new Set();
+      const localScenarios = new Set();
+
+      data.forEach((row: any) => {
+        if (row.track === 'hospital') {
+          hospitalScenarios.add(row.scenario_id);
+        } else if (row.track === 'local') {
+          localScenarios.add(row.scenario_id);
+        }
+      });
+
+      progress.hospital = hospitalScenarios.size;
+      progress.local = localScenarios.size;
+    }
     
     return progress;
   }

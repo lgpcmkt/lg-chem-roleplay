@@ -75,13 +75,13 @@ router.post('/elevenlabs/evaluation/:conversationId', async (req, res) => {
 });
 
 // POST /api/login
-router.post('/login', (req, res) => {
+router.post('/login', async (req, res) => {
   try {
     const { id, name } = req.body;
     if (!id || !name) {
       return res.status(400).json({ error: 'id and name are required' });
     }
-    const user = dbService.loginUser(id, name);
+    const user = await dbService.loginUser(id, name);
     res.json(user);
   } catch (error: any) {
     console.error('API /api/login error:', error);
@@ -90,10 +90,10 @@ router.post('/login', (req, res) => {
 });
 
 // GET /api/progress/:userId
-router.get('/progress/:userId', (req, res) => {
+router.get('/progress/:userId', async (req, res) => {
   try {
     const { userId } = req.params;
-    const progress = dbService.getUserProgress(userId);
+    const progress = await dbService.getUserProgress(userId);
     res.json(progress);
   } catch (error: any) {
     console.error('API /api/progress error:', error);
@@ -102,13 +102,13 @@ router.get('/progress/:userId', (req, res) => {
 });
 
 // POST /api/session
-router.post('/session', (req, res) => {
+router.post('/session', async (req, res) => {
   try {
     const { id, userId, track, scenarioId, grade } = req.body;
     if (!id || !userId || !track || !scenarioId || !grade) {
       return res.status(400).json({ error: 'Missing required session fields' });
     }
-    dbService.saveSession({ id, userId, track, scenarioId, grade });
+    await dbService.saveSession({ id, userId, track, scenarioId, grade });
     res.json({ success: true });
   } catch (error: any) {
     console.error('API /api/session error:', error);
