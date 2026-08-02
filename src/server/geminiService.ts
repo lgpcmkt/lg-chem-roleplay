@@ -307,9 +307,9 @@ export async function evaluateWithElevenLabs(conversationId: string) {
           isSuccess,
           grade,
           totalScore: score,
-          reasoning: "일레븐랩스 에이전트 평가가 성공적으로 완료되었습니다.",
-          strengths: strengthsStr.split('\n').map((s: string) => s.replace(/^- /, '').trim()).filter((s: string) => s.length > 0),
-          weaknesses: weaknessesStr.split('\n').map((s: string) => s.replace(/^- /, '').trim()).filter((s: string) => s.length > 0),
+          reasoning: rpResult?.rationale || "",
+          strengths: strengthsStr.split('\n').map((s: string) => s.replace(/^(\d+\.\s*|-\s*)/, '').trim()).filter((s: string) => s.length > 0),
+          weaknesses: weaknessesStr.split('\n').map((s: string) => s.replace(/^(\d+\.\s*|-\s*)/, '').trim()).filter((s: string) => s.length > 0),
           recommendedScript: recommendedScript,
           detailedFeedback: "총점: " + score + "점",
         };
