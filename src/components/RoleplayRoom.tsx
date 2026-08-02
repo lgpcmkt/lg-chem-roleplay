@@ -23,6 +23,43 @@ export const RoleplayRoom: React.FC<RoleplayRoomProps> = ({
   const [isMicPressed, setIsMicPressed] = useState(false);
   const chatEndRef = useRef<HTMLDivElement>(null);
   const hasAutoStarted = useRef(false);
+  const recognitionRef = useRef<any>(null);
+  const [interimText, setInterimText] = useState('');
+
+  // Initialize Speech Recognition
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+      if (SpeechRecognition) {
+        const recognition = new SpeechRecognition();
+        recognition.continuous = true;
+        recognition.interimResults = true;
+        recognition.lang = 'ko-KR';
+        
+        recognition.onresult = (event: any) => {
+          let currentInterim = '';
+          for (let i = event.resultIndex; i < event.results.length; ++i) {
+            currentInterim += event.results[i][0].transcript;
+          }
+          setInterimText(currentInterim);
+        };
+        recognitionRef.current = recognition;
+      }
+    }
+  }, []);
+
+  // Handle Speech Recognition Start/Stop
+  useEffect(() => {
+    if (!recognitionRef.current) return;
+    if (isMicPressed) {
+      setInterimText('');
+      try { recognitionRef.current.start(); } catch (e) {}
+    } else {
+      try { recognitionRef.current.stop(); } catch (e) {}
+      setInterimText('');
+    }
+  }, [isMicPressed]);
+
 
   const conversation = useConversation({
     onMessage: (message: any) => {
@@ -141,6 +178,13 @@ export const RoleplayRoom: React.FC<RoleplayRoomProps> = ({
             </div>
           </div>
         ))}
+        {interimText && (
+          <div className="flex justify-end">
+            <div className="max-w-[75%] pixel-box px-4 py-3 text-sm leading-relaxed bg-gray-200 text-black border-2 border-black ml-2 opacity-70">
+              {interimText}
+            </div>
+          </div>
+        )}
         {isMicPressed ? (
           <div className="flex justify-end">
             <div className="pixel-box px-4 py-3 bg-red-100 text-red-600 text-xs font-bold animate-pulse border-red-400">
