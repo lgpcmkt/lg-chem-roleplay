@@ -30,17 +30,22 @@ export const RoleplayRoom: React.FC<RoleplayRoomProps> = ({
     onMessage: (message: any) => {
       const role = message.source === 'user' || message.role === 'user' ? 'user' : 'assistant';
 
+      let content = message.message;
+      if (role === 'assistant') {
+        content = content.replace(/\[.*?\]|\*.*?\*/g, '').trim();
+      }
+
       setChatHistory(prev => {
         if (prev.length > 0) {
           const lastMsg = prev[prev.length - 1];
-          if (lastMsg.role === role && lastMsg.content === message.message) {
+          if (lastMsg.role === role && lastMsg.content === content) {
             return prev;
           }
         }
         return [...prev, {
           id: Date.now().toString(),
           role,
-          content: message.message,
+          content: content,
           timestamp: new Date().toISOString()
         }];
       });
@@ -146,10 +151,12 @@ export const RoleplayRoom: React.FC<RoleplayRoomProps> = ({
   }, [conversation.status]);
 
   const handleEndCall = async () => {
+    let convId = '';
     if (conversation.status === 'connected') {
+      convId = conversation.getId();
       await conversation.endSession();
     }
-    onEndRoleplay(chatHistory);
+    onEndRoleplay(chatHistory, convId);
   };
 
   const handleSendText = () => {

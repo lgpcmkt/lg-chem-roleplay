@@ -259,3 +259,64 @@ ${criteriaText}
     };
   }
 }
+
+export async function evaluateWithElevenLabs(conversationId: string) {
+  const apiKey = process.env.VITE_ELEVENLABS_API_KEY;
+  if (!apiKey) {
+    console.error('No ElevenLabs API key found in backend');
+    return null;
+  }
+
+  const url = `https://api.elevenlabs.io/v1/convai/conversations/${conversationId}`;
+  
+  const maxRetries = 15;
+  for (let i = 0; i < maxRetries; i++) {
+    try {
+      const res = await fetch(url, {
+        headers: { 'xi-api-key': apiKey }
+      });
+      
+      if (!res.ok) {
+        console.error(`ElevenLabs API returned ${res.status}`);
+        return null;
+      }
+
+      const data = await res.json();
+      
+      if (data.data_collection_results && Object.keys(data.data_collection_results).length > 0) {
+        const results = data.data_collection_results;
+        
+        const score = results.RP?.value || 0;
+        const strengthsStr = results.strengths?.value || '';
+        const weaknessesStr = results.weaknesses?.value || '';
+        const recommendedScript = results.recommended_script?.value || '';
+
+        let grade: 'S' | 'A' | 'B' | 'C' = 'C';
+        if (score >= 90) grade = 'S';
+        else if (score >= 80) grade = 'A';
+        else if (score >= 70) grade = 'B';
+
+        const isSuccess = score >= 80;
+        
+        return {
+          isSuccess,
+          grade,
+          totalScore: score,
+          reasoning: "일레븐랩스 에이전트 평가가 성공적으로 완료되었습니다.",
+          strengths: strengthsStr.split('\n').map((s: string) => s.replace(/^- /, '').trim()).filter((s: string) => s.length > 0),
+          weaknesses: weaknessesStr.split('\n').map((s: string) => s.replace(/^- /, '').trim()).filter((s: string) => s.length > 0),
+          recommendedScript: recommendedScript,
+          detailedFeedback: "총점: " + score + "점",
+        };
+      }
+      
+      await new Promise(resolve => setTimeout(resolve, 3000));
+    } catch (e) {
+      console.error('Error polling ElevenLabs:', e);
+      await new Promise(resolve => setTimeout(resolve, 3000));
+    }
+  }
+
+  console.error('ElevenLabs evaluation polling timed out');
+  return null;
+}

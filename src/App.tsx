@@ -64,20 +64,40 @@ export default function App() {
     setScreen('roleplay');
   };
 
-  const handleEndRoleplay = useCallback(async (chatHistory: ChatMessage[]) => {
+  const handleEndRoleplay = useCallback(async (chatHistory: ChatMessage[], conversationId?: string) => {
     if (!currentScenario || !employeeInfo) return;
     
     setIsEvaluating(true);
     setScreen('evaluation');
 
     try {
-      // Evaluate
-      const evalResult = await evaluateRoleplayWithGemini(
-        { name: '제미다파', indication: '당뇨복합제' } as any,
-        currentScenario,
-        '',
-        chatHistory
-      );
+      let evalResult;
+      
+      // If conversationId is provided, try ElevenLabs evaluation
+      if (conversationId) {
+        try {
+          const res = await fetch(`/api/elevenlabs/evaluation/${conversationId}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ chatHistory, scenario: currentScenario })
+          });
+          if (res.ok) {
+            evalResult = await res.json();
+          }
+        } catch (e) {
+          console.error("ElevenLabs evaluation failed, falling back to Gemini:", e);
+        }
+      }
+
+      // Fallback to Gemini if ElevenLabs fails or conversationId is missing
+      if (!evalResult) {
+        evalResult = await evaluateRoleplayWithGemini(
+          { name: '제미다파', indication: '당뇨복합제' } as any,
+          currentScenario,
+          '',
+          chatHistory
+        );
+      }
       
       setEvaluation(evalResult);
 

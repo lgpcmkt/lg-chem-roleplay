@@ -1,6 +1,6 @@
 import express from 'express';
 import { PRODUCTS, DOCTOR_TYPES } from './productData';
-import { generateDoctorResponse, evaluateRoleplayTranscript } from './geminiService';
+import { generateDoctorResponse, evaluateRoleplayTranscript, evaluateWithElevenLabs } from './geminiService';
 import { dbService } from './db';
 
 const router = express.Router();
@@ -56,6 +56,21 @@ router.post('/evaluate', async (req, res) => {
   } catch (error: any) {
     console.error('API /api/evaluate error:', error);
     res.status(500).json({ error: 'Failed to evaluate', details: error.message });
+  }
+});
+
+// POST /api/elevenlabs/evaluation/:conversationId
+router.post('/elevenlabs/evaluation/:conversationId', async (req, res) => {
+  try {
+    const { conversationId } = req.params;
+    const result = await evaluateWithElevenLabs(conversationId);
+    if (!result) {
+      return res.status(404).json({ error: 'Evaluation not ready or failed' });
+    }
+    res.json(result);
+  } catch (error: any) {
+    console.error('API /api/elevenlabs/evaluation error:', error);
+    res.status(500).json({ error: 'Failed to fetch ElevenLabs evaluation', details: error.message });
   }
 });
 
