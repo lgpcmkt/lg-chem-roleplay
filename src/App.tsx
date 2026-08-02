@@ -5,7 +5,6 @@ import { HomeScreen } from './components/HomeScreen';
 import { RoleplayRoom } from './components/RoleplayRoom';
 import { EvaluationReport } from './components/EvaluationReport';
 import { ScenarioSelectScreen } from './components/ScenarioSelectScreen';
-import { evaluateRoleplayWithGemini } from './lib/geminiEvaluation';
 import { ConversationProvider } from '@elevenlabs/react';
 import { SCENARIOS } from './data';
 
@@ -73,7 +72,7 @@ export default function App() {
     try {
       let evalResult;
       
-      // If conversationId is provided, try ElevenLabs evaluation
+      // Try ElevenLabs evaluation if conversationId exists
       if (conversationId) {
         try {
           const res = await fetch(`/api/elevenlabs/evaluation/${conversationId}`, {
@@ -85,18 +84,17 @@ export default function App() {
             evalResult = await res.json();
           }
         } catch (e) {
-          console.error("ElevenLabs evaluation failed, falling back to Gemini:", e);
+          console.error("ElevenLabs evaluation failed:", e);
         }
       }
 
-      // Fallback to Gemini if ElevenLabs fails or conversationId is missing
+      // If evaluation fails or conversationId is missing, show error evaluation
       if (!evalResult) {
-        evalResult = await evaluateRoleplayWithGemini(
-          { name: '제미다파', indication: '당뇨복합제' } as any,
-          currentScenario,
-          '',
-          chatHistory
-        );
+        evalResult = {
+          isSuccess: false,
+          grade: 'C',
+          reasoning: '평가 처리 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.',
+        };
       }
       
       setEvaluation(evalResult);

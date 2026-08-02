@@ -1,0 +1,837 @@
+{
+  "agent_id": "agent_6501kymkvp51eb68k1m589abc18s",
+  "agent_name": "롤플레이 교육 에이전트",
+  "conversation_product": "agent",
+  "status": "done",
+  "user_id": null,
+  "branch_id": "agtbrch_7101kymkvqtbe0e9zbeqbp7bx58e",
+  "version_id": "agtvrsn_8201kz00kbf0ehv87pr2bt3ymhtf",
+  "metadata": {
+    "start_time_unix_secs": 1785635419,
+    "accepted_time_unix_secs": 1785635419,
+    "call_duration_secs": 36,
+    "cost": 278,
+    "deletion_settings": {
+      "deletion_time_unix_secs": null,
+      "deleted_logs_at_time_unix_secs": null,
+      "deleted_audio_at_time_unix_secs": null,
+      "deleted_transcript_at_time_unix_secs": null,
+      "delete_transcript_and_pii": false,
+      "delete_audio": false
+    },
+    "feedback": {
+      "type": null,
+      "overall_score": null,
+      "likes": 0,
+      "dislikes": 0,
+      "rating": null,
+      "comment": null
+    },
+    "authorization_method": "public",
+    "charging": {
+      "dev_discount": false,
+      "is_burst": false,
+      "tier": "creator",
+      "llm_usage": {
+        "irreversible_generation": {
+          "model_usage": {
+            "gemini-2.5-flash": {
+              "input": {
+                "tokens": 22403,
+                "price": 0.00336045
+              },
+              "input_cache_read": {
+                "tokens": 0,
+                "price": 0
+              },
+              "input_cache_write": {
+                "tokens": 0,
+                "price": 0
+              },
+              "output_total": {
+                "tokens": 67,
+                "price": 0.0000402
+              }
+            }
+          }
+        },
+        "initiated_generation": {
+          "model_usage": {
+            "gemini-2.5-flash": {
+              "input": {
+                "tokens": 22403,
+                "price": 0.00336045
+              },
+              "input_cache_read": {
+                "tokens": 0,
+                "price": 0
+              },
+              "input_cache_write": {
+                "tokens": 0,
+                "price": 0
+              },
+              "output_total": {
+                "tokens": 67,
+                "price": 0.0000402
+              }
+            }
+          }
+        }
+      },
+      "llm_price": 0.00340065,
+      "llm_charge": 18,
+      "call_charge": 260,
+      "platform_charge": 260,
+      "platform_usage": {
+        "category_usage": {
+          "voice": {
+            "credits": 260,
+            "price": 0.046713838326547186,
+            "quantity": 0.5907411609000216
+          }
+        }
+      },
+      "platform_price": 0.046713838326547186,
+      "free_minutes_consumed": 0,
+      "free_llm_dollars_consumed": 0,
+      "tts_usage": {
+        "primary_tts_model": "eleven_v3_conversational",
+        "total_audio_output_seconds": 19.84,
+        "total_characters": 152,
+        "per_voice_usage": [
+          {
+            "voice_id": "pb3lVZVjdFWbkhPKlelB",
+            "audio_output_seconds": 19.84
+          }
+        ]
+      },
+      "asr_usage": {
+        "asr_model": "scribe_realtime",
+        "total_transcription_calls": 100,
+        "total_audio_input_seconds": 17.00000000000001
+      }
+    },
+    "phone_call": null,
+    "batch_call": null,
+    "termination_reason": "Client disconnected: 1000",
+    "error": null,
+    "warnings": [],
+    "main_language": "ko",
+    "rag_usage": {
+      "usage_count": 2,
+      "embedding_model": "e5_mistral_7b_instruct"
+    },
+    "text_only": false,
+    "features_usage": {
+      "language_detection": {
+        "enabled": false,
+        "used": false
+      },
+      "transfer_to_agent": {
+        "enabled": false,
+        "used": false
+      },
+      "transfer_to_number": {
+        "enabled": false,
+        "used": false
+      },
+      "multivoice": {
+        "enabled": false,
+        "used": false
+      },
+      "dtmf_tones": {
+        "enabled": false,
+        "used": false
+      },
+      "external_mcp_servers": {
+        "enabled": false,
+        "used": false
+      },
+      "pii_zrm_workspace": false,
+      "pii_zrm_agent": false,
+      "tool_dynamic_variable_updates": {
+        "enabled": false,
+        "used": false
+      },
+      "is_livekit": true,
+      "voicemail_detection": {
+        "enabled": false,
+        "used": false
+      },
+      "dtmf_input": {
+        "enabled": false,
+        "used": false
+      },
+      "workflow": {
+        "enabled": false,
+        "tool_node": {
+          "enabled": false,
+          "used": false
+        },
+        "standalone_agent_node": {
+          "enabled": false,
+          "used": false
+        },
+        "phone_number_node": {
+          "enabled": false,
+          "used": false
+        },
+        "end_node": {
+          "enabled": false,
+          "used": false
+        }
+      },
+      "agent_testing": {
+        "enabled": false,
+        "tests_ran_after_last_modification": false,
+        "tests_ran_in_last_7_days": false
+      },
+      "versioning": {
+        "enabled": true,
+        "used": false
+      },
+      "file_input": {
+        "enabled": false,
+        "used": false
+      }
+    },
+    "eleven_assistant": {
+      "is_eleven_assistant": false
+    },
+    "initiator_id": null,
+    "conversation_initiation_source": "react_sdk",
+    "conversation_initiation_source_version": "1.11.0",
+    "timezone": "Asia/Seoul",
+    "async_metadata": null,
+    "whatsapp": null,
+    "sms": null,
+    "agent_created_from": "ui",
+    "agent_last_updated_from": "ui",
+    "voice_rewards": [],
+    "cost_fiat": 0.050114488326547184
+  },
+  "analysis": {
+    "evaluation_criteria_results": {
+      "rp": {
+        "criteria_id": "rp",
+        "result": "failure",
+        "rationale": "사용자는 제미다파의 장점을 설명하지 않았습니다. 대신 개인적인 호소(\"제가 귀여우니까\")를 했고, 이는 농담으로 치부되었으며 에이전트는 실제 데이터를 다시 요구했습니다. 따라서 설득 시도는 실패했습니다.",
+        "scoring_mode": "numeric_uniform",
+        "score": 0,
+        "max_score": 100
+      }
+    },
+    "data_collection_results": {
+      "strengths": {
+        "data_collection_id": "strengths",
+        "value": "사용자는 데이터가 없음을 솔직하게 인정했으며, 어려운 상황에서 유머를 사용하여 분위기를 전환하려 시도했습니다.",
+        "json_schema": {
+          "type": "string",
+          "description": "사용자의 디테일링(영업)에서 잘한 점 2가지를 요약하세요.",
+          "enum": null,
+          "is_system_provided": false,
+          "dynamic_variable": "",
+          "allowed_values_dynamic_variable": "",
+          "constant_value": "",
+          "is_omitted": false
+        },
+        "rationale": "사용자는 '네, 없습니다, 원장님.'이라고 솔직하게 답했고, 이어서 '제가 귀여우니까 그냥 써주시면 안 될까요?'라며 유머를 사용해 상황을 전환하려 시도했으므로 이를 잘한 점으로 요약했습니다."
+      },
+      "weaknesses": {
+        "data_collection_id": "weaknesses",
+        "value": "데이터 부재에 대한 추가 설명이나 대안 제시가 부족했고, 비전문적인 농담으로 응대했습니다.",
+        "json_schema": {
+          "type": "string",
+          "description": "사용자의 디테일링에서 아쉬운 점 2가지를 요약하세요.",
+          "enum": null,
+          "is_system_provided": false,
+          "dynamic_variable": "",
+          "allowed_values_dynamic_variable": "",
+          "constant_value": "",
+          "is_omitted": false
+        },
+        "rationale": "사용자는 심혈관 안전성 데이터 부재에 대해 추가 설명이나 대안을 제시하지 않았고, 비전문적인 농담으로 질문에 응답했습니다."
+      },
+      "recommended_script": {
+        "data_collection_id": "recommended_script",
+        "value": "현재 심혈관 안전성 데이터는 없지만, 제미다파의 혈당 강하 효과와 다른 임상적 이점들을 설명해 드릴 수 있습니다.",
+        "json_schema": {
+          "type": "string",
+          "description": "만약 사용자가 이렇게 말했다면 더 좋았을 모범 스크립트를 1~2문장으로 제안하세요.",
+          "enum": null,
+          "is_system_provided": false,
+          "dynamic_variable": "",
+          "allowed_values_dynamic_variable": "",
+          "constant_value": "",
+          "is_omitted": false
+        },
+        "rationale": "사용자의 답변이 비전문적이었으므로, 심혈관 안전성 데이터 부재를 인정하고 약물의 다른 임상적 이점을 설명하겠다고 제안하는 것이 더 적절합니다."
+      }
+    },
+    "evaluation_criteria_results_list": [
+      {
+        "criteria_id": "rp",
+        "result": "failure",
+        "rationale": "사용자는 제미다파의 장점을 설명하지 않았습니다. 대신 개인적인 호소(\"제가 귀여우니까\")를 했고, 이는 농담으로 치부되었으며 에이전트는 실제 데이터를 다시 요구했습니다. 따라서 설득 시도는 실패했습니다.",
+        "scoring_mode": "numeric_uniform",
+        "score": 0,
+        "max_score": 100
+      }
+    ],
+    "data_collection_results_list": [
+      {
+        "data_collection_id": "strengths",
+        "value": "사용자는 데이터가 없음을 솔직하게 인정했으며, 어려운 상황에서 유머를 사용하여 분위기를 전환하려 시도했습니다.",
+        "json_schema": {
+          "type": "string",
+          "description": "사용자의 디테일링(영업)에서 잘한 점 2가지를 요약하세요.",
+          "enum": null,
+          "is_system_provided": false,
+          "dynamic_variable": "",
+          "allowed_values_dynamic_variable": "",
+          "constant_value": "",
+          "is_omitted": false
+        },
+        "rationale": "사용자는 '네, 없습니다, 원장님.'이라고 솔직하게 답했고, 이어서 '제가 귀여우니까 그냥 써주시면 안 될까요?'라며 유머를 사용해 상황을 전환하려 시도했으므로 이를 잘한 점으로 요약했습니다."
+      },
+      {
+        "data_collection_id": "weaknesses",
+        "value": "데이터 부재에 대한 추가 설명이나 대안 제시가 부족했고, 비전문적인 농담으로 응대했습니다.",
+        "json_schema": {
+          "type": "string",
+          "description": "사용자의 디테일링에서 아쉬운 점 2가지를 요약하세요.",
+          "enum": null,
+          "is_system_provided": false,
+          "dynamic_variable": "",
+          "allowed_values_dynamic_variable": "",
+          "constant_value": "",
+          "is_omitted": false
+        },
+        "rationale": "사용자는 심혈관 안전성 데이터 부재에 대해 추가 설명이나 대안을 제시하지 않았고, 비전문적인 농담으로 질문에 응답했습니다."
+      },
+      {
+        "data_collection_id": "recommended_script",
+        "value": "현재 심혈관 안전성 데이터는 없지만, 제미다파의 혈당 강하 효과와 다른 임상적 이점들을 설명해 드릴 수 있습니다.",
+        "json_schema": {
+          "type": "string",
+          "description": "만약 사용자가 이렇게 말했다면 더 좋았을 모범 스크립트를 1~2문장으로 제안하세요.",
+          "enum": null,
+          "is_system_provided": false,
+          "dynamic_variable": "",
+          "allowed_values_dynamic_variable": "",
+          "constant_value": "",
+          "is_omitted": false
+        },
+        "rationale": "사용자의 답변이 비전문적이었으므로, 심혈관 안전성 데이터 부재를 인정하고 약물의 다른 임상적 이점을 설명하겠다고 제안하는 것이 더 적절합니다."
+      }
+    ],
+    "call_successful": "failure",
+    "call_success_score": 0,
+    "transcript_summary": "에이전트는 제미다파의 심혈관 안전성 데이터 유무를 문의했으나, 사용자는 데이터가 없다고 답했습니다. 에이전트가 데이터 부재 시 약물 사용의 정당성을 묻자, 사용자는 가벼운 농담으로 응대했습니다. 에이전트는 바쁘다며 농담할 시간이 없음을 밝히고 다시 데이터의 중요성을 강조했습니다.",
+    "call_summary_title": "제미다파 심혈관 안전성",
+    "scoped": [],
+    "sentiment_analysis": null
+  },
+  "visited_agents": [
+    {
+      "agent_id": "agent_6501kymkvp51eb68k1m589abc18s",
+      "branch_id": "agtbrch_7101kymkvqtbe0e9zbeqbp7bx58e"
+    }
+  ],
+  "conversation_initiation_client_data": {
+    "conversation_config_override": {
+      "asr": null,
+      "turn": null,
+      "tts": {
+        "model_id": null,
+        "voice_id": null,
+        "stability": null,
+        "speed": null,
+        "similarity_boost": null
+      },
+      "conversation": {
+        "text_only": null
+      },
+      "agent": {
+        "first_message": null,
+        "language": null,
+        "max_conversation_duration_message": null,
+        "prompt": null
+      }
+    },
+    "custom_llm_extra_body": {},
+    "user_id": null,
+    "source_info": {
+      "source": "react_sdk",
+      "version": "1.11.0"
+    },
+    "branch_id": null,
+    "environment": null,
+    "starting_workflow_node_id": null,
+    "dynamic_variables": {
+      "doctor_persona": "순환기내과",
+      "mission": "제미다파 스위칭의 강력한 심혈관 안전성과 혈당 강하 효과를 강조하여 처방을 유도하세요.",
+      "first_message": "네, 담당자님 오랜만이에요. 혹시 제미다파도 심혈관 안전성 관련 데이터가 있나요?",
+      "system__agent_id": "agent_6501kymkvp51eb68k1m589abc18s",
+      "system__agent_turns": 3,
+      "system__current_agent_turns": 3,
+      "system__current_subagent_turns": 3,
+      "system__current_agent_id": "agent_6501kymkvp51eb68k1m589abc18s",
+      "system__conversation_id": "conv_5201kz02mb19etmb0j8ky00nw4dt",
+      "system__call_duration_secs": 35,
+      "system__time_utc": "2026-08-02T01:50:55.083177+00:00",
+      "system__time": "Sunday, 10:50 02 August 2026",
+      "system__timezone": "Asia/Seoul",
+      "system__is_text_only": false,
+      "system__channel": "react_sdk",
+      "system__caller_id": null,
+      "system__called_number": null,
+      "system__call_sid": null,
+      "system__conversation_history": "{\"x-elevenlabs-history\": true, \"entries\": [{\"role\": \"agent\", \"message\": \"\\ub124, \\ub2f4\\ub2f9\\uc790\\ub2d8 \\uc624\\ub79c\\ub9cc\\uc774\\uc5d0\\uc694. \\ud639\\uc2dc \\uc81c\\ubbf8\\ub2e4\\ud30c\\ub3c4 \\uc2ec\\ud608\\uad00 \\uc548\\uc804\\uc131 \\uad00\\ub828 \\ub370\\uc774\\ud130\\uac00 \\uc788\\ub098\\uc694? \"}, {\"role\": \"user\", \"message\": \"\\ub124, \\uc5c6\\uc2b5\\ub2c8\\ub2e4, \\uc6d0\\uc7a5\\ub2d8.\"}, {\"role\": \"agent\", \"message\": \"\\uc5c6\\ub2e4\\ub2c8\\uc694? \\uadf8\\ub7fc \\uc81c\\uac00 \\uc65c \\uc81c\\ubbf8\\ub2e4\\ud30c\\ub97c \\uc368\\uc57c \\ud558\\uc8e0?\"}, {\"role\": \"user\", \"message\": \"\\uc81c\\uac00 \\uadc0\\uc5ec\\uc6b0\\ub2c8\\uae4c \\uadf8\\ub0e5 \\uc368\\uc8fc\\uc2dc\\uba74 \\uc548 \\ub420\\uae4c\\uc694?\"}, {\"role\": \"agent\", \"message\": \"[\\uc6c3\\uc73c\\uba70] \\ub2f4\\ub2f9\\uc790\\ub2d8, \\uc81c\\uac00 \\ubc14\\ube60\\uc11c \\ub18d\\ub2f4\\ud560 \\uc2dc\\uac04\\uc774 \\uc5c6\\uc5b4\\uc694. \\uc81c\\ubbf8\\ub2e4\\ud30c\\uc758 \\uc2ec\\ud608\\uad00 \\uc548\\uc804\\uc131 \\ub370\\uc774\\ud130\\uac00 ...\"}]}",
+      "system__user_id": null,
+      "system__initiator_id": null
+    },
+    "tool_mock_config": {
+      "mocking_strategy": "none",
+      "fallback_strategy": "raise_error",
+      "mocked_tool_names": []
+    },
+    "tool_mock_overrides": {}
+  },
+  "environment": "production",
+  "hiding_reason": null,
+  "smb_metadata": null,
+  "conversation_id": "conv_5201kz02mb19etmb0j8ky00nw4dt",
+  "has_audio": false,
+  "has_user_audio": false,
+  "has_response_audio": false,
+  "has_auxiliary_audio": false,
+  "transcript": [
+    {
+      "role": "agent",
+      "agent_metadata": {
+        "agent_id": "agent_6501kymkvp51eb68k1m589abc18s",
+        "branch_id": "agtbrch_7101kymkvqtbe0e9zbeqbp7bx58e",
+        "workflow_node_id": null,
+        "version_id": "agtvrsn_8201kz00kbf0ehv87pr2bt3ymhtf"
+      },
+      "message": "네, 담당자님 오랜만이에요. 혹시 제미다파도 심혈관 안전성 관련 데이터가 있나요? ",
+      "multivoice_message": null,
+      "tool_calls": [],
+      "tool_results": [],
+      "feedback": null,
+      "llm_override": null,
+      "time_in_call_secs": 0,
+      "conversation_turn_metrics": {
+        "metrics": {
+          "convai_tts_service_ttfb": {
+            "elapsed_time": 0.27181123895570636
+          },
+          "convai_ttf_audio_since_silence": {
+            "elapsed_time": 0.27343060896964744
+          },
+          "convai_turn_silence_before_initiation": {
+            "elapsed_time": 0
+          }
+        },
+        "convai_asr_provider": null,
+        "convai_tts_model": "eleven_v3_conversational",
+        "convai_tts_cascade": null
+      },
+      "rag_retrieval_info": null,
+      "llm_usage": null,
+      "interrupted": false,
+      "ignored_as_backchannel": false,
+      "original_message": null,
+      "reasoning": [],
+      "source_medium": null,
+      "source_event_id": 1,
+      "used_static_kb_document_ids": [],
+      "analysis": null,
+      "user_identifier": null,
+      "id": null,
+      "triggered_guardrails": [],
+      "file_input": null,
+      "contextual_update_info": null,
+      "config_snapshot_id": null,
+      "reasoned": false
+    },
+    {
+      "role": "user",
+      "agent_metadata": null,
+      "message": "네, 없습니다, 원장님.",
+      "multivoice_message": null,
+      "tool_calls": [],
+      "tool_results": [],
+      "feedback": null,
+      "llm_override": null,
+      "time_in_call_secs": 7,
+      "conversation_turn_metrics": {
+        "metrics": {
+          "convai_asr_trailing_service_latency": {
+            "elapsed_time": 0.02122648002114147
+          }
+        },
+        "convai_asr_provider": "Scribe v2 Realtime",
+        "convai_tts_model": null,
+        "convai_tts_cascade": null
+      },
+      "rag_retrieval_info": null,
+      "llm_usage": null,
+      "interrupted": false,
+      "ignored_as_backchannel": false,
+      "original_message": null,
+      "reasoning": [],
+      "source_medium": "audio",
+      "source_event_id": 57,
+      "used_static_kb_document_ids": [],
+      "analysis": null,
+      "user_identifier": null,
+      "id": null,
+      "triggered_guardrails": [],
+      "file_input": null,
+      "contextual_update_info": null,
+      "config_snapshot_id": null,
+      "reasoned": false
+    },
+    {
+      "role": "agent",
+      "agent_metadata": {
+        "agent_id": "agent_6501kymkvp51eb68k1m589abc18s",
+        "branch_id": "agtbrch_7101kymkvqtbe0e9zbeqbp7bx58e",
+        "workflow_node_id": null,
+        "version_id": "agtvrsn_8201kz00kbf0ehv87pr2bt3ymhtf"
+      },
+      "message": "없다니요? 그럼 제가 왜 제미다파를 써야 하죠?",
+      "multivoice_message": null,
+      "tool_calls": [],
+      "tool_results": [],
+      "feedback": null,
+      "llm_override": null,
+      "time_in_call_secs": 12,
+      "conversation_turn_metrics": {
+        "metrics": {
+          "convai_llm_service_ttf_sentence": {
+            "elapsed_time": 0.5999325499869883
+          },
+          "convai_llm_service_ttfb": {
+            "elapsed_time": 0.38311449001776055
+          },
+          "convai_llm_service_tt_last_sentence": {
+            "elapsed_time": 0.5999251600005664
+          },
+          "convai_tts_service_ttfb": {
+            "elapsed_time": 0.2967143589630723
+          },
+          "convai_ttf_audio_since_silence": {
+            "elapsed_time": 3.7788642360037192
+          },
+          "convai_turn_silence_before_initiation": {
+            "elapsed_time": 0.96
+          },
+          "convai_turn_asr_latency": {
+            "elapsed_time": 0.02122648002114147
+          }
+        },
+        "convai_asr_provider": null,
+        "convai_tts_model": "eleven_v3_conversational",
+        "convai_tts_cascade": null
+      },
+      "rag_retrieval_info": {
+        "chunks": [
+          {
+            "document_id": "4ERj5TnAeE89GmyEvrnZ",
+            "chunk_id": "Zbgu8VyCWRrCcKivvH0X",
+            "vector_distance": 0.16613799333572388
+          },
+          {
+            "document_id": "4ERj5TnAeE89GmyEvrnZ",
+            "chunk_id": "OoabtFrKwN2N2GP6RkdC",
+            "vector_distance": 0.16883933544158936
+          },
+          {
+            "document_id": "4ERj5TnAeE89GmyEvrnZ",
+            "chunk_id": "va8Fsbh2vifAYPmf7SQO",
+            "vector_distance": 0.17027604579925537
+          },
+          {
+            "document_id": "4ERj5TnAeE89GmyEvrnZ",
+            "chunk_id": "OSgQWwy8zAPIMJ7sJMGw",
+            "vector_distance": 0.170646071434021
+          },
+          {
+            "document_id": "4ERj5TnAeE89GmyEvrnZ",
+            "chunk_id": "4Rsrm0V5wjAALxjqIo4l",
+            "vector_distance": 0.1723651885986328
+          },
+          {
+            "document_id": "4ERj5TnAeE89GmyEvrnZ",
+            "chunk_id": "SREMCcqOhWe0gMA6qKpa",
+            "vector_distance": 0.17455923557281494
+          },
+          {
+            "document_id": "XraZIJbFKcdissGGsfGR",
+            "chunk_id": "UmEMcSq1ZSzdxeMpWx3G",
+            "vector_distance": 0.178555428981781
+          },
+          {
+            "document_id": "4ERj5TnAeE89GmyEvrnZ",
+            "chunk_id": "27ecMbG7wpFxwrcCYwMo",
+            "vector_distance": 0.17973816394805908
+          },
+          {
+            "document_id": "4ERj5TnAeE89GmyEvrnZ",
+            "chunk_id": "MQZfhQ3k7O71VSIZtQrI",
+            "vector_distance": 0.18182003498077393
+          },
+          {
+            "document_id": "4ERj5TnAeE89GmyEvrnZ",
+            "chunk_id": "5ntRWZrOkL05YG5aYexZ",
+            "vector_distance": 0.1841326355934143
+          },
+          {
+            "document_id": "4ERj5TnAeE89GmyEvrnZ",
+            "chunk_id": "uN4jf1Oyu1JShiUmNS4V",
+            "vector_distance": 0.18650054931640625
+          },
+          {
+            "document_id": "OOvqLzHTiYlxBMsM3Cun",
+            "chunk_id": "6PdVeecVR5iV9VtUy0GI",
+            "vector_distance": 0.1971902847290039
+          }
+        ],
+        "embedding_model": "e5_mistral_7b_instruct",
+        "retrieval_query": "제미다파의 심혈관 안전성 관련 데이터가 있나요?",
+        "rag_latency_secs": 0.38293743901886046,
+        "used_chunk_ids": []
+      },
+      "llm_usage": {
+        "model_usage": {
+          "gemini-2.5-flash": {
+            "input": {
+              "tokens": 11186,
+              "price": 0.0016779
+            },
+            "input_cache_read": {
+              "tokens": 0,
+              "price": 0
+            },
+            "input_cache_write": {
+              "tokens": 0,
+              "price": 0
+            },
+            "output_total": {
+              "tokens": 18,
+              "price": 0.000010799999999999998
+            }
+          }
+        }
+      },
+      "interrupted": false,
+      "ignored_as_backchannel": false,
+      "original_message": null,
+      "reasoning": [],
+      "source_medium": null,
+      "source_event_id": 57,
+      "used_static_kb_document_ids": [],
+      "analysis": null,
+      "user_identifier": null,
+      "id": null,
+      "triggered_guardrails": [],
+      "file_input": null,
+      "contextual_update_info": null,
+      "config_snapshot_id": null,
+      "reasoned": false
+    },
+    {
+      "role": "user",
+      "agent_metadata": null,
+      "message": "제가 귀여우니까 그냥 써주시면 안 될까요?",
+      "multivoice_message": null,
+      "tool_calls": [],
+      "tool_results": [],
+      "feedback": null,
+      "llm_override": null,
+      "time_in_call_secs": 17,
+      "conversation_turn_metrics": {
+        "metrics": {
+          "convai_asr_trailing_service_latency": {
+            "elapsed_time": 0.0214797499938868
+          }
+        },
+        "convai_asr_provider": "Scribe v2 Realtime",
+        "convai_tts_model": null,
+        "convai_tts_cascade": null
+      },
+      "rag_retrieval_info": null,
+      "llm_usage": null,
+      "interrupted": false,
+      "ignored_as_backchannel": false,
+      "original_message": null,
+      "reasoning": [],
+      "source_medium": "audio",
+      "source_event_id": 130,
+      "used_static_kb_document_ids": [],
+      "analysis": null,
+      "user_identifier": null,
+      "id": null,
+      "triggered_guardrails": [],
+      "file_input": null,
+      "contextual_update_info": null,
+      "config_snapshot_id": null,
+      "reasoned": false
+    },
+    {
+      "role": "agent",
+      "agent_metadata": {
+        "agent_id": "agent_6501kymkvp51eb68k1m589abc18s",
+        "branch_id": "agtbrch_7101kymkvqtbe0e9zbeqbp7bx58e",
+        "workflow_node_id": null,
+        "version_id": "agtvrsn_8201kz00kbf0ehv87pr2bt3ymhtf"
+      },
+      "message": "[웃으며] 담당자님, 제가 바빠서 농담할 시간이 없어요. 제미다파의 심혈관 안전성 데이터가 ...",
+      "multivoice_message": null,
+      "tool_calls": [],
+      "tool_results": [],
+      "feedback": null,
+      "llm_override": null,
+      "time_in_call_secs": 23,
+      "conversation_turn_metrics": {
+        "metrics": {
+          "convai_llm_service_ttf_sentence": {
+            "elapsed_time": 0.6475025689578615
+          },
+          "convai_llm_service_ttfb": {
+            "elapsed_time": 0.4016682289657183
+          },
+          "convai_llm_service_tt_last_sentence": {
+            "elapsed_time": 0.9394577479688451
+          },
+          "convai_tts_service_ttfb": {
+            "elapsed_time": 0.2618123689899221
+          },
+          "convai_ttf_audio_since_silence": {
+            "elapsed_time": 7.061682115979493
+          },
+          "convai_turn_silence_before_initiation": {
+            "elapsed_time": 1.28
+          },
+          "convai_turn_asr_latency": {
+            "elapsed_time": 0.0214797499938868
+          }
+        },
+        "convai_asr_provider": null,
+        "convai_tts_model": "eleven_v3_conversational",
+        "convai_tts_cascade": null
+      },
+      "rag_retrieval_info": {
+        "chunks": [
+          {
+            "document_id": "4ERj5TnAeE89GmyEvrnZ",
+            "chunk_id": "Zbgu8VyCWRrCcKivvH0X",
+            "vector_distance": 0.16972362995147705
+          },
+          {
+            "document_id": "4ERj5TnAeE89GmyEvrnZ",
+            "chunk_id": "OoabtFrKwN2N2GP6RkdC",
+            "vector_distance": 0.1717134714126587
+          },
+          {
+            "document_id": "4ERj5TnAeE89GmyEvrnZ",
+            "chunk_id": "4Rsrm0V5wjAALxjqIo4l",
+            "vector_distance": 0.17207902669906616
+          },
+          {
+            "document_id": "4ERj5TnAeE89GmyEvrnZ",
+            "chunk_id": "va8Fsbh2vifAYPmf7SQO",
+            "vector_distance": 0.17525339126586914
+          },
+          {
+            "document_id": "XraZIJbFKcdissGGsfGR",
+            "chunk_id": "UmEMcSq1ZSzdxeMpWx3G",
+            "vector_distance": 0.17628967761993408
+          },
+          {
+            "document_id": "4ERj5TnAeE89GmyEvrnZ",
+            "chunk_id": "SREMCcqOhWe0gMA6qKpa",
+            "vector_distance": 0.17975842952728271
+          },
+          {
+            "document_id": "4ERj5TnAeE89GmyEvrnZ",
+            "chunk_id": "uN4jf1Oyu1JShiUmNS4V",
+            "vector_distance": 0.19278401136398315
+          },
+          {
+            "document_id": "4ERj5TnAeE89GmyEvrnZ",
+            "chunk_id": "5ntRWZrOkL05YG5aYexZ",
+            "vector_distance": 0.19383883476257324
+          },
+          {
+            "document_id": "4ERj5TnAeE89GmyEvrnZ",
+            "chunk_id": "OSgQWwy8zAPIMJ7sJMGw",
+            "vector_distance": 0.1997002363204956
+          },
+          {
+            "document_id": "OOvqLzHTiYlxBMsM3Cun",
+            "chunk_id": "6PdVeecVR5iV9VtUy0GI",
+            "vector_distance": 0.20052629709243774
+          },
+          {
+            "document_id": "4ERj5TnAeE89GmyEvrnZ",
+            "chunk_id": "27ecMbG7wpFxwrcCYwMo",
+            "vector_distance": 0.2106429934501648
+          },
+          {
+            "document_id": "4ERj5TnAeE89GmyEvrnZ",
+            "chunk_id": "MQZfhQ3k7O71VSIZtQrI",
+            "vector_distance": 0.21523725986480713
+          }
+        ],
+        "embedding_model": "e5_mistral_7b_instruct",
+        "retrieval_query": "제미다파를 사용해야 하는 이유는 무엇인가요?",
+        "rag_latency_secs": 0.21872628899291158,
+        "used_chunk_ids": []
+      },
+      "llm_usage": {
+        "model_usage": {
+          "gemini-2.5-flash": {
+            "input": {
+              "tokens": 11217,
+              "price": 0.0016825499999999999
+            },
+            "input_cache_read": {
+              "tokens": 0,
+              "price": 0
+            },
+            "input_cache_write": {
+              "tokens": 0,
+              "price": 0
+            },
+            "output_total": {
+              "tokens": 49,
+              "price": 0.0000294
+            }
+          }
+        }
+      },
+      "interrupted": true,
+      "ignored_as_backchannel": false,
+      "original_message": "[웃으며] 담당자님, 제가 바빠서 농담할 시간이 없어요. 제미다파의 심혈관 안전성 데이터가 없다면, 제가 굳이 이 약을 처방할 이유가 없는데요.",
+      "reasoning": [],
+      "source_medium": null,
+      "source_event_id": 130,
+      "used_static_kb_document_ids": [],
+      "analysis": null,
+      "user_identifier": null,
+      "id": null,
+      "triggered_guardrails": [],
+      "file_input": null,
+      "contextual_update_info": null,
+      "config_snapshot_id": null,
+      "reasoned": false
+    }
+  ],
+  "tag_ids": [],
+  "realtime_config_snapshots": null,
+  "otlp_traces": null
+}

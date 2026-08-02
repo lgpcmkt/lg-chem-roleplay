@@ -75,10 +75,15 @@ export const dbService = {
       throw error;
     }
 
+    const startOfMonth = new Date();
+    startOfMonth.setDate(1);
+    startOfMonth.setHours(0, 0, 0, 0);
+
     const { count: totalPlays, error: countError } = await supabase
       .from('sessions')
       .select('*', { count: 'exact', head: true })
-      .eq('user_id', userId);
+      .eq('user_id', userId)
+      .gte('timestamp', startOfMonth.toISOString());
 
     if (countError) {
       console.error('Error getting total plays:', countError);
