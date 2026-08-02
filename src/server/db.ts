@@ -62,7 +62,7 @@ export const dbService = {
     }
   },
 
-  // Get user progress (count of A or S grades per track)
+  // Get user progress (count of A or S grades per track, and total plays)
   getUserProgress: async (userId: string) => {
     const { data, error } = await supabase
       .from('sessions')
@@ -75,9 +75,19 @@ export const dbService = {
       throw error;
     }
 
+    const { count: totalPlays, error: countError } = await supabase
+      .from('sessions')
+      .select('*', { count: 'exact', head: true })
+      .eq('user_id', userId);
+
+    if (countError) {
+      console.error('Error getting total plays:', countError);
+    }
+
     const progress = {
       hospital: 0,
-      local: 0
+      local: 0,
+      totalPlays: totalPlays || 0
     };
 
     if (data) {

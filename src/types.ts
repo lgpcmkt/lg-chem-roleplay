@@ -108,4 +108,5 @@ export interface Scenario {
 export interface UserProgress {
   hospital: number;
   local: number;
+  totalPlays?: number;
 }

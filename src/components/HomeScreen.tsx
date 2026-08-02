@@ -60,8 +60,9 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ employeeInfo, onLogout, 
       
       {/* Header Info */}
       <div className="w-full max-w-sm px-6 flex justify-between items-center mb-8">
-        <div className="text-sm font-bold">
-          {employeeInfo.name} 님
+        <div className="flex flex-col">
+          <span className="text-sm font-bold">{employeeInfo.name} 님</span>
+          <span className="text-xs text-gray-500 font-bold">총 누적 플레이: {progress.totalPlays || 0}회</span>
         </div>
         <button onClick={onLogout} className="p-2 border-2 border-black rounded-lg hover:bg-black hover:text-white transition-colors flex items-center gap-2">
           <LogOut className="w-4 h-4" />
