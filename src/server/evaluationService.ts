@@ -40,7 +40,7 @@ export async function evaluateWithElevenLabs(conversationId: string) {
         let grade: 'S' | 'A' | 'B' | 'C' = 'C';
         if (score >= 90) grade = 'S';
         else if (score >= 80) grade = 'A';
-        else if (score >= 70) grade = 'B';
+        else if (score >= 50) grade = 'B';
 
         const isSuccess = score >= 80;
         
