@@ -7,7 +7,7 @@ import { TypewriterText } from './TypewriterText';
 interface RoleplayRoomProps {
   scenario: Scenario;
   employeeInfo: EmployeeInfo;
-  onEndRoleplay: (chatHistory: ChatMessage[]) => void;
+  onEndRoleplay: (chatHistory: ChatMessage[], conversationId?: string) => void;
   onBack: () => void;
 }
 
@@ -130,8 +130,9 @@ export const RoleplayRoom: React.FC<RoleplayRoomProps> = ({
         agentId: AGENT_ID,
         dynamicVariables: {
           doctor_persona: scenario.title,
-          mission: scenario.missionMsg || '',
-          first_message: scenario.firstMessage
+          mission: scenario.mission,
+          first_message: scenario.firstMessage,
+          recommended_detail: scenario.recommendedDetail
         },
       });
     } catch (err) {
@@ -217,8 +218,8 @@ export const RoleplayRoom: React.FC<RoleplayRoomProps> = ({
         ))}
         {interimText && (
           <div className="flex justify-end">
-            <div className="max-w-[75%] pixel-box px-4 py-3 text-sm leading-relaxed bg-gray-200 text-black border-2 border-black ml-2 opacity-70">
-              {interimText}
+            <div className="max-w-[75%] pixel-box px-4 py-3 text-sm leading-relaxed bg-gray-200 text-black border-2 border-black ml-2 opacity-70 flex items-center gap-2">
+              <span className="animate-pulse">💬 말씀하시는 중...</span>
             </div>
           </div>
         )}

@@ -1,37 +1,3 @@
-// ── Product ──
-export interface Product {
-  id: string;
-  name: string;
-  nameEn: string;
-  composition: string;
-  indication: string;
-  tagline: string;
-  color: string;         // gradient color theme
-  icon: string;          // emoji icon
-  imageUrl?: string;     // real product image URL
-  specialties: Specialty[];
-}
-
-export interface Specialty {
-  id: string;
-  name: string;
-  icon: string;
-  imageUrl?: string;
-  description: string;
-}
-
-// ── Doctor Type ──
-export interface DoctorType {
-  id: 'strict' | 'academic' | 'friendly';
-  name: string;
-  title: string;
-  avatar: string;
-  imageUrl?: string;     // real doctor image URL
-  difficulty: string;
-  personality: string;
-  focusArea: string;
-}
-
 // ── Chat ──
 export interface ChatMessage {
   id: string;
@@ -73,10 +39,9 @@ export interface RoleplayEvaluationResult {
 export interface SavedSession {
   id: string;
   date: string;
-  productId: string;
-  productName: string;
-  specialtyName: string;
-  doctorTypeName: string;
+  track: 'hospital' | 'local';
+  scenarioId: string;
+  scenarioTitle: string;
   evaluation?: RoleplayEvaluationResult;
   chatHistory: ChatMessage[];
 }
@@ -88,13 +53,6 @@ export interface EmployeeInfo {
   department: string;
 }
 
-// ── Roleplay Config (선택된 조합) ──
-export interface RoleplayConfig {
-  productId: string;
-  specialtyId: string;
-  doctorTypeId: string;
-}
-
 // ── Scenario ──
 export interface Scenario {
   id: string;
@@ -102,7 +60,8 @@ export interface Scenario {
   title: string;
   firstMessage: string;
   hint: string;
-  missionMsg?: string;
+  mission: string;
+  recommendedDetail: string;
 }
 
 export interface UserProgress {

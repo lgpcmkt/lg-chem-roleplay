@@ -40,9 +40,7 @@ export const ScenarioSelectScreen: React.FC<ScenarioSelectScreenProps> = ({
             <div className="font-black text-lg">
               {idx + 1}. {scenario.title}
             </div>
-            <div className="text-sm text-gray-600">
-              {scenario.missionMsg}
-            </div>
+
           </button>
         ))}
       </div>
