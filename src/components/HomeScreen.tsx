@@ -109,7 +109,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ employeeInfo, onLogout, 
           {/* Side-by-side Image Container */}
           <div className="relative w-full h-40 mb-6 flex items-end justify-center group">
              {/* Character Image (Ratio 1) - Left */}
-             <div className="relative w-20 h-20 flex items-end justify-center -mr-6 z-10">
+             <div className="relative w-20 h-20 flex items-end justify-center -mr-10 z-10">
                <img 
                  src={getCharImage(currentProgress)} 
                  alt="캐릭터" 
@@ -124,7 +124,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ employeeInfo, onLogout, 
              <img 
                src={selectedTrack === 'hospital' ? '/images/pixel_hospital_lg.png' : '/images/pixel_clinic_lg.png'} 
                alt="병원 배경" 
-               className="w-40 h-40 object-contain image-rendering-pixelated z-0"
+               className="w-40 h-40 object-contain image-rendering-pixelated z-0 translate-y-4"
                style={{ imageRendering: 'pixelated' }}
              />
           </div>
