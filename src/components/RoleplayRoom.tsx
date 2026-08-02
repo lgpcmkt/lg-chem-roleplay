@@ -215,13 +215,7 @@ export const RoleplayRoom: React.FC<RoleplayRoomProps> = ({
             </div>
           </div>
         )}
-        {isMicPressed ? (
-          <div className="flex justify-end">
-            <div className="pixel-box px-4 py-3 bg-red-100 text-red-600 text-xs font-bold animate-pulse border-red-400">
-              마이크 켜짐 (말씀하시면 자동 인식됩니다)
-            </div>
-          </div>
-        ) : (conversation.status === 'connected' && !conversation.isSpeaking && chatHistory.length > 0 && chatHistory[chatHistory.length - 1].role === 'user') ? (
+        {(!isMicPressed && conversation.status === 'connected' && !conversation.isSpeaking && chatHistory.length > 0 && chatHistory[chatHistory.length - 1].role === 'user') ? (
           <div className="flex justify-start">
              <div className="w-8 h-8 rounded-full border-2 border-black bg-white mr-2 flex items-center justify-center overflow-hidden flex-shrink-0">
                <img src="/images/korean_doctor_strict_clinic_1785413940376.png" alt="doc" className="w-full h-full object-cover" />
@@ -270,7 +264,7 @@ export const RoleplayRoom: React.FC<RoleplayRoomProps> = ({
                 }`}
               >
                 <Mic className="w-4 h-4 mr-1" />
-                {isMicPressed ? '마이크 끄기 (음성 소거)' : '마이크 켜기'}
+                {isMicPressed ? '마이크 끄기' : '마이크 켜기'}
               </button>
             ) : (
               <div className="px-3 py-1 text-xs font-bold text-gray-500 border-2 border-transparent">
