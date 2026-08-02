@@ -109,7 +109,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ employeeInfo, onLogout, 
           {/* Side-by-side Image Container */}
           <div className="relative w-full h-40 mb-6 flex items-end justify-center group">
              {/* Character Image (Ratio 1) - Left */}
-             <div className="relative w-20 h-20 flex items-end justify-center mb-2 -mr-2 z-10">
+             <div className="relative w-20 h-20 flex items-end justify-center -mr-6 z-10">
                <img 
                  src={getCharImage(currentProgress)} 
                  alt="캐릭터" 
