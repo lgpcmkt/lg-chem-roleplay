@@ -107,16 +107,9 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ employeeInfo, onLogout, 
           </div>
 
           {/* Side-by-side Image Container */}
-          <div className="relative w-full h-40 mb-6 flex items-end justify-center gap-2 group">
-             {/* Hospital Image (Ratio 2) */}
-             <img 
-               src={selectedTrack === 'hospital' ? '/images/pixel_hospital_lg.png' : '/images/pixel_clinic_lg.png'} 
-               alt="병원 배경" 
-               className="w-40 h-40 object-contain image-rendering-pixelated"
-               style={{ imageRendering: 'pixelated' }}
-             />
-             {/* Character Image (Ratio 1) */}
-             <div className="relative w-20 h-20 flex items-end justify-center mb-2">
+          <div className="relative w-full h-40 mb-6 flex items-end justify-center group">
+             {/* Character Image (Ratio 1) - Left */}
+             <div className="relative w-20 h-20 flex items-end justify-center mb-2 -mr-2 z-10">
                <img 
                  src={getCharImage(currentProgress)} 
                  alt="캐릭터" 
@@ -124,9 +117,16 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ employeeInfo, onLogout, 
                  style={{ imageRendering: 'pixelated' }}
                />
                {currentProgress === 5 && (
-                 <div className="absolute -top-2 -right-4 text-[10px] animate-bounce border-2 border-black bg-yellow-300 px-2 py-1 font-bold shadow-[2px_2px_0_rgba(0,0,0,1)] z-20 whitespace-nowrap">마스터</div>
+                 <div className="absolute -top-2 -left-4 text-[10px] animate-bounce border-2 border-black bg-yellow-300 px-2 py-1 font-bold shadow-[2px_2px_0_rgba(0,0,0,1)] z-20 whitespace-nowrap">마스터</div>
                )}
              </div>
+             {/* Hospital Image (Ratio 2) - Right */}
+             <img 
+               src={selectedTrack === 'hospital' ? '/images/pixel_hospital_lg.png' : '/images/pixel_clinic_lg.png'} 
+               alt="병원 배경" 
+               className="w-40 h-40 object-contain image-rendering-pixelated z-0"
+               style={{ imageRendering: 'pixelated' }}
+             />
           </div>
 
           <button 
