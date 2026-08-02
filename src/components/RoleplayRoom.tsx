@@ -25,6 +25,29 @@ export const RoleplayRoom: React.FC<RoleplayRoomProps> = ({
   const hasAutoStarted = useRef(false);
   const recognitionRef = useRef<any>(null);
   const [interimText, setInterimText] = useState('');
+
+  const conversation = useConversation({
+    onMessage: (message: any) => {
+      const role = message.source === 'user' || message.role === 'user' ? 'user' : 'assistant';
+
+      setChatHistory(prev => {
+        if (prev.length > 0) {
+          const lastMsg = prev[prev.length - 1];
+          if (lastMsg.role === role && lastMsg.content === message.message) {
+            return prev;
+          }
+        }
+        return [...prev, {
+          id: Date.now().toString(),
+          role,
+          content: message.message,
+          timestamp: new Date().toISOString()
+        }];
+      });
+    },
+    onError: (error) => console.error('[ElevenLabs Error]', error)
+  });
+
   const isMicPressedRef = useRef(false);
   const isListeningRef = useRef(false);
 
@@ -74,27 +97,6 @@ export const RoleplayRoom: React.FC<RoleplayRoomProps> = ({
   }, [isMicPressed, conversation.isSpeaking]);
 
 
-  const conversation = useConversation({
-    onMessage: (message: any) => {
-      const role = message.source === 'user' || message.role === 'user' ? 'user' : 'assistant';
-
-      setChatHistory(prev => {
-        if (prev.length > 0) {
-          const lastMsg = prev[prev.length - 1];
-          if (lastMsg.role === role && lastMsg.content === message.message) {
-            return prev;
-          }
-        }
-        return [...prev, {
-          id: Date.now().toString(),
-          role,
-          content: message.message,
-          timestamp: new Date().toISOString()
-        }];
-      });
-    },
-    onError: (error) => console.error('[ElevenLabs Error]', error)
-  });
 
   // Auto-scroll chat
   useEffect(() => {
