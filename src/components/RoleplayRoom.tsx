@@ -25,6 +25,11 @@ export const RoleplayRoom: React.FC<RoleplayRoomProps> = ({
   const hasAutoStarted = useRef(false);
   const recognitionRef = useRef<any>(null);
   const [interimText, setInterimText] = useState('');
+  const isMicPressedRef = useRef(false);
+
+  useEffect(() => {
+    isMicPressedRef.current = isMicPressed;
+  }, [isMicPressed]);
 
   // Initialize Speech Recognition
   useEffect(() => {
@@ -37,6 +42,10 @@ export const RoleplayRoom: React.FC<RoleplayRoomProps> = ({
         recognition.lang = 'ko-KR';
         
         recognition.onresult = (event: any) => {
+          if (!isMicPressedRef.current) {
+            setInterimText('');
+            return;
+          }
           let currentInterim = '';
           for (let i = event.resultIndex; i < event.results.length; ++i) {
             currentInterim += event.results[i][0].transcript;
@@ -55,8 +64,8 @@ export const RoleplayRoom: React.FC<RoleplayRoomProps> = ({
       setInterimText('');
       try { recognitionRef.current.start(); } catch (e) {}
     } else {
-      try { recognitionRef.current.stop(); } catch (e) {}
       setInterimText('');
+      try { recognitionRef.current.stop(); } catch (e) {}
     }
   }, [isMicPressed]);
 
@@ -65,12 +74,20 @@ export const RoleplayRoom: React.FC<RoleplayRoomProps> = ({
     onMessage: (message: any) => {
       const role = message.source === 'user' || message.role === 'user' ? 'user' : 'assistant';
 
-      setChatHistory(prev => [...prev, {
-        id: Date.now().toString(),
-        role,
-        content: message.message,
-        timestamp: new Date().toISOString()
-      }]);
+      setChatHistory(prev => {
+        if (prev.length > 0) {
+          const lastMsg = prev[prev.length - 1];
+          if (lastMsg.role === role && lastMsg.content === message.message) {
+            return prev;
+          }
+        }
+        return [...prev, {
+          id: Date.now().toString(),
+          role,
+          content: message.message,
+          timestamp: new Date().toISOString()
+        }];
+      });
     },
     onError: (error) => console.error('[ElevenLabs Error]', error)
   });
