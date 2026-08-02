@@ -283,13 +283,18 @@ export async function evaluateWithElevenLabs(conversationId: string) {
 
       const data = await res.json();
       
-      if (data.data_collection_results && Object.keys(data.data_collection_results).length > 0) {
-        const results = data.data_collection_results;
+      const analysis = data.analysis;
+      if (analysis && analysis.data_collection_results && analysis.evaluation_criteria_results) {
+        const dataCollection = analysis.data_collection_results;
+        const evalCriteria = analysis.evaluation_criteria_results;
         
-        const score = results.RP?.value || 0;
-        const strengthsStr = results.strengths?.value || '';
-        const weaknessesStr = results.weaknesses?.value || '';
-        const recommendedScript = results.recommended_script?.value || '';
+        // Handle case-sensitivity for 'rp' vs 'RP'
+        const rpResult = evalCriteria.rp || evalCriteria.RP;
+        const score = rpResult?.score || 0;
+        
+        const strengthsStr = dataCollection.strengths?.value || '';
+        const weaknessesStr = dataCollection.weaknesses?.value || '';
+        const recommendedScript = dataCollection.recommended_script?.value || '';
 
         let grade: 'S' | 'A' | 'B' | 'C' = 'C';
         if (score >= 90) grade = 'S';
