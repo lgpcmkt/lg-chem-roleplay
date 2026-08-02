@@ -26,10 +26,12 @@ export const RoleplayRoom: React.FC<RoleplayRoomProps> = ({
   const recognitionRef = useRef<any>(null);
   const [interimText, setInterimText] = useState('');
   const isMicPressedRef = useRef(false);
+  const isListeningRef = useRef(false);
 
   useEffect(() => {
     isMicPressedRef.current = isMicPressed;
-  }, [isMicPressed]);
+    isListeningRef.current = isMicPressed && !conversation.isSpeaking;
+  }, [isMicPressed, conversation.isSpeaking]);
 
   // Initialize Speech Recognition
   useEffect(() => {
@@ -42,7 +44,7 @@ export const RoleplayRoom: React.FC<RoleplayRoomProps> = ({
         recognition.lang = 'ko-KR';
         
         recognition.onresult = (event: any) => {
-          if (!isMicPressedRef.current) {
+          if (!isListeningRef.current) {
             setInterimText('');
             return;
           }
@@ -60,14 +62,16 @@ export const RoleplayRoom: React.FC<RoleplayRoomProps> = ({
   // Handle Speech Recognition Start/Stop
   useEffect(() => {
     if (!recognitionRef.current) return;
-    if (isMicPressed) {
+    const shouldListen = isMicPressed && !conversation.isSpeaking;
+
+    if (shouldListen) {
       setInterimText('');
       try { recognitionRef.current.start(); } catch (e) {}
     } else {
       setInterimText('');
       try { recognitionRef.current.stop(); } catch (e) {}
     }
-  }, [isMicPressed]);
+  }, [isMicPressed, conversation.isSpeaking]);
 
 
   const conversation = useConversation({
@@ -103,6 +107,13 @@ export const RoleplayRoom: React.FC<RoleplayRoomProps> = ({
       conversation.setMuted(!isMicPressed);
     }
   }, [isMicPressed, conversation.status]);
+
+  // Auto-enable mic on connect
+  useEffect(() => {
+    if (conversation.status === 'connected') {
+      setIsMicPressed(true);
+    }
+  }, [conversation.status]);
 
   const handleStartCall = async () => {
     if (isConnecting) return;
@@ -205,7 +216,7 @@ export const RoleplayRoom: React.FC<RoleplayRoomProps> = ({
         {isMicPressed ? (
           <div className="flex justify-end">
             <div className="pixel-box px-4 py-3 bg-red-100 text-red-600 text-xs font-bold animate-pulse border-red-400">
-              음성 입력 중입니다...
+              마이크 켜짐 (말씀하시면 자동 인식됩니다)
             </div>
           </div>
         ) : (conversation.status === 'connected' && !conversation.isSpeaking && chatHistory.length > 0 && chatHistory[chatHistory.length - 1].role === 'user') ? (
@@ -257,7 +268,7 @@ export const RoleplayRoom: React.FC<RoleplayRoomProps> = ({
                 }`}
               >
                 <Mic className="w-4 h-4 mr-1" />
-                {isMicPressed ? '음성 입력 완료하기' : '마이크 켜기 (토글)'}
+                {isMicPressed ? '마이크 끄기 (음성 소거)' : '마이크 켜기'}
               </button>
             ) : (
               <div className="px-3 py-1 text-xs font-bold text-gray-500 border-2 border-transparent">
