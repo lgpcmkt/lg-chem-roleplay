@@ -15,7 +15,7 @@ export interface ChatMessage {
   content: string;
 }
 
-const MODEL_CANDIDATES = ['gemini-2.5-flash', 'gemini-2.0-flash'];
+const MODEL_CANDIDATES = ['gemini-flash-latest'];
 
 async function callGeminiWithRetry(params: {
   contents: any;
