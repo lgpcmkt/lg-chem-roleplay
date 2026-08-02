@@ -107,16 +107,16 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ employeeInfo, onLogout, 
           </div>
 
           {/* Side-by-side Image Container */}
-          <div className="relative w-full h-32 mb-6 flex items-end justify-center gap-4 group">
-             {/* Hospital Image */}
+          <div className="relative w-full h-40 mb-6 flex items-end justify-center gap-2 group">
+             {/* Hospital Image (Ratio 2) */}
              <img 
                src={selectedTrack === 'hospital' ? '/images/pixel_hospital_lg.png' : '/images/pixel_clinic_lg.png'} 
                alt="병원 배경" 
-               className="w-28 h-28 object-contain image-rendering-pixelated"
+               className="w-40 h-40 object-contain image-rendering-pixelated"
                style={{ imageRendering: 'pixelated' }}
              />
-             {/* Character Image */}
-             <div className="relative w-28 h-28 flex items-end justify-center">
+             {/* Character Image (Ratio 1) */}
+             <div className="relative w-20 h-20 flex items-end justify-center mb-2">
                <img 
                  src={getCharImage(currentProgress)} 
                  alt="캐릭터" 
