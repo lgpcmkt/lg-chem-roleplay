@@ -89,15 +89,17 @@ export const dbService = {
       console.error('Error getting total plays:', countError);
     }
 
-    const progress = {
+    const progress: any = {
       hospital: 0,
       local: 0,
-      totalPlays: totalPlays || 0
+      totalPlays: totalPlays || 0,
+      clearedHospitalScenarios: [],
+      clearedLocalScenarios: []
     };
 
     if (data) {
-      const hospitalScenarios = new Set();
-      const localScenarios = new Set();
+      const hospitalScenarios = new Set<string>();
+      const localScenarios = new Set<string>();
 
       data.forEach((row: any) => {
         if (row.track === 'hospital') {
@@ -109,6 +111,8 @@ export const dbService = {
 
       progress.hospital = hospitalScenarios.size;
       progress.local = localScenarios.size;
+      progress.clearedHospitalScenarios = Array.from(hospitalScenarios);
+      progress.clearedLocalScenarios = Array.from(localScenarios);
     }
     
     return progress;

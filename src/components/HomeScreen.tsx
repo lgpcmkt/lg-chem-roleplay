@@ -12,6 +12,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ employeeInfo, onLogout, 
   const [progress, setProgress] = useState<UserProgress>({ hospital: 0, local: 0 });
   const [selectedTrack, setSelectedTrack] = useState<'hospital' | 'local'>('hospital');
   const [isLoading, setIsLoading] = useState(true);
+  const [showInfo, setShowInfo] = useState(false);
 
   useEffect(() => {
     // Fetch progress from backend
@@ -94,8 +95,27 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ employeeInfo, onLogout, 
             </button>
           </div>
 
-          <div className="text-sm font-bold mb-2 text-center">
-            {getCharDesc(currentProgress)}
+          <div className="text-sm font-bold mb-2 text-center flex items-center justify-center gap-2 relative">
+            <span>{getCharDesc(currentProgress)}</span>
+            <button 
+              onClick={() => setShowInfo(!showInfo)}
+              className="w-5 h-5 rounded-full border-2 border-black flex items-center justify-center text-xs bg-white hover:bg-gray-200 transition-colors font-black"
+            >
+              ?
+            </button>
+            
+            {showInfo && (
+              <div className="absolute top-8 left-1/2 -translate-x-1/2 w-64 p-3 bg-white border-2 border-black shadow-[4px_4px_0_rgba(0,0,0,1)] z-50 text-xs text-left">
+                <strong>Level 기준:</strong><br/>
+                각 시나리오별 <span className="text-red-500 font-bold">A등급 이상</span> 완료시마다 Level이 상승합니다!
+                <button 
+                  onClick={() => setShowInfo(false)}
+                  className="mt-3 w-full py-1.5 bg-black text-white font-bold"
+                >
+                  확인
+                </button>
+              </div>
+            )}
           </div>
           
           {/* Progress Bar */}

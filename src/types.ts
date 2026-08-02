@@ -68,4 +68,6 @@ export interface UserProgress {
   hospital: number;
   local: number;
   totalPlays?: number;
+  clearedHospitalScenarios?: string[];
+  clearedLocalScenarios?: string[];
 }
