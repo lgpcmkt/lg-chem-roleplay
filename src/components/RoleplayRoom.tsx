@@ -219,7 +219,14 @@ export const RoleplayRoom: React.FC<RoleplayRoomProps> = ({
         {interimText && (
           <div className="flex justify-end">
             <div className="max-w-[75%] pixel-box px-4 py-3 text-sm leading-relaxed bg-gray-200 text-black border-2 border-black ml-2 opacity-70 flex items-center gap-2">
-              <span className="animate-pulse">💬 말씀하시는 중...</span>
+              <span className="flex items-center gap-0.5">
+                💬 입력중입니다
+                <span className="flex ml-0.5 mt-1">
+                  <span className="animate-bounce" style={{ animationDelay: '0ms' }}>.</span>
+                  <span className="animate-bounce" style={{ animationDelay: '150ms' }}>.</span>
+                  <span className="animate-bounce" style={{ animationDelay: '300ms' }}>.</span>
+                </span>
+              </span>
             </div>
           </div>
         )}
