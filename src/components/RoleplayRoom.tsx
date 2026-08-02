@@ -101,7 +101,7 @@ export const RoleplayRoom: React.FC<RoleplayRoomProps> = ({
   // Auto-scroll chat
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [chatHistory]);
+  }, [chatHistory, interimText, conversation.isSpeaking]);
 
   // Handle Push-to-Talk (Mute when not pressed)
   useEffect(() => {
