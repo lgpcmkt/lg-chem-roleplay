@@ -106,25 +106,27 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ employeeInfo, onLogout, 
             />
           </div>
 
-          {/* Combined Image */}
-          <div className="relative w-full h-48 border-2 border-black bg-white rounded-xl overflow-hidden mb-6 flex items-end justify-center group">
-             {/* Background Image */}
+          {/* Side-by-side Image Container */}
+          <div className="relative w-full h-32 mb-6 flex items-end justify-center gap-4 group">
+             {/* Hospital Image */}
              <img 
                src={selectedTrack === 'hospital' ? '/images/pixel_hospital_lg.png' : '/images/pixel_clinic_lg.png'} 
                alt="병원 배경" 
-               className="absolute inset-0 w-full h-full object-cover image-rendering-pixelated opacity-80"
+               className="w-28 h-28 object-contain image-rendering-pixelated"
                style={{ imageRendering: 'pixelated' }}
              />
-             {/* Character Image overlay */}
-             <img 
-               src={getCharImage(currentProgress)} 
-               alt="캐릭터" 
-               className="relative z-10 w-36 h-36 object-contain image-rendering-pixelated group-hover:scale-110 transition-transform -mb-2" 
-               style={{ imageRendering: 'pixelated' }}
-             />
-             {currentProgress === 5 && (
-               <div className="absolute top-2 right-2 text-[10px] animate-bounce border-2 border-black bg-yellow-300 px-2 py-1 font-bold shadow-[2px_2px_0_rgba(0,0,0,1)] z-20">마스터</div>
-             )}
+             {/* Character Image */}
+             <div className="relative w-28 h-28 flex items-end justify-center">
+               <img 
+                 src={getCharImage(currentProgress)} 
+                 alt="캐릭터" 
+                 className="w-full h-full object-contain image-rendering-pixelated group-hover:scale-110 transition-transform mix-blend-multiply" 
+                 style={{ imageRendering: 'pixelated' }}
+               />
+               {currentProgress === 5 && (
+                 <div className="absolute -top-2 -right-4 text-[10px] animate-bounce border-2 border-black bg-yellow-300 px-2 py-1 font-bold shadow-[2px_2px_0_rgba(0,0,0,1)] z-20 whitespace-nowrap">마스터</div>
+               )}
+             </div>
           </div>
 
           <button 
