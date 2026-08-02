@@ -39,10 +39,10 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ employeeInfo, onLogout, 
   };
 
   const getCharDesc = (clearCount: number) => {
-    if (clearCount <= 1) return '쩔쩔매는 초보 영업사원';
-    if (clearCount <= 3) return '고군분투 중인 영업사원';
-    if (clearCount === 4) return '제법 유능해진 영업사원';
-    return '능숙한 제미다파 마스터!';
+    if (clearCount <= 1) return 'Level 1 (초보 영업사원)';
+    if (clearCount <= 3) return 'Level 2 (고군분투 중인 영업사원)';
+    if (clearCount === 4) return 'Level 3 (제법 유능해진 영업사원)';
+    return 'Level 4 (능숙한 제미다파 마스터!)';
   };
 
   if (isLoading) {
@@ -93,8 +93,8 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ employeeInfo, onLogout, 
             </button>
           </div>
 
-          <div className="text-sm font-bold mb-2">
-            진행도: {currentProgress} / 5
+          <div className="text-sm font-bold mb-2 text-center">
+            {getCharDesc(currentProgress)}
           </div>
           
           {/* Progress Bar */}
@@ -132,10 +132,6 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ employeeInfo, onLogout, 
                  <div className="absolute top-1 right-1 text-[10px] animate-bounce border-2 border-black bg-yellow-300 px-1 font-bold shadow-[1px_1px_0_rgba(0,0,0,1)] z-20">마스터</div>
                )}
             </div>
-          </div>
-
-          <div className="text-sm font-bold mb-8 h-6">
-            {getCharDesc(currentProgress)}
           </div>
 
           <button 
