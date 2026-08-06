@@ -22,9 +22,9 @@ export const EvaluationReport: React.FC<EvaluationReportProps> = ({
   };
 
   return (
-    <div className="flex-1 flex flex-col items-center justify-start bg-slate-50 text-slate-800 font-sans h-full overflow-y-auto p-4 w-full">
+    <div className="flex-1 flex flex-col items-center justify-start bg-slate-50 text-slate-800 font-sans h-full overflow-y-auto w-full px-4 py-6">
 
-      <div className="w-full max-w-md bg-white rounded-3xl p-6 flex flex-col items-center border border-slate-200 animate-slideUp my-auto">
+      <div className="w-full max-w-md bg-white rounded-3xl p-5 flex flex-col items-center border border-slate-200 animate-slideUp">
         
         <div className="flex items-center gap-2 mb-6">
           {evaluation.isSuccess ? (
@@ -37,18 +37,18 @@ export const EvaluationReport: React.FC<EvaluationReportProps> = ({
           </h2>
         </div>
 
-        <div className={`w-32 h-32 rounded-full flex flex-col items-center justify-center border-4 mb-6 shadow-sm ${getGradeColor(evaluation.grade)}`}>
-          <span className="text-5xl font-black tracking-tighter">{evaluation.grade}</span>
-          <span className="text-sm font-bold mt-1 opacity-80">등급</span>
+        <div className={`w-24 h-24 rounded-full flex flex-col items-center justify-center border-4 mb-4 shadow-sm ${getGradeColor(evaluation.grade)}`}>
+          <span className="text-4xl font-black tracking-tighter">{evaluation.grade}</span>
+          <span className="text-xs font-bold mt-1 opacity-80">등급</span>
         </div>
 
         {evaluation.totalScore !== undefined && (
-          <div className="text-xl font-bold mb-6 text-slate-600 bg-slate-100 px-6 py-2 rounded-2xl">
+          <div className="text-lg font-bold mb-4 text-slate-600 bg-slate-100 px-5 py-1.5 rounded-2xl">
             총점: <span className="text-slate-800">{evaluation.totalScore}</span> / 100
           </div>
         )}
 
-        <div className="w-full text-left flex flex-col gap-4 mb-8">
+        <div className="w-full text-left flex flex-col gap-3 mb-6">
           {evaluation.reasoning && (
             <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200">
               <h3 className="font-bold text-slate-800 mb-2 flex items-center gap-2">고객의 코멘트</h3>
@@ -86,18 +86,18 @@ export const EvaluationReport: React.FC<EvaluationReportProps> = ({
           )}
         </div>
 
-        <div className="flex gap-3 w-full">
+        <div className="flex gap-3 w-full mt-auto">
           {!evaluation.isSuccess && (
             <button
               onClick={onRetry}
-              className="flex-1 py-4 bg-slate-200 text-slate-600 rounded-2xl font-bold text-lg active:scale-95 transition-transform flex items-center justify-center gap-2"
+              className="flex-1 py-3.5 bg-slate-200 text-slate-600 rounded-2xl font-bold text-base active:scale-95 transition-transform flex items-center justify-center gap-2"
             >
               <RotateCcw className="w-5 h-5" /> 다시하기
             </button>
           )}
           <button
             onClick={onClose}
-            className="flex-1 py-4 bg-blue-500 text-white rounded-2xl font-bold text-lg shadow-md active:scale-95 transition-transform flex items-center justify-center gap-2 hover:bg-blue-600 transition-colors"
+            className="flex-1 py-3.5 bg-blue-500 text-white rounded-2xl font-bold text-base shadow-md active:scale-95 transition-transform flex items-center justify-center gap-2 hover:bg-blue-600 transition-colors"
           >
             <Home className="w-5 h-5" /> 홈으로
           </button>
