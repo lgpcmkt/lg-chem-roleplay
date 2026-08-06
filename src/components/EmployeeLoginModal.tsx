@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ArrowRight, User } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { EmployeeInfo } from '../types';
 
 interface EmployeeLoginModalProps {
@@ -26,40 +26,42 @@ export const EmployeeLoginModal: React.FC<EmployeeLoginModalProps> = ({ onSave, 
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex flex-col items-center justify-center p-4 bg-white font-sans border-x-2 border-black max-w-md mx-auto">
+    <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-slate-50 font-sans p-4">
       
-      <div className="w-full space-y-10">
+      <div className="w-full max-w-sm bg-white rounded-3xl p-8 shadow-xl border border-slate-100 flex flex-col items-center animate-slideUp">
         
-        <div className="flex flex-col items-center text-center space-y-4">
-          <div className="text-3xl font-black mb-4">제미다파 마스터 챌린지</div>
+        <div className="flex flex-col items-center text-center space-y-4 mb-8">
+          <div className="w-20 h-20 bg-orange-100 rounded-full flex items-center justify-center text-4xl mb-2 shadow-inner">
+            🔥
+          </div>
+          <h1 className="text-2xl font-black text-slate-800 tracking-tight leading-tight">
+            제미패밀리<br/>디테일 마스터
+          </h1>
+          <p className="text-slate-500 text-sm font-medium">당신의 디테일링 실력을 확인해보세요!</p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4 px-6">
+        <form onSubmit={handleSubmit} className="w-full space-y-4">
           <div className="space-y-3">
-            <div className="relative">
-              <input 
-                type="text" 
-                value={empIdInput} 
-                onChange={(e) => setEmpIdInput(e.target.value)}
-                placeholder="사번 입력 (ex. 123456)" 
-                autoFocus
-                className="w-full px-5 py-4 border-2 border-black rounded-none text-sm font-bold focus:outline-none focus:bg-gray-100 transition-colors" 
-              />
-            </div>
-            <div className="relative">
-              <input 
-                type="text" 
-                value={nameInput} 
-                onChange={(e) => setNameInput(e.target.value)}
-                placeholder="이름 입력" 
-                className="w-full px-5 py-4 border-2 border-black rounded-none text-sm font-bold focus:outline-none focus:bg-gray-100 transition-colors" 
-              />
-            </div>
+            <input 
+              type="text" 
+              value={empIdInput} 
+              onChange={(e) => setEmpIdInput(e.target.value)}
+              placeholder="사번 입력 (ex. 123456)" 
+              autoFocus
+              className="w-full px-5 py-4 bg-slate-100 border border-slate-200 rounded-2xl text-[15px] font-bold text-slate-800 placeholder-slate-400 focus:outline-none focus:border-orange-400 focus:bg-white transition-colors shadow-inner" 
+            />
+            <input 
+              type="text" 
+              value={nameInput} 
+              onChange={(e) => setNameInput(e.target.value)}
+              placeholder="이름 입력" 
+              className="w-full px-5 py-4 bg-slate-100 border border-slate-200 rounded-2xl text-[15px] font-bold text-slate-800 placeholder-slate-400 focus:outline-none focus:border-orange-400 focus:bg-white transition-colors shadow-inner" 
+            />
           </div>
-          {error && <p className="text-xs text-red-500 font-bold text-center">{error}</p>}
+          {error && <p className="text-sm text-rose-500 font-bold text-center animate-fadeIn">{error}</p>}
           <button 
             type="submit" 
-            className="w-full py-4 bg-black text-white font-black text-base border-2 border-black shadow-[4px_4px_0_rgba(0,0,0,1)] active:shadow-none active:translate-y-[4px] active:translate-x-[4px] transition-all flex items-center justify-center gap-2 mt-4"
+            className="w-full py-4 mt-2 btn-duo-orange flex items-center justify-center gap-2 text-lg"
           >
             <span>시작하기</span>
             <ArrowRight className="w-5 h-5" />

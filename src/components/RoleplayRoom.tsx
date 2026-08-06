@@ -131,11 +131,17 @@ export const RoleplayRoom: React.FC<RoleplayRoomProps> = ({
   const handleStartCall = async () => {
     if (isConnecting) return;
     setIsConnecting(true);
+    let productInfoStr = '';
+    if (scenario.product === 'zemiglo') productInfoStr = '제미글로 (Zemiglo, 국산 최초 & 1등 DPP-4i 신약)';
+    else if (scenario.product === 'zemimet') productInfoStr = '제미메트 (Zemimet, 다양한 용량 옵션과 작은 크기의 서방형 메트포르민 복합제)';
+    else if (scenario.product === 'zemidapa') productInfoStr = '제미다파 (Zemidapa, 제미글로+다파글리플로진 복합제)';
+
     try {
       await conversation.startSession({
         agentId: AGENT_ID,
         dynamicVariables: {
-          doctor_persona: scenario.title,
+          product_info: productInfoStr,
+          competitor_drug: scenario.title,
           mission: scenario.mission,
           first_message: scenario.firstMessage,
           recommended_detail: scenario.recommendedDetail

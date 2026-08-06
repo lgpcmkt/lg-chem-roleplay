@@ -36,6 +36,7 @@ export async function evaluateWithElevenLabs(conversationId: string) {
         const strengthsStr = dataCollection.strengths?.value || '';
         const weaknessesStr = dataCollection.weaknesses?.value || '';
         const recommendedScript = dataCollection.recommended_script?.value || '';
+        const doctorComment = dataCollection.doctor_comment?.value || '';
 
         let grade: 'S' | 'A' | 'B' | 'C' = 'C';
         if (score >= 90) grade = 'S';
@@ -48,7 +49,7 @@ export async function evaluateWithElevenLabs(conversationId: string) {
           isSuccess,
           grade,
           totalScore: score,
-          reasoning: rpResult?.rationale || "",
+          reasoning: doctorComment || rpResult?.rationale || "",
           strengths: strengthsStr.split('\n').map((s: string) => s.replace(/^(\d+\.\s*|-\s*)/, '').trim()).filter((s: string) => s.length > 0),
           weaknesses: weaknessesStr.split('\n').map((s: string) => s.replace(/^(\d+\.\s*|-\s*)/, '').trim()).filter((s: string) => s.length > 0),
           recommendedScript: recommendedScript,
