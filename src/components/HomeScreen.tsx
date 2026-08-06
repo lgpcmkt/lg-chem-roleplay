@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { UserProgress, EmployeeInfo } from '../types';
-import { LogOut, ChevronRight } from 'lucide-react';
+import { LogOut, ChevronRight, Pill, Activity, HeartPulse } from 'lucide-react';
 
 interface HomeScreenProps {
   employeeInfo: EmployeeInfo;
   onLogout: () => void;
   onSelectProduct: (product: 'zemiglo' | 'zemimet' | 'zemidapa') => void;
+  onShowHistory: () => void;
 }
 
-export const HomeScreen: React.FC<HomeScreenProps> = ({ employeeInfo, onLogout, onSelectProduct }) => {
+export const HomeScreen: React.FC<HomeScreenProps> = ({ employeeInfo, onLogout, onSelectProduct, onShowHistory }) => {
   const [progress, setProgress] = useState<UserProgress>({ zemiglo: 0, zemimet: 0, zemidapa: 0 });
   const [isLoading, setIsLoading] = useState(true);
 
@@ -39,9 +40,9 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ employeeInfo, onLogout, 
   }
 
   const products = [
-    { id: 'zemiglo', name: '제미글로', desc: '강력하고 안전한 DPP-4 억제제', colorClass: 'text-blue-500 bg-blue-50', icon: 'Z' },
-    { id: 'zemimet', name: '제미메트', desc: '제미글로+메트포르민 복합제', colorClass: 'text-blue-500 bg-blue-50', icon: 'M' },
-    { id: 'zemidapa', name: '제미다파', desc: '제미글로+다파글리플로진 복합제', colorClass: 'text-blue-500 bg-blue-50', icon: 'D' },
+    { id: 'zemiglo', name: '제미글로', desc: '강력하고 안전한 DPP-4 억제제', colorClass: 'text-blue-500 bg-blue-50', icon: <Pill className="w-6 h-6" /> },
+    { id: 'zemimet', name: '제미메트', desc: '제미글로+메트포르민 복합제', colorClass: 'text-blue-500 bg-blue-50', icon: <Activity className="w-6 h-6" /> },
+    { id: 'zemidapa', name: '제미다파', desc: '제미글로+다파글리플로진 복합제', colorClass: 'text-blue-500 bg-blue-50', icon: <HeartPulse className="w-6 h-6" /> },
   ] as const;
 
   return (
@@ -91,7 +92,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ employeeInfo, onLogout, 
       </div>
       
       <div className="w-full max-w-md px-6 mt-auto pb-6">
-        <button className="w-full py-4 bg-blue-50 text-blue-600 font-bold rounded-[20px] text-sm">
+        <button onClick={onShowHistory} className="w-full py-4 bg-blue-50 text-blue-600 font-bold rounded-[20px] text-sm hover:bg-blue-100 transition-colors">
           내 연습 기록 점검하기
         </button>
       </div>

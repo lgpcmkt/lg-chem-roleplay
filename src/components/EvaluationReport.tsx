@@ -51,7 +51,7 @@ export const EvaluationReport: React.FC<EvaluationReportProps> = ({
         <div className="w-full text-left flex flex-col gap-4 mb-8">
           {evaluation.reasoning && (
             <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200">
-              <h3 className="font-bold text-slate-800 mb-2 flex items-center gap-2">원장님의 코멘트</h3>
+              <h3 className="font-bold text-slate-800 mb-2 flex items-center gap-2">고객의 코멘트</h3>
               <p className="text-sm leading-relaxed text-slate-600 font-medium">{evaluation.reasoning}</p>
             </div>
           )}

@@ -5,10 +5,11 @@ import { HomeScreen } from './components/HomeScreen';
 import { RoleplayRoom } from './components/RoleplayRoom';
 import { EvaluationReport } from './components/EvaluationReport';
 import { ScenarioSelectScreen } from './components/ScenarioSelectScreen';
+import { HistoryScreen } from './components/HistoryScreen';
 import { ConversationProvider } from '@elevenlabs/react';
 import { SCENARIOS } from './data';
 
-type AppScreen = 'login' | 'home' | 'scenario' | 'roleplay' | 'evaluation';
+type AppScreen = 'login' | 'home' | 'scenario' | 'roleplay' | 'evaluation' | 'history';
 
 export default function App() {
   const [screen, setScreen] = useState<AppScreen>('login');
@@ -125,7 +126,8 @@ export default function App() {
           userId: employeeInfo.employeeId,
           track: currentScenario.product, // keeping track field for backward compatibility or change to product later
           scenarioId: currentScenario.id,
-          grade: evalResult.grade
+          grade: evalResult.grade,
+          evaluation_data: evalResult
         })
       });
 
@@ -153,6 +155,17 @@ export default function App() {
             employeeInfo={employeeInfo} 
             onLogout={handleLogout} 
             onSelectProduct={handleSelectProduct} 
+            onShowHistory={() => setScreen('history')}
+          />
+        )}
+        {screen === 'history' && employeeInfo && (
+          <HistoryScreen
+            employeeInfo={employeeInfo}
+            onBack={() => setScreen('home')}
+            onSelectRecord={(evalData) => {
+              setEvaluation(evalData);
+              setScreen('evaluation');
+            }}
           />
         )}
         {screen === 'scenario' && employeeInfo && (
@@ -182,7 +195,7 @@ export default function App() {
             <div className="flex-1 flex flex-col items-center justify-center bg-slate-50 w-full">
               <div className="p-8 flex flex-col items-center text-center animate-pulse">
                 <div className="w-16 h-16 border-4 border-slate-300 border-t-orange-500 rounded-full animate-spin mb-4"></div>
-                <div className="font-bold text-lg text-slate-600">원장님의 속마음을 분석 중입니다...</div>
+                <div className="font-bold text-lg text-slate-600">고객의 속마음을 분석 중입니다...</div>
               </div>
             </div>
           ) : evaluation && (

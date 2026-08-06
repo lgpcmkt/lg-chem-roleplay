@@ -211,9 +211,9 @@ export const RoleplayRoom: React.FC<RoleplayRoomProps> = ({
         {/* Avatar Area */}
         <div className="flex flex-col items-center mt-2 animate-fadeIn">
           <div className={`relative w-20 h-20 rounded-full border border-slate-200 bg-white shadow-sm mb-3 flex items-center justify-center overflow-hidden ${conversation.isSpeaking ? 'animate-pulse ring-4 ring-blue-100' : ''}`}>
-            <img src="/images/korean_doctor_strict_clinic_1785413940376.png" alt="doc" className="w-full h-full object-cover" />
+            <img src="/images/doctor_z2.png" alt="doc" className="w-full h-full object-cover" />
           </div>
-          <h2 className="font-black text-xl tracking-tight text-slate-800">원장님</h2>
+          <h2 className="font-black text-xl tracking-tight text-slate-800">고객</h2>
           <p className="text-xs font-bold bg-blue-50 text-blue-600 px-3 py-1 rounded-full mt-2">
             VS {scenario.title} 스위칭
           </p>
@@ -248,7 +248,7 @@ export const RoleplayRoom: React.FC<RoleplayRoomProps> = ({
         {(!isMicPressed && conversation.status === 'connected' && !conversation.isSpeaking && chatHistory.length > 0 && chatHistory[chatHistory.length - 1].role === 'user') ? (
           <div className="flex justify-start animate-fadeIn">
             <div className="rounded-[20px] rounded-bl-sm px-5 py-3.5 bg-white border border-slate-200 text-slate-400 text-sm font-medium animate-pulse shadow-sm">
-              원장님이 생각중입니다...
+              고객이 생각중입니다...
             </div>
           </div>
         ) : null}

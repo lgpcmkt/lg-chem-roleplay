@@ -5,8 +5,8 @@ export interface ExportResult {
   rowsAdded: number;
 }
 
-// ⚠️ 원장님이 발급받은 Apps Script 웹앱 URL을 여기에 붙여넣어 주세요. (추후 .env로 빼셔도 됩니다)
-// ⚠️ 원장님이 발급받은 Apps Script 웹앱 URL을 여기에 붙여넣어 주세요. (추후 .env로 빼셔도 됩니다)
+// ⚠️ 고객이 발급받은 Apps Script 웹앱 URL을 여기에 붙여넣어 주세요. (추후 .env로 빼셔도 됩니다)
+// ⚠️ 고객이 발급받은 Apps Script 웹앱 URL을 여기에 붙여넣어 주세요. (추후 .env로 빼셔도 됩니다)
 const APPS_SCRIPT_URL = import.meta.env.VITE_GOOGLE_APPS_SCRIPT_URL || 'https://script.google.com/macros/s/AKfycbz8fpsBhIIFZA3qoOc9ewXieSiLu89Q5g8Lzt64OdRzFTLS1VGAFCsR-cwe9JNAEgEq/exec';
 
 export async function exportSingleEvaluationToSheets(

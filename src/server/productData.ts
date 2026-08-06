@@ -86,8 +86,8 @@ export const DOCTOR_TYPES: Record<string, DoctorType> = {
     avatar: '👩‍⚕️',
     imageUrl: '/images/doctor_friendly_1785238849913.png',
     difficulty: '중',
-    personality: '30대 주니어. 친화적이지만 원장님 눈치를 봄. 처방 변경 시 안전성과 설득 명분을 염려.',
-    focusArea: '원장님 보고 명분, 안전성, 가이드라인 준수, 환자 사례',
+    personality: '30대 주니어. 친화적이지만 고객 눈치를 봄. 처방 변경 시 안전성과 설득 명분을 염려.',
+    focusArea: '고객 보고 명분, 안전성, 가이드라인 준수, 환자 사례',
   },
 };
 

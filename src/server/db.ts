@@ -20,9 +20,10 @@ export interface User {
 export interface Session {
   id: string;
   userId: string;
-  track: 'hospital' | 'local';
+  track: string;
   scenarioId: string;
   grade: 'S' | 'A' | 'B' | 'C';
+  evaluation_data?: any;
   timestamp?: string;
 }
 
@@ -53,7 +54,8 @@ export const dbService = {
         user_id: session.userId,
         track: session.track,
         scenario_id: session.scenarioId,
-        grade: session.grade
+        grade: session.grade,
+        evaluation_data: session.evaluation_data
       });
 
     if (error) {
@@ -116,5 +118,21 @@ export const dbService = {
     }
     
     return progress;
+  },
+
+  // Get user's full practice history
+  getUserHistory: async (userId: string) => {
+    const { data, error } = await supabase
+      .from('sessions')
+      .select('*')
+      .eq('user_id', userId)
+      .order('timestamp', { ascending: false });
+
+    if (error) {
+      console.error('Error getting user history:', error);
+      throw error;
+    }
+
+    return data;
   }
 };

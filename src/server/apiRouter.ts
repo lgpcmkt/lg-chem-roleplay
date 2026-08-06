@@ -49,15 +49,27 @@ router.get('/progress/:userId', async (req, res) => {
 // POST /api/session
 router.post('/session', async (req, res) => {
   try {
-    const { id, userId, track, scenarioId, grade } = req.body;
+    const { id, userId, track, scenarioId, grade, evaluation_data } = req.body;
     if (!id || !userId || !track || !scenarioId || !grade) {
       return res.status(400).json({ error: 'Missing required session fields' });
     }
-    await dbService.saveSession({ id, userId, track, scenarioId, grade });
+    await dbService.saveSession({ id, userId, track, scenarioId, grade, evaluation_data });
     res.json({ success: true });
   } catch (error: any) {
     console.error('API /api/session error:', error);
     res.status(500).json({ error: 'Failed to save session', details: error.message });
+  }
+});
+
+// GET /api/history/:userId
+router.get('/history/:userId', async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const history = await dbService.getUserHistory(userId);
+    res.json(history);
+  } catch (error: any) {
+    console.error('API /api/history error:', error);
+    res.status(500).json({ error: 'Failed to get history', details: error.message });
   }
 });
 

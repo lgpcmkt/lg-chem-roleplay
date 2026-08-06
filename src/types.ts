@@ -46,6 +46,16 @@ export interface SavedSession {
   chatHistory: ChatMessage[];
 }
 
+export interface HistoryRecord {
+  id: string;
+  user_id: string;
+  track: string;
+  scenario_id: string;
+  grade: string;
+  evaluation_data: RoleplayEvaluationResult;
+  timestamp: string;
+}
+
 // ── Employee ──
 export interface EmployeeInfo {
   employeeId: string;
