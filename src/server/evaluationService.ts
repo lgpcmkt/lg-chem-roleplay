@@ -100,11 +100,16 @@ export async function evaluateWithElevenLabs(conversationId: string) {
 
         const isSuccess = score >= 80;
         
+        const rawReasoning = doctorComment || rpResult?.rationale || rpResult?.reason || "";
+        const reasoning = rawReasoning.includes('LLM Cascade') || rawReasoning.includes('LLM Error')
+          ? "대화 내용이 너무 짧거나 분석할 내용이 부족하여 AI가 채점할 수 없습니다. 롤플레잉을 조금 더 진행해 주세요."
+          : rawReasoning;
+
         const result = {
           isSuccess,
           grade,
           totalScore: score,
-          reasoning: doctorComment || rpResult?.rationale || rpResult?.reason || "",
+          reasoning: reasoning,
           strengths: strengthsStr ? strengthsStr.split('\n').map((s: string) => s.replace(/^(\d+\.\s*|-\s*)/, '').trim()).filter((s: string) => s.length > 0) : [],
           weaknesses: weaknessesStr ? weaknessesStr.split('\n').map((s: string) => s.replace(/^(\d+\.\s*|-\s*)/, '').trim()).filter((s: string) => s.length > 0) : [],
           recommendedScript: recommendedScript,
