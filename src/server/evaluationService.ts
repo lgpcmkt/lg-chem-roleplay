@@ -13,7 +13,7 @@ export async function evaluateWithElevenLabs(conversationId: string) {
 
   const url = `https://api.elevenlabs.io/v1/convai/conversations/${conversationId}`;
   
-  const maxRetries = 20;
+  const maxRetries = 30; // 30 retries * 4 seconds = 120 seconds (2 minutes)
   const retryDelay = 4000; // 4 seconds between retries
   
   for (let i = 0; i < maxRetries; i++) {
