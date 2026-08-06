@@ -5,7 +5,7 @@ export async function evaluateWithElevenLabs(conversationId: string) {
   const apiKey = process.env.VITE_ELEVENLABS_API_KEY;
   if (!apiKey) {
     console.error('No ElevenLabs API key found in backend');
-    return null;
+    throw new Error('API_KEY_MISSING');
   }
 
   const url = `https://api.elevenlabs.io/v1/convai/conversations/${conversationId}`;
@@ -18,8 +18,11 @@ export async function evaluateWithElevenLabs(conversationId: string) {
       });
       
       if (!res.ok) {
-        console.error(`ElevenLabs API returned ${res.status}`);
-        return null;
+        const errText = await res.text();
+        console.error(`ElevenLabs API returned ${res.status}: ${errText}`);
+        if (res.status === 401) throw new Error('UNAUTHORIZED');
+        if (res.status === 404) throw new Error('NOT_FOUND');
+        throw new Error(`API_ERROR_${res.status}`);
       }
 
       const data = await res.json();

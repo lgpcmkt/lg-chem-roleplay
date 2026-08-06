@@ -82,18 +82,35 @@ export default function App() {
           });
           if (res.ok) {
             evalResult = await res.json();
+          } else {
+            const errData = await res.json().catch(() => ({}));
+            throw new Error(errData.details || `Server responded with ${res.status}`);
           }
-        } catch (e) {
+        } catch (e: any) {
           console.error("ElevenLabs evaluation failed:", e);
+          evalResult = {
+            isSuccess: false,
+            grade: 'C',
+            totalScore: 0,
+            reasoning: `평가 서버 연동 중 오류가 발생했습니다. 상세 원인: [${e.message}]`,
+            strengths: [],
+            weaknesses: [],
+            recommendedScript: '',
+            detailedFeedback: 'API 에러'
+          };
         }
       }
 
-      // If evaluation fails or conversationId is missing, show error evaluation
       if (!evalResult) {
         evalResult = {
           isSuccess: false,
           grade: 'C',
-          reasoning: '평가 처리 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.',
+          totalScore: 0,
+          reasoning: '평가 처리 중 알 수 없는 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.',
+          strengths: [],
+          weaknesses: [],
+          recommendedScript: '',
+          detailedFeedback: '알 수 없는 오류'
         };
       }
       
