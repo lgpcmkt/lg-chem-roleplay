@@ -168,6 +168,13 @@ export const RoleplayRoom: React.FC<RoleplayRoomProps> = ({
     onEndRoleplay(chatHistory, convId);
   };
 
+  const handleExit = async () => {
+    if (conversation.status === 'connected') {
+      await conversation.endSession();
+    }
+    onBack();
+  };
+
   const handleSendText = () => {
     const msg = textInput.trim();
     if (!msg) return;
@@ -199,8 +206,9 @@ export const RoleplayRoom: React.FC<RoleplayRoomProps> = ({
       {/* Header with Avatar */}
       <div className="px-4 py-4 flex flex-col items-center z-10 sticky top-0 bg-white border-b border-slate-200">
         <div className="w-full flex items-center justify-between mb-2">
-          <button onClick={onBack} className="p-2 -ml-2 rounded-full hover:bg-slate-100 transition-colors text-slate-500">
-            <ArrowLeft className="w-6 h-6" />
+          <button onClick={handleExit} className="flex items-center gap-1 p-2 -ml-2 rounded-xl hover:bg-slate-100 transition-colors text-slate-500 font-bold text-sm">
+            <ArrowLeft className="w-5 h-5" />
+            나가기
           </button>
           <div className="flex-1"></div>
           <button onClick={onHome} className="p-2 -mr-2 rounded-full hover:bg-slate-100 transition-colors text-slate-500">
@@ -327,13 +335,21 @@ export const RoleplayRoom: React.FC<RoleplayRoomProps> = ({
           </button>
         </div>
         
-        {chatHistory.length > 1 && (
+        {chatHistory.length > 1 ? (
            <button
              onClick={handleEndCall}
              className="w-full py-4 mt-2 font-black text-lg bg-blue-500 hover:bg-blue-600 text-white rounded-2xl flex items-center justify-center gap-2 shadow-lg active:scale-[0.98] transition-all"
            >
              <CheckCircle className="w-6 h-6" />
              대화 종료 및 평가 받기
+           </button>
+        ) : (
+           <button
+             onClick={handleExit}
+             className="w-full py-4 mt-2 font-bold text-base bg-slate-200 hover:bg-slate-300 text-slate-600 rounded-2xl flex items-center justify-center gap-2 shadow-sm active:scale-[0.98] transition-all"
+           >
+             <ArrowLeft className="w-5 h-5" />
+             나가기
            </button>
         )}
       </div>
