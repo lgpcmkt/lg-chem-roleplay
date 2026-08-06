@@ -88,6 +88,8 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ employeeInfo, onLogout, 
             </div>
           );
         })}
+      </div>
+      
       <div className="w-full max-w-md px-6 mt-auto pb-6">
         <button className="w-full py-4 bg-blue-50 text-blue-600 font-bold rounded-[20px] text-sm">
           내 연습 기록 점검하기
