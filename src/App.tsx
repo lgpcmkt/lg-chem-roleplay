@@ -14,7 +14,7 @@ export default function App() {
   const [screen, setScreen] = useState<AppScreen>('login');
   const [employeeInfo, setEmployeeInfo] = useState<EmployeeInfo | null>(null);
   
-  const [selectedTrack, setSelectedTrack] = useState<'hospital' | 'local'>('hospital');
+  const [selectedProduct, setSelectedProduct] = useState<'zemiglo' | 'zemimet' | 'zemidapa'>('zemiglo');
   const [currentScenario, setCurrentScenario] = useState<Scenario | null>(null);
   
   const [evaluation, setEvaluation] = useState<RoleplayEvaluationResult | null>(null);
@@ -53,8 +53,8 @@ export default function App() {
     setScreen('login');
   };
 
-  const handleSelectTrack = async (track: 'hospital' | 'local') => {
-    setSelectedTrack(track);
+  const handleSelectProduct = async (product: 'zemiglo' | 'zemimet' | 'zemidapa') => {
+    setSelectedProduct(product);
     setScreen('scenario');
   };
 
@@ -106,7 +106,7 @@ export default function App() {
         body: JSON.stringify({
           id: Date.now().toString(),
           userId: employeeInfo.employeeId,
-          track: currentScenario.track,
+          track: currentScenario.product, // keeping track field for backward compatibility or change to product later
           scenarioId: currentScenario.id,
           grade: evalResult.grade
         })
@@ -129,19 +129,19 @@ export default function App() {
   }
 
   return (
-    <div className="fixed inset-0 flex bg-gray-100 overflow-hidden justify-center font-sans">
-      <main className="w-full max-w-md bg-white shadow-xl flex flex-col relative overflow-hidden">
+    <div className="fixed inset-0 flex bg-slate-100 overflow-hidden justify-center font-sans">
+      <main className="w-full max-w-md bg-slate-50 shadow-2xl flex flex-col relative overflow-hidden">
         {screen === 'home' && employeeInfo && (
           <HomeScreen 
             employeeInfo={employeeInfo} 
             onLogout={handleLogout} 
-            onSelectTrack={handleSelectTrack} 
+            onSelectProduct={handleSelectProduct} 
           />
         )}
         {screen === 'scenario' && employeeInfo && (
           <ScenarioSelectScreen 
             employeeInfo={employeeInfo}
-            track={selectedTrack}
+            product={selectedProduct}
             onSelect={handleSelectScenario}
             onBack={() => setScreen('home')}
           />
@@ -160,9 +160,10 @@ export default function App() {
 
         {screen === 'evaluation' && (
           isEvaluating ? (
-            <div className="flex-1 flex flex-col items-center justify-center bg-white border-x-2 border-black max-w-md mx-auto w-full">
-              <div className="pixel-box p-8 flex flex-col items-center text-center animate-pulse">
-                <div className="font-bold text-lg">원장님의 속마음을 분석 중입니다...</div>
+            <div className="flex-1 flex flex-col items-center justify-center bg-slate-50 w-full">
+              <div className="p-8 flex flex-col items-center text-center animate-pulse">
+                <div className="w-16 h-16 border-4 border-slate-300 border-t-orange-500 rounded-full animate-spin mb-4"></div>
+                <div className="font-bold text-lg text-slate-600">원장님의 속마음을 분석 중입니다...</div>
               </div>
             </div>
           ) : evaluation && (

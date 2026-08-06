@@ -39,7 +39,7 @@ export interface RoleplayEvaluationResult {
 export interface SavedSession {
   id: string;
   date: string;
-  track: 'hospital' | 'local';
+  product: 'zemiglo' | 'zemimet' | 'zemidapa';
   scenarioId: string;
   scenarioTitle: string;
   evaluation?: RoleplayEvaluationResult;
@@ -56,7 +56,7 @@ export interface EmployeeInfo {
 // ── Scenario ──
 export interface Scenario {
   id: string;
-  track: 'hospital' | 'local';
+  product: 'zemiglo' | 'zemimet' | 'zemidapa';
   title: string;
   firstMessage: string;
   hint: string;
@@ -65,9 +65,9 @@ export interface Scenario {
 }
 
 export interface UserProgress {
-  hospital: number;
-  local: number;
+  zemiglo: number;
+  zemimet: number;
+  zemidapa: number;
   totalPlays?: number;
-  clearedHospitalScenarios?: string[];
-  clearedLocalScenarios?: string[];
+  clearedScenarios?: string[];
 }

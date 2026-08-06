@@ -1,18 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { UserProgress, EmployeeInfo } from '../types';
-import { LogOut } from 'lucide-react';
+import { LogOut, ChevronRight } from 'lucide-react';
 
 interface HomeScreenProps {
   employeeInfo: EmployeeInfo;
   onLogout: () => void;
-  onSelectTrack: (track: 'hospital' | 'local') => void;
+  onSelectProduct: (product: 'zemiglo' | 'zemimet' | 'zemidapa') => void;
 }
 
-export const HomeScreen: React.FC<HomeScreenProps> = ({ employeeInfo, onLogout, onSelectTrack }) => {
-  const [progress, setProgress] = useState<UserProgress>({ hospital: 0, local: 0 });
-  const [selectedTrack, setSelectedTrack] = useState<'hospital' | 'local'>('hospital');
+export const HomeScreen: React.FC<HomeScreenProps> = ({ employeeInfo, onLogout, onSelectProduct }) => {
+  const [progress, setProgress] = useState<UserProgress>({ zemiglo: 0, zemimet: 0, zemidapa: 0 });
   const [isLoading, setIsLoading] = useState(true);
-  const [showInfo, setShowInfo] = useState(false);
 
   useEffect(() => {
     // Fetch progress from backend
@@ -32,131 +30,66 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ employeeInfo, onLogout, 
     fetchProgress();
   }, [employeeInfo.employeeId]);
 
-  const getCharImage = (clearCount: number) => {
-    if (clearCount <= 1) return '/images/char_level1.png';
-    if (clearCount <= 3) return '/images/char_level2.png';
-    if (clearCount === 4) return '/images/char_level3.png';
-    return '/images/char_level4.png';
-  };
-
-  const getCharDesc = (clearCount: number) => {
-    if (clearCount <= 1) return 'Level 1 (초보 영업사원)';
-    if (clearCount <= 3) return 'Level 2 (고군분투 중인 영업사원)';
-    if (clearCount === 4) return 'Level 3 (제법 유능해진 영업사원)';
-    return 'Level 4 (능숙한 제미다파 마스터!)';
-  };
-
   if (isLoading) {
     return (
-      <div className="flex-1 flex items-center justify-center bg-white text-black font-sans">
-        <p>로딩중...</p>
+      <div className="flex-1 flex items-center justify-center bg-slate-50 text-slate-500 font-sans">
+        <p className="animate-pulse font-bold">로딩중...</p>
       </div>
     );
   }
 
-  const currentProgress = progress[selectedTrack];
+  const products = [
+    { id: 'zemiglo', name: '제미글로', desc: '강력하고 안전한 DPP-4 억제제', colorClass: 'text-orange-500', icon: '🔥' },
+    { id: 'zemimet', name: '제미메트', desc: '제미글로+메트포르민 복합제', colorClass: 'text-[#78350f]', icon: '💊' },
+    { id: 'zemidapa', name: '제미다파', desc: '제미글로+다파글리플로진 복합제', colorClass: 'text-pink-500', icon: '💖' },
+  ] as const;
 
   return (
-    <div className="flex-1 flex flex-col items-center justify-start bg-white text-black font-sans h-[100dvh] pt-10">
+    <div className="flex-1 flex flex-col items-center justify-start bg-slate-50 text-slate-800 font-sans min-h-screen pt-8 pb-12">
       
       {/* Header Info */}
-      <div className="w-full max-w-sm px-6 flex justify-between items-center mb-8">
+      <div className="w-full max-w-md px-6 flex justify-between items-center mb-10">
         <div className="flex flex-col">
-          <span className="text-sm font-bold">{employeeInfo.name} 님</span>
-          <span className="text-xs text-gray-500 font-bold">이번 달 누적 연습 횟수: {progress.totalPlays || 0}회</span>
+          <span className="text-sm font-bold text-slate-800">{employeeInfo.name} 님</span>
+          <span className="text-xs text-slate-500 font-medium">이번 달 누적 연습: {progress.totalPlays || 0}회</span>
         </div>
-        <button onClick={onLogout} className="p-2 border-2 border-black rounded-lg hover:bg-black hover:text-white transition-colors flex items-center gap-2">
-          <LogOut className="w-4 h-4" />
-          <span className="text-xs">로그아웃</span>
+        <button onClick={onLogout} className="p-2 rounded-xl text-slate-400 hover:text-slate-600 hover:bg-slate-200 transition-colors flex items-center gap-2">
+          <LogOut className="w-5 h-5" />
         </button>
       </div>
 
       {/* Title */}
-      <div className="text-2xl font-black mb-8 text-center px-4 leading-tight">
-        제미다파 마스터 챌린지
+      <div className="w-full max-w-md px-6 mb-8 text-left animate-fadeIn">
+        <h1 className="text-2xl font-black mb-2 text-slate-800 tracking-tight leading-snug">
+          오늘은 어떤 제품 디테일을<br/>연습해볼까요?
+        </h1>
+        <p className="text-slate-500 text-sm font-medium">제품을 선택하고 경쟁품 스위칭에 도전하세요!</p>
       </div>
 
-      {/* Main Box */}
-      <div className="w-full max-w-sm px-6">
-        <div className="pixel-box p-6 flex flex-col items-center shadow-[4px_4px_0px_rgba(0,0,0,1)]">
-          
-          <div className="flex w-full mb-6 border-2 border-black rounded-lg overflow-hidden font-bold">
-            <button 
-              className={`flex-1 py-3 text-center transition-colors ${selectedTrack === 'hospital' ? 'bg-black text-white' : 'bg-white text-black hover:bg-gray-100'}`}
-              onClick={() => setSelectedTrack('hospital')}
-            >
-              종합병원
-            </button>
-            <button 
-              className={`flex-1 py-3 text-center border-l-2 border-black transition-colors ${selectedTrack === 'local' ? 'bg-black text-white' : 'bg-white text-black hover:bg-gray-100'}`}
-              onClick={() => setSelectedTrack('local')}
-            >
-              로컬 병의원
-            </button>
-          </div>
-
-          <div className="text-sm font-bold mb-2 text-center flex items-center justify-center gap-2 relative">
-            <span>{getCharDesc(currentProgress)}</span>
-            <button 
-              onClick={() => setShowInfo(!showInfo)}
-              className="w-5 h-5 rounded-full border-2 border-black flex items-center justify-center text-xs bg-white hover:bg-gray-200 transition-colors font-black"
-            >
-              ?
-            </button>
-            
-            {showInfo && (
-              <div className="absolute top-8 left-1/2 -translate-x-1/2 w-64 p-3 bg-white border-2 border-black shadow-[4px_4px_0_rgba(0,0,0,1)] z-50 text-xs text-left">
-                <strong>Level 기준:</strong><br/>
-                각 시나리오별 <span className="text-red-500 font-bold">A등급 이상</span> 완료시마다 Level이 상승합니다!
-                <button 
-                  onClick={() => setShowInfo(false)}
-                  className="mt-3 w-full py-1.5 bg-black text-white font-bold"
-                >
-                  확인
-                </button>
-              </div>
-            )}
-          </div>
-          
-          {/* Progress Bar */}
-          <div className="w-full h-4 border-2 border-black rounded-full mb-8 overflow-hidden bg-gray-200">
+      {/* Product List */}
+      <div className="w-full max-w-md px-6 flex flex-col gap-4 animate-fadeIn" style={{ animationDelay: '0.1s', animationFillMode: 'both' }}>
+        {products.map((p) => {
+          return (
             <div 
-              className="h-full bg-black transition-all duration-500" 
-              style={{ width: `${(currentProgress / 5) * 100}%` }}
-            />
-          </div>
-
-          {/* Side-by-side Image Container */}
-          <div className="relative w-full h-40 mb-6 flex items-end justify-center group">
-             {/* Character Image (Ratio 1) - Left */}
-             <div className="relative w-20 h-20 flex items-end justify-center -mr-4 z-10">
-               <img 
-                 src={getCharImage(currentProgress)} 
-                 alt="캐릭터" 
-                 className="w-full h-full object-contain image-rendering-pixelated group-hover:scale-110 transition-transform mix-blend-multiply" 
-                 style={{ imageRendering: 'pixelated' }}
-               />
-               {currentProgress === 5 && (
-                 <div className="absolute -top-2 -left-4 text-[10px] animate-bounce border-2 border-black bg-yellow-300 px-2 py-1 font-bold shadow-[2px_2px_0_rgba(0,0,0,1)] z-20 whitespace-nowrap">마스터</div>
-               )}
-             </div>
-             {/* Hospital Image (Ratio 2) - Right */}
-             <img 
-               src={selectedTrack === 'hospital' ? '/images/pixel_hospital_lg.png' : '/images/pixel_clinic_lg.png'} 
-               alt="병원 배경" 
-               className="w-40 h-40 object-contain image-rendering-pixelated z-0 translate-y-4"
-               style={{ imageRendering: 'pixelated' }}
-             />
-          </div>
-
-          <button 
-            className="w-full py-4 bg-black text-white font-bold text-lg rounded-xl border-4 border-black hover:bg-white hover:text-black transition-colors flex items-center justify-center gap-2 relative shadow-[4px_4px_0px_rgba(0,0,0,0.3)] active:shadow-none active:translate-y-1 active:translate-x-1"
-            onClick={() => onSelectTrack(selectedTrack)}
-          >
-            {selectedTrack === 'hospital' ? '종병' : '로컬'} 롤플레이 시작
-          </button>
-        </div>
+              key={p.id}
+              onClick={() => onSelectProduct(p.id)}
+              className="card-duo p-5 flex items-center justify-between group active:scale-[0.98]"
+            >
+              <div className="flex items-center gap-4">
+                <div className={`w-14 h-14 rounded-2xl flex items-center justify-center text-3xl bg-slate-100 group-hover:scale-110 transition-transform ${p.colorClass}`}>
+                  {p.icon}
+                </div>
+                <div className="flex flex-col text-left">
+                  <span className={`text-xl font-black ${p.colorClass}`}>{p.name}</span>
+                  <span className="text-xs text-slate-500 mt-1 font-medium">{p.desc}</span>
+                </div>
+              </div>
+              <ChevronRight className="w-6 h-6 text-slate-300 group-hover:text-slate-500 transition-colors" />
+            </div>
+          );
+        })}
       </div>
+      
     </div>
   );
 };
