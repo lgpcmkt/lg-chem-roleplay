@@ -146,8 +146,8 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-900 flex items-center justify-center font-sans">
-      <main className="max-w-md w-full h-[100dvh] bg-gradient-to-br from-indigo-600 via-purple-600 to-indigo-800 shadow-2xl relative overflow-hidden flex flex-col text-white">
+    <div className="min-h-screen bg-slate-200 flex items-center justify-center font-sans">
+      <main className="max-w-md w-full h-[100dvh] bg-slate-50 shadow-2xl relative overflow-hidden flex flex-col text-slate-800">
         {screen === 'home' && employeeInfo && (
           <HomeScreen 
             employeeInfo={employeeInfo} 
@@ -161,6 +161,7 @@ export default function App() {
             product={selectedProduct}
             onSelect={handleSelectScenario}
             onBack={() => setScreen('home')}
+            onHome={() => setScreen('home')}
           />
         )}
         
@@ -171,6 +172,7 @@ export default function App() {
               employeeInfo={employeeInfo} 
               onEndRoleplay={handleEndRoleplay} 
               onBack={() => setScreen('scenario')} 
+              onHome={() => setScreen('home')}
             />
           </ConversationProvider>
         )}

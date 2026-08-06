@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { Scenario, EmployeeInfo, ChatMessage } from '../types';
-import { ArrowLeft, Mic, Send, X, MicOff, CheckCircle } from 'lucide-react';
+import { ArrowLeft, Mic, Send, X, MicOff, CheckCircle, Home } from 'lucide-react';
 import { useConversation } from '@elevenlabs/react';
 import { TypewriterText } from './TypewriterText';
 
@@ -9,12 +9,13 @@ interface RoleplayRoomProps {
   employeeInfo: EmployeeInfo;
   onEndRoleplay: (chatHistory: ChatMessage[], conversationId?: string) => void;
   onBack: () => void;
+  onHome: () => void;
 }
 
 const AGENT_ID = 'agent_6501kymkvp51eb68k1m589abc18s';
 
 export const RoleplayRoom: React.FC<RoleplayRoomProps> = ({
-  scenario, employeeInfo, onEndRoleplay, onBack
+  scenario, employeeInfo, onEndRoleplay, onBack, onHome
 }) => {
   const [chatHistory, setChatHistory] = useState<ChatMessage[]>([]);
   const [textInput, setTextInput] = useState('');
@@ -26,11 +27,6 @@ export const RoleplayRoom: React.FC<RoleplayRoomProps> = ({
   const recognitionRef = useRef<any>(null);
   const [interimText, setInterimText] = useState('');
 
-  const productInfo = {
-    zemiglo: { bg: 'bg-orange-500', border: 'border-orange-500', text: 'text-orange-500', btn: 'btn-duo-orange' },
-    zemimet: { bg: 'bg-[#78350f]', border: 'border-[#78350f]', text: 'text-[#78350f]', btn: 'btn-duo-brown' },
-    zemidapa: { bg: 'bg-pink-500', border: 'border-pink-500', text: 'text-pink-500', btn: 'btn-duo-pink' }
-  }[scenario.product];
 
   const conversation = useConversation({
     onMessage: (message: any) => {
@@ -143,7 +139,7 @@ export const RoleplayRoom: React.FC<RoleplayRoomProps> = ({
           product_info: productInfoStr,
           competitor_drug: scenario.title,
           mission: scenario.mission,
-          first_message: `네 담당자님 오셨어요. ${scenario.firstMessage}`,
+          first_message: scenario.firstMessage,
           recommended_detail: scenario.recommendedDetail
         },
       });
@@ -198,24 +194,27 @@ export const RoleplayRoom: React.FC<RoleplayRoomProps> = ({
 
 
   return (
-    <div className="flex-1 flex flex-col bg-transparent font-sans min-h-screen relative overflow-hidden text-slate-800">
+    <div className="flex-1 flex flex-col bg-slate-50 font-sans h-[100dvh] relative overflow-hidden text-slate-800">
       
       {/* Header with Avatar */}
-      <div className="px-4 py-4 flex flex-col items-center z-10 sticky top-0 bg-transparent text-white">
+      <div className="px-4 py-4 flex flex-col items-center z-10 sticky top-0 bg-white border-b border-slate-200">
         <div className="w-full flex items-center justify-between mb-2">
-          <button onClick={onBack} className="p-2 -ml-2 rounded-full hover:bg-white/10 transition-colors text-white/80">
+          <button onClick={onBack} className="p-2 -ml-2 rounded-full hover:bg-slate-100 transition-colors text-slate-500">
             <ArrowLeft className="w-6 h-6" />
           </button>
           <div className="flex-1"></div>
+          <button onClick={onHome} className="p-2 -mr-2 rounded-full hover:bg-slate-100 transition-colors text-slate-500">
+            <Home className="w-6 h-6" />
+          </button>
         </div>
         
         {/* Avatar Area */}
         <div className="flex flex-col items-center mt-2 animate-fadeIn">
-          <div className={`relative w-20 h-20 rounded-full border-4 border-white/20 bg-white shadow-xl mb-3 flex items-center justify-center overflow-hidden ${conversation.isSpeaking ? 'animate-speaking-glow' : ''}`}>
+          <div className={`relative w-20 h-20 rounded-full border border-slate-200 bg-white shadow-sm mb-3 flex items-center justify-center overflow-hidden ${conversation.isSpeaking ? 'animate-pulse ring-4 ring-blue-100' : ''}`}>
             <img src="/images/korean_doctor_strict_clinic_1785413940376.png" alt="doc" className="w-full h-full object-cover" />
           </div>
-          <h2 className="font-black text-xl tracking-tight">원장님</h2>
-          <p className="text-xs font-bold bg-white/20 px-3 py-1 rounded-full mt-2 backdrop-blur-md">
+          <h2 className="font-black text-xl tracking-tight text-slate-800">원장님</h2>
+          <p className="text-xs font-bold bg-blue-50 text-blue-600 px-3 py-1 rounded-full mt-2">
             VS {scenario.title} 스위칭
           </p>
         </div>
@@ -226,7 +225,7 @@ export const RoleplayRoom: React.FC<RoleplayRoomProps> = ({
         {chatHistory.map((msg, idx) => (
           <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'} animate-slideUp`}>
             <div className={`max-w-[75%] rounded-[20px] px-5 py-3.5 text-[15px] leading-relaxed shadow-sm font-medium ${
-              msg.role === 'user' ? `bg-white/90 text-slate-800 rounded-br-sm backdrop-blur-sm` : 'bg-indigo-900/40 text-white border border-indigo-400/30 rounded-bl-sm backdrop-blur-sm shadow-xl'
+              msg.role === 'user' ? `bg-blue-500 text-white rounded-br-sm` : 'bg-white text-slate-800 border border-slate-200 rounded-bl-sm'
             }`}>
               {msg.role === 'assistant' ? <TypewriterText text={msg.content} speed={15} /> : msg.content}
             </div>
@@ -248,7 +247,7 @@ export const RoleplayRoom: React.FC<RoleplayRoomProps> = ({
         )}
         {(!isMicPressed && conversation.status === 'connected' && !conversation.isSpeaking && chatHistory.length > 0 && chatHistory[chatHistory.length - 1].role === 'user') ? (
           <div className="flex justify-start animate-fadeIn">
-            <div className="rounded-[20px] rounded-bl-sm px-5 py-3.5 bg-indigo-900/40 backdrop-blur-sm border border-indigo-400/30 text-white/70 text-sm font-medium animate-pulse shadow-sm">
+            <div className="rounded-[20px] rounded-bl-sm px-5 py-3.5 bg-white border border-slate-200 text-slate-400 text-sm font-medium animate-pulse shadow-sm">
               원장님이 생각중입니다...
             </div>
           </div>
@@ -261,7 +260,7 @@ export const RoleplayRoom: React.FC<RoleplayRoomProps> = ({
         <div className="absolute inset-0 bg-slate-900/40 z-20 flex flex-col justify-end backdrop-blur-sm">
           <div className="bg-white rounded-t-3xl p-6 shadow-2xl animate-slideUp">
             <div className="flex justify-between items-center mb-4">
-              <h3 className={`font-black text-xl ${productInfo.text}`}>💡 힌트</h3>
+              <h3 className="font-black text-xl text-blue-500">💡 힌트</h3>
               <button onClick={() => setShowHint(false)} className="p-2 bg-slate-100 rounded-full hover:bg-slate-200 text-slate-500">
                 <X className="w-5 h-5" />
               </button>
@@ -269,7 +268,7 @@ export const RoleplayRoom: React.FC<RoleplayRoomProps> = ({
             <p className="text-slate-700 leading-relaxed font-medium mb-6 text-sm">
               {scenario.hint}
             </p>
-            <button onClick={() => setShowHint(false)} className={`w-full py-4 rounded-xl font-bold text-white shadow-md transition-transform active:scale-[0.98] ${productInfo.bg}`}>
+            <button onClick={() => setShowHint(false)} className="w-full py-4 rounded-xl font-bold text-white shadow-md transition-transform active:scale-[0.98] bg-blue-500">
               확인했습니다
             </button>
           </div>
@@ -277,13 +276,13 @@ export const RoleplayRoom: React.FC<RoleplayRoomProps> = ({
       )}
 
       {/* Bottom Controls */}
-      <div className="bg-white/10 backdrop-blur-md p-4 z-10 flex flex-col gap-3 shadow-[0_-8px_30px_rgba(0,0,0,0.1)] border-t border-white/10 pb-6 rounded-t-[32px]">
+      <div className="bg-white p-4 z-10 flex flex-col gap-3 shadow-[0_-8px_30px_rgba(0,0,0,0.05)] border-t border-slate-200 pb-6">
         
         {/* Top bar (Hint / Mic / End) */}
         <div className="flex justify-between items-center gap-2">
           <button
             onClick={() => setShowHint(true)}
-            className="flex-1 py-2.5 px-3 rounded-xl bg-indigo-50 text-indigo-600 font-bold text-sm border border-indigo-100 active:scale-[0.98] transition-transform text-center shadow-sm"
+            className="flex-1 py-2.5 px-3 rounded-xl bg-slate-50 text-slate-600 font-bold text-sm border border-slate-200 active:scale-[0.98] transition-transform text-center shadow-sm"
           >
             💡 힌트 보기
           </button>
@@ -294,8 +293,8 @@ export const RoleplayRoom: React.FC<RoleplayRoomProps> = ({
                 onClick={() => setIsMicPressed(prev => !prev)}
                 className={`w-full flex items-center justify-center gap-1 py-2.5 px-3 rounded-xl font-bold text-sm transition-all active:scale-[0.98] shadow-sm ${
                   isMicPressed 
-                    ? 'bg-rose-100 text-rose-600 border border-rose-200 shadow-inner' 
-                    : 'bg-emerald-100 text-emerald-600 border border-emerald-200'
+                    ? 'bg-rose-50 text-rose-600 border border-rose-200 shadow-inner' 
+                    : 'bg-emerald-50 text-emerald-600 border border-emerald-200'
                 }`}
               >
                 {isMicPressed ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
@@ -310,29 +309,28 @@ export const RoleplayRoom: React.FC<RoleplayRoomProps> = ({
         </div>
 
         {/* Text Input */}
-        <div className="flex items-center gap-2 bg-white/20 rounded-[20px] p-1.5 pr-1.5 border border-white/10 focus-within:bg-white/30 transition-colors shadow-inner backdrop-blur-md">
+        <div className="flex items-center gap-2 bg-slate-50 rounded-[20px] p-1.5 pr-1.5 border border-slate-200 focus-within:bg-white focus-within:border-blue-300 transition-colors shadow-inner">
           <input
             type="text"
             value={textInput}
             onChange={(e) => setTextInput(e.target.value)}
             onKeyDown={handleTextKeyDown}
             placeholder="마이크 대신 텍스트로 대화할 수 있습니다..."
-            className="flex-1 bg-transparent text-white text-[15px] px-3 py-2 outline-none font-medium placeholder-white/50"
+            className="flex-1 bg-transparent text-slate-800 text-[15px] px-3 py-2 outline-none font-medium placeholder-slate-400"
           />
           <button
             onClick={handleSendText}
             disabled={!textInput.trim()}
-            className="w-11 h-11 rounded-[16px] bg-white flex items-center justify-center text-indigo-600 disabled:opacity-50 disabled:bg-white/50 transition-colors shrink-0 shadow-md"
+            className="w-11 h-11 rounded-[16px] bg-blue-500 flex items-center justify-center text-white disabled:opacity-50 transition-colors shrink-0 shadow-md"
           >
             <Send className="w-5 h-5 ml-1" />
           </button>
         </div>
         
-        {/* Complete Button (Only visible if history > 1) */}
         {chatHistory.length > 1 && (
            <button
              onClick={handleEndCall}
-             className="w-full py-4 mt-2 font-black text-lg bg-indigo-600 hover:bg-indigo-500 text-white rounded-2xl flex items-center justify-center gap-2 shadow-lg active:scale-[0.98] transition-all"
+             className="w-full py-4 mt-2 font-black text-lg bg-blue-500 hover:bg-blue-600 text-white rounded-2xl flex items-center justify-center gap-2 shadow-lg active:scale-[0.98] transition-all"
            >
              <CheckCircle className="w-6 h-6" />
              대화 종료 및 평가 받기

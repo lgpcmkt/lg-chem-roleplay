@@ -6,7 +6,7 @@ export const SCENARIOS: Record<'zemiglo' | 'zemimet' | 'zemidapa', Scenario[]> =
       id: 'zg1',
       product: 'zemiglo',
       title: '자누비아',
-      firstMessage: "자누비아가 워낙 오랫동안 검증된 약이라... 굳이 제미글로로 바꿀 필요가 있을까요?",
+      firstMessage: "네 담당자님 오셨어요. 제미글로요? 글쎄.. 이미 자누비아 쓰고 있어서 굳이 바꿀 필요가 있을까요?",
       hint: "[용량 조절 편의성] 자누비아와 달리 제미글로는 신기능 저하 환자에서도 용량 조절이 필요없어 처방이 편리하며, STABLE I 연구에서 혈당 변동성 지표인 SD가 유의하게 개선되었음을 강조하세요.",
       mission: "자누비아를 처방하는 원장님께 제미글로의 용량 조절 편의성과 혈당 변동성 개선 효과를 어필하여 스위칭을 유도하세요.",
       recommendedDetail: "자누비아와 달리 신기능 저하 환자에서도 용량 조절이 필요 없어 간편하며, STABLE I 연구에서 혈당 변동성 개선 효과를 입증함."
@@ -15,7 +15,7 @@ export const SCENARIOS: Record<'zemiglo' | 'zemimet' | 'zemidapa', Scenario[]> =
       id: 'zg2',
       product: 'zemiglo',
       title: '트라젠타',
-      firstMessage: "제미글로나 트라젠타나 둘 다 신장애 환자한테 쓰기 편하죠. 근데 아무래도 트라젠타가 CVOT도 있으니까.. 제미글로만의 차별점이 있나요?",
+      firstMessage: "네 담당자님 오셨어요. 제미글로요? 글쎄.. 이미 트라젠타 쓰고 있어서요. 제미글로만의 차별점이 있나요?",
       hint: "[강력한 혈당강하 효과] GUARD 연구에서 제미글로는 트라젠타 대비 CKD 동반 환자에서 더 우수한 혈당강하 및 UACR 감소 경향을 보였습니다.",
       mission: "트라젠타의 편리함을 선호하는 원장님께 제미글로의 강력한 혈당강하 효과와 UACR 감소 효과를 어필하세요.",
       recommendedDetail: "신장애 환자 대상 강력한 혈당강하 효과와 UACR 감소 효과 확인."
@@ -24,7 +24,7 @@ export const SCENARIOS: Record<'zemiglo' | 'zemimet' | 'zemidapa', Scenario[]> =
       id: 'zg3',
       product: 'zemiglo',
       title: '가브스',
-      firstMessage: "가브스는 하루 두 번 먹는 게 좀 번거롭긴 한데, 아무래도 식후혈당 조절 하나는 제일 확실한 것 같아서요..",
+      firstMessage: "네 담당자님 오셨어요. 제미글로요? 글쎄.. 이미 가브스 쓰고 있어서요. 하루 두 번 먹는 게 번거롭긴 해도 식후혈당엔 확실한 것 같아서...",
       hint: "[동등한 혈당강하 효과 및 우수한 복용 편의성] ALTERNATIVE 연구로 입증된 제미글로와 가브스의 동등한 혈당강하 효과를 언급하면서, 1일 1회 복용의 편리함을 어필하세요.",
       mission: "가브스를 처방하는 원장님께 제미글로의 1일 1회 복용 편의성과 동등한 혈당강하 효과를 어필하세요.",
       recommendedDetail: "ALTERNATIVE 연구로 입증된 제미글로와 가브스의 동등한 혈당강하 효과 및 1일 1회 복용으로 인한 환자 복약 순응도 개선."
@@ -33,7 +33,7 @@ export const SCENARIOS: Record<'zemiglo' | 'zemimet' | 'zemidapa', Scenario[]> =
       id: 'zg4',
       product: 'zemiglo',
       title: '온글라이자',
-      firstMessage: "온글라이자 처방 중인데, 심혈관 안전성 이슈도 해결되었다고 하던데요? 제미글로만의 차별점이 있을까요?",
+      firstMessage: "네 담당자님 오셨어요. 제미글로요? 글쎄.. 이미 온글라이자 쓰고 있어서요. 심혈관 이슈도 해결됐다던데 제미글로만의 차별점이 있나요?",
       hint: "[심혈관 안전성] SAVOR-TIMI 58 연구에서 온글라이자군은 대조군에 비해 심부전 입원 위험이 27% 증가한 바 있음을 언급하며, 제미글로는 국내 대규모 전향적 코호트 연구인 OPTIMUS 연구를 통해 한국인 대상 심혈관 안전성 데이터를 보유하고 있습니다.",
       mission: "온글라이자를 처방하는 원장님께 제미글로의 심혈관 안전성 데이터를 제시하세요.",
       recommendedDetail: "SAVOR-TIMI 58 연구에서 온글라이자군은 심부전 입원 위험이 증가한 바 있음을 언급하며, 제미글로는 국내 대규모 전향적 코호트 연구인 OPTIMUS 연구를 통해 한국인 대상 심혈관 안전성 데이터를 보유하고 있습니다."
@@ -42,7 +42,7 @@ export const SCENARIOS: Record<'zemiglo' | 'zemimet' | 'zemidapa', Scenario[]> =
       id: 'zg5',
       product: 'zemiglo',
       title: '네시나',
-      firstMessage: "네시나도 무난하게 잘 쓰고 있는데, 제미글로만의 특별한 장점이 있나요?",
+      firstMessage: "네 담당자님 오셨어요. 제미글로요? 글쎄.. 이미 네시나 쓰고 있어서요. 무난하게 잘 쓰고 있는데 제미글로만의 특별한 장점이 있나요?",
       hint: "[국내 다수의 임상근거 보유] 제미글로는 DPP-4 억제제 중 가장 많은 국내 임상연구와 리얼월드데이터(RWE)를 통해 효능 및 안전성을 입증했습니다.",
       mission: "네시나 처방 원장님께 제미글로의 압도적으로 풍부한 국내 처방 경험과 데이터를 강조하세요.",
       recommendedDetail: "국내에서 사용된 DPP-4 억제제 중 가장 많은 임상연구와 리얼월드데이터(RWE)를 통해 효능 및 안전성을 입증."
@@ -51,7 +51,7 @@ export const SCENARIOS: Record<'zemiglo' | 'zemimet' | 'zemidapa', Scenario[]> =
       id: 'zg6',
       product: 'zemiglo',
       title: '테넬리아',
-      firstMessage: "테넬리아랑 제미글로는 포지션이 비슷해서.. 굳이 바꿀 필요가 있을까요?",
+      firstMessage: "네 담당자님 오셨어요. 제미글로요? 글쎄.. 이미 테넬리아 쓰고 있어서요. 포지션이 비슷한데 굳이 바꿀 필요가 있을까요?",
       hint: "[한국인 맞춤형 DPP-4 억제제] 국산 최초 당뇨병 신약인 제미글로는 한국인 대상 다수의 임상 연구를 통해 뛰어난 혈당강하 효과와 안전성을 입증받았습니다.",
       mission: "테넬리아 처방 원장님께 제미글로의 풍부한 국내 처방 경험을 어필하세요.",
       recommendedDetail: "한국인 대상 다수의 임상 연구를 통해 입증된 뛰어난 혈당강하 효과와 안전성, 그리고 한국인 맞춤형 DPP-4 억제제로서의 이점을 강조."
@@ -60,7 +60,7 @@ export const SCENARIOS: Record<'zemiglo' | 'zemimet' | 'zemidapa', Scenario[]> =
       id: 'zg7',
       product: 'zemiglo',
       title: '슈가논',
-      firstMessage: "슈가논이랑 제미글로는 포지션이 비슷해서.. 굳이 바꿀 필요가 있을까요?",
+      firstMessage: "네 담당자님 오셨어요. 제미글로요? 글쎄.. 이미 슈가논 쓰고 있어서요. 포지션이 비슷해서 굳이 바꿀 필요가 있을까요?",
       hint: "[국산 신약 No.1 브랜드] 제미글로는 대한민국 최초이자 1위 국산 당뇨병 신약으로서 압도적인 시장 점유율과 입증된 효과를 보유하고 있습니다.",
       mission: "슈가논을 처방하는 원장님께 제미글로의 1위 브랜드 가치를 각인시키세요.",
       recommendedDetail: "국산 당뇨병 신약 1위 브랜드로서 압도적인 시장 점유율과 입증된 임상적 효과."
@@ -69,7 +69,7 @@ export const SCENARIOS: Record<'zemiglo' | 'zemimet' | 'zemidapa', Scenario[]> =
       id: 'zg8',
       product: 'zemiglo',
       title: '가드렛',
-      firstMessage: "가드렛을 최근에 좀 쓰기 시작했는데 무난하더라고요. 굳이 제미글로로 바꿀 이유가 있을까요?",
+      firstMessage: "네 담당자님 오셨어요. 제미글로요? 글쎄.. 이미 가드렛 쓰고 있어서요. 무난하던데 굳이 제미글로로 바꿀 이유가 있을까요?",
       hint: "[1일 1회 복용 편의성] 가드렛은 1일 2회 복용이지만, 제미글로는 1일 1회 복용으로도 동등한 혈당강하 효과를 보이면서 환자 복약 순응도를 개선할 수 있습니다.",
       mission: "가드렛을 처방하는 원장님께 제미글로의 1일 1회 복용 편의성을 어필하세요.",
       recommendedDetail: "1일 2회 복용인 가드렛 대비 1일 1회 복용으로 환자 복약 순응도 개선 효과 강조."
@@ -80,7 +80,7 @@ export const SCENARIOS: Record<'zemiglo' | 'zemimet' | 'zemidapa', Scenario[]> =
       id: 'zm1',
       product: 'zemimet',
       title: '자누메트XR',
-      firstMessage: "자누메트를 워낙 오래 써온 환자들이 있어서.. CVOT 연구도 있고. 굳이 제미메트로 바꿀 이유가 있나요?.",
+      firstMessage: "네 담당자님 오셨어요. 제미메트요? 글쎄.. 이미 자누메트XR 쓰고 있어서요. 워낙 오래 써온 환자들이라 굳이 바꿀 이유가 있을까요?",
       hint: "[다양한 용량 옵션] 제미메트 50/1000 mg은 자누메트XR 100/1000 mg 대비 정제 크기가 작아 복용이 편리하며, 특히 제미메트는 50/500 mg 저용량도 보유하고 있어 용량조절이 더욱 편리합니다.",
       mission: "자누메트를 처방하는 원장님께 제미메트의 다양한 용량 옵션과 작은 알약 크기를 어필하세요.",
       recommendedDetail: "작은 알약 크기의 복용 편의성 및 다양한 용량 옵션 제시."
@@ -89,7 +89,7 @@ export const SCENARIOS: Record<'zemiglo' | 'zemimet' | 'zemidapa', Scenario[]> =
       id: 'zm2',
       product: 'zemimet',
       title: '트라젠타듀오',
-      firstMessage: "트라젠타듀오로 이미 신기능 떨어진 환자들 잘 커버하고 있습니다. 제미메트의 장점이 뭐가 있나요?",
+      firstMessage: "네 담당자님 오셨어요. 제미메트요? 글쎄.. 이미 트라젠타듀오 쓰고 있어서요. 신기능 떨어진 환자들도 잘 커버되는데 제미메트 장점이 뭐죠?",
       hint: "[1일 1회 복용 & 위장관 부작용 개선] 제미메트는 1일 1회로 1일 2회 복용하는 트라젠타듀오대비 복용이 편리하며, 서방정 메트포르민으로 위장관 부작용도 개선할 수 있습니다.",
       mission: "트라젠타듀오를 처방하는 원장님께 제미메트의 1일 1회 복용 편의성과 위장관 부작용 개선 효과를 어필하세요.",
       recommendedDetail: "1일 2회 복용인 트라젠타듀오 대비 1일 1회 복용으로 복약 순응도 개선, 서방정 메트포르민으로 위장관계 부작용 개선."
@@ -98,7 +98,7 @@ export const SCENARIOS: Record<'zemiglo' | 'zemimet' | 'zemidapa', Scenario[]> =
       id: 'zm3',
       product: 'zemimet',
       title: '가브스메트',
-      firstMessage: "가브스메트 하루 두 번 먹는게 식후 혈당도 더 잘 잡아서 나은 것 같은데요.",
+      firstMessage: "네 담당자님 오셨어요. 제미메트요? 글쎄.. 이미 가브스메트 쓰고 있어서요. 하루 두 번 먹는 게 식후 혈당을 더 잘 잡는 것 같은데요?",
       hint: "[SR 제형의 장점] 제미메트는 서방형 메트포르민으로 기존 제형의 위장관계 부작용을 개선하면서 1일 1회 복용으로 복약순응도를 개선할 수 있습니다.",
       mission: "가브스메트 처방 원장님께 제미메트의 위장관 안전성 및 1일 1회 복용으로 인한 복약순응도 개선을 어필하세요.",
       recommendedDetail: "위장관계 부작용 개선 및 1일 1회 복용으로 복약 순응도 향상."
@@ -107,7 +107,7 @@ export const SCENARIOS: Record<'zemiglo' | 'zemimet' | 'zemidapa', Scenario[]> =
       id: 'zm4',
       product: 'zemimet',
       title: '콤비글라이즈',
-      firstMessage: "콤비글라이즈 쓰고 있는데 가끔 심혈관 쪽으로 걱정하는 환자들이 있긴 합니다.",
+      firstMessage: "네 담당자님 오셨어요. 제미메트요? 글쎄.. 이미 콤비글라이즈 쓰고 있어서요. 심혈관 쪽 걱정하는 환자도 있긴 한데 굳이 바꿔야 할까요?",
       hint: "[심혈관 안전성 확보] 제미글로 성분의 국내 대규모 심혈관 안전성 임상 데이터를 바탕으로 콤비글라이즈 대비 우려 없는 처방이 가능함을 어필하세요.",
       mission: "심혈관 부작용을 걱정하는 원장님께 제미메트의 검증된 안전성을 어필하세요.",
       recommendedDetail: "제미글로의 국내 대규모 심혈관 안전성 데이터로 신뢰감 형성."
@@ -116,7 +116,7 @@ export const SCENARIOS: Record<'zemiglo' | 'zemimet' | 'zemidapa', Scenario[]> =
       id: 'zm5',
       product: 'zemimet',
       title: '네시나메트',
-      firstMessage: "네시나메트가 속방정도 있고 서방정도 있어서 환자별로 맞춰서 이미 잘 쓰고 있어요.",
+      firstMessage: "네 담당자님 오셨어요. 제미메트요? 글쎄.. 이미 네시나메트 쓰고 있어서요. 환자별로 맞춰 쓰기 편한데 제미메트는 다른가요?",
       hint: "[다양한 용량 라인업] 제미메트는 50/500 mg 유니크한 용량을 보유하고 있어, 저용량 메트포르민 병용이 고려되는 환자에게 유용합니다.",
       mission: "네시나메트 처방 원장님께 제미메트 50/500 mg 용량 옵션의 장점을 설명하세요.",
       recommendedDetail: "환자 상태별 맞춤 처방이 가능한 다양한 용량 라인업 어필."
@@ -125,7 +125,7 @@ export const SCENARIOS: Record<'zemiglo' | 'zemimet' | 'zemidapa', Scenario[]> =
       id: 'zm6',
       product: 'zemimet',
       title: '테넬리아엠',
-      firstMessage: "테넬리아엠도 효과 좋던데요. 제미메트랑 큰 차이가 있나요?",
+      firstMessage: "네 담당자님 오셨어요. 제미메트요? 글쎄.. 이미 테넬리아엠 쓰고 있어서요. 효과 좋던데 제미메트랑 큰 차이가 있나요?",
       hint: "[복용 편의성 및 용량 옵션] 테넬리아엠 20/1000 mg 대비 제미메트 50/1000 mg 는 장축 길이가 작아 복용 편의성이 더 우수하며, 또한 50/500 mg의 유니크한 용량도 보유하고 있습니다.",
       mission: "테넬리아엠 처방 원장님께 제미메트의 복용 편의성 및 용량 옵션의 장점을 설명하세요.",
       recommendedDetail: "복용 편의성 및 다양한 용량 옵션의 장점 어필."
@@ -134,7 +134,7 @@ export const SCENARIOS: Record<'zemiglo' | 'zemimet' | 'zemidapa', Scenario[]> =
       id: 'zm7',
       product: 'zemimet',
       title: '슈가메트',
-      firstMessage: "슈가메트도 국산이고 가격도 저렴해서 잘 쓰고 있는데요.. 제미메트로 왜 바꿔야 하는데요?",
+      firstMessage: "네 담당자님 오셨어요. 제미메트요? 글쎄.. 이미 슈가메트 쓰고 있어서요. 가격도 저렴하고 좋은데 제미메트로 바꿔야 하나요?",
       hint: "[오리지널리티와 처방 경험] 제미메트는 50/500 mg 유니크한 용량을 보유하고 있으며, 압도적인 임상적 데이터와 신뢰도, DPP-4i 1위의 처방 실적으로 차별화된 가치를 전달하세요.",
       mission: "슈가메트를 처방하는 원장님께 제미메트의 다양한 장점을 어필하세요.",
       recommendedDetail: "압도적 임상적 근거, 처방 실적을 가진 오리지널리티 강조."
@@ -143,7 +143,7 @@ export const SCENARIOS: Record<'zemiglo' | 'zemimet' | 'zemidapa', Scenario[]> =
       id: 'zm8',
       product: 'zemimet',
       title: '가드메트',
-      firstMessage: "가드메트 최근에 좀 써보는 중인데, 제미메트로 꼭 스위칭 해야 할 이유를 하나만 꼽자면요?",
+      firstMessage: "네 담당자님 오셨어요. 제미메트요? 글쎄.. 이미 가드메트 쓰고 있어서요. 꼭 스위칭 해야 할 이유를 하나만 꼽자면 뭔가요?",
       hint: "[1일 1회 복용 & 위장관 부작용 개선] 1일 2회 복용하는 가드메트와 달리 1일 1회로 복용이 편리하며 서방형 메트포르민 제제로 위장관 부작용 낮음",
       mission: "가드메트를 처방하는 원장님께 제미메트의 1일 1회 복용과 위장관 부작용 개선의 장점을 설명하세요.",
       recommendedDetail: "1일 1회 복용의 편리성과 위장관 부작용 개선."
@@ -152,7 +152,7 @@ export const SCENARIOS: Record<'zemiglo' | 'zemimet' | 'zemidapa', Scenario[]> =
       id: 'zm9',
       product: 'zemimet',
       title: '리나글로메트서방정',
-      firstMessage: "한미약품 리나글로메트서방정이 최근에 나왔던데, 제미메트와 비교하면 어떤가요?",
+      firstMessage: "네 담당자님 오셨어요. 제미메트요? 글쎄.. 최근에 나온 리나글로메트서방정을 좀 보고 있어서요. 제미메트랑 비교하면 어떤가요?",
       hint: "[용량 옵션의 유연성] 리나글로메트는 1000, 2000 mg 2가지의 메트포르민 용량만 처방 가능한 반면, 제미메트는 500, 1500, 1700 등 세밀한 용량조절이 가능함을 어필.",
       mission: "리나글로메트를 처방하는 원장님께 제미메트의 유연한 용량 옵션의 장점을 설명하세요.",
       recommendedDetail: "리나글로메트와 달리 환자 상태에 따라 세밀한 용량 조절이 가능하여 맞춤 치료에 유리함."
@@ -163,7 +163,7 @@ export const SCENARIOS: Record<'zemiglo' | 'zemimet' | 'zemidapa', Scenario[]> =
       id: 'zd1',
       product: 'zemidapa',
       title: '에스글리토',
-      firstMessage: "에스글리토가 CVOT가 확실한 조합이라.. 제미다파로 스위칭 할 근거라도 있나요?",
+      firstMessage: "네 담당자님 오셨어요. 제미다파요? 글쎄.. 이미 에스글리토 쓰고 있어서요. CVOT도 확실한데 제미다파로 스위칭할 근거가 있나요?",
       hint: "[스위칭 연구 데이터] 스위칭 연구 결과에 따르면, 기존의 EMPA 용량에 관계 없이 EMPA+LINA에서 제미다파로 전환 시 혈당강하 효과가 안정적으로 유지되었음을 어필하세요.",
       mission: "에스글리토 처방 원장님께 제미다파 스위칭 임상 데이터를 바탕으로 전환을 설득하세요.",
       recommendedDetail: "스위칭 시 혈당강하 효과 유지"
@@ -172,7 +172,7 @@ export const SCENARIOS: Record<'zemiglo' | 'zemimet' | 'zemidapa', Scenario[]> =
       id: 'zd2',
       product: 'zemidapa',
       title: '큐턴',
-      firstMessage: "큐턴이 성분 조합이 좋아서 잘 쓰고 있는데, 제미다파로 스위칭 할 근거라도 있나요?",
+      firstMessage: "네 담당자님 오셨어요. 제미다파요? 글쎄.. 이미 큐턴 쓰고 있어서요. 조합이 좋아서 잘 쓰는데 굳이 스위칭할 근거가 있나요?",
       hint: "[복약 순응도 개선 및 스위칭 연구 데이터] 제미다파는 큐턴 대비 정제 크기가 작아 복약 순응도 개선에 유리하며, 스위칭 연구 결과 기존 DPP-4i+SGLT-2i에서 제미다파로 전환 시 HbA1c 0.23% 추가적으로 감소되었음을 제시하세요.",
       mission: "큐턴 처방 원장님께 제미다파의 복약 순응도 개선 및 스위칭 연구 결과를 바탕으로 전환을 설득하세요.",
       recommendedDetail: "스위칭 시 혈당강하 효과 유지"
@@ -181,7 +181,7 @@ export const SCENARIOS: Record<'zemiglo' | 'zemimet' | 'zemidapa', Scenario[]> =
       id: 'zd3',
       product: 'zemidapa',
       title: '시다프비아',
-      firstMessage: "기존에 SITA+DAPA 조합을 먹던 환자들이 많아서 아무래도 시다프비아를 많이 쓰고있는데, 또 제미다파로 바꾸기는 환자들 눈치가 좀 보입니다.",
+      firstMessage: "네 담당자님 오셨어요. 제미다파요? 글쎄.. 이미 시다프비아 쓰고 있어서요. 또 다른 약으로 바꾸면 환자들 눈치가 좀 보입니다.",
       hint: "[복약 순응도 개선 및 스위칭 연구 데이터] 제미다파는 시다프비아 대비 정제 크기가 작아 복약 순응도 개선에 유리하며, 스위칭 연구 결과 기존 DPP-4i+SGLT-2i에서 제미다파로 전환 시 HbA1c 0.23% 추가적으로 감소되었음을 제시하세요.",
       mission: "잦은 약 변경을 부담스러워하는 원장님께 제미다파의 복약 순응도 개선 및 스위칭 연구 결과를 바탕으로 전환을 설득하세요.",
       recommendedDetail: "스위칭 시 얻을 수 있는 복약 순응도 개선 및 혈당강하 효과 유지 어필."
@@ -190,7 +190,7 @@ export const SCENARIOS: Record<'zemiglo' | 'zemimet' | 'zemidapa', Scenario[]> =
       id: 'zd4',
       product: 'zemidapa',
       title: '엑시글루에스',
-      firstMessage: "기존에 SITA+DAPA 조합을 먹던 환자들이 많아서 엑시글루에스도 많이 쓰고있는데요, 제미다파가 더 나은 근거가 있나요?",
+      firstMessage: "네 담당자님 오셨어요. 제미다파요? 글쎄.. 이미 엑시글루에스 쓰고 있어서요. 제미다파가 그것보다 더 나은 근거가 있나요?",
       hint: "[복약 순응도 개선 및 스위칭 연구 데이터] 제미다파는 엑시글루에스 대비 정제 크기가 작아 복약 순응도 개선에 유리하며, 스위칭 연구 결과 기존 DPP-4i+SGLT-2i에서 제미다파로 전환 시 HbA1c 0.23% 추가적으로 감소되었음을 제시하세요.",
       mission: "엑시글루에스 처방 원장님께 제미다파 성분 조합의 복약 순응도 개선 및 스위칭 연구 결과의 이점을 어필하세요.",
       recommendedDetail: "복약 순응도 개선 및 스위칭 연구 결과의 이점 어필."
@@ -199,7 +199,7 @@ export const SCENARIOS: Record<'zemiglo' | 'zemimet' | 'zemidapa', Scenario[]> =
       id: 'zd5',
       product: 'zemidapa',
       title: '엠파맥스에스',
-      firstMessage: "엠파맥스에스 조합이 참신하기도 해서 잘 쓰고 있는데, 제미다파로 바꿀 이유가 있나요?",
+      firstMessage: "네 담당자님 오셨어요. 제미다파요? 글쎄.. 이미 엠파맥스에스 쓰고 있어서요. 참신하고 좋은데 제미다파로 바꿀 이유가 있나요?",
       hint: "[다파글리플로진의 입증된 근거] 제미다파는 엠파맥스에스 대비 정제 크기가 작아 복약 순응도 개선에 유리하며, 국내에서 수행된 다양한 임상 연구를 통해 효과와 안전성이 입증된 약입니다.",
       mission: "엠파맥스에스 처방 원장님께 제미다파의 복약 순응도 개선 및 국내 임상 연구를 통해 검증된 효과를 설명하세요.",
       recommendedDetail: "국내 다양한 임상 연구를 통해 효과와 안전성이 검증된 복약 순응도 개선 효과 강조."
@@ -208,7 +208,7 @@ export const SCENARIOS: Record<'zemiglo' | 'zemimet' | 'zemidapa', Scenario[]> =
       id: 'zd6',
       product: 'zemidapa',
       title: '슈가다파',
-      firstMessage: "슈가다파가 같은 계열 국산 복합제이기도 하고, 가격적인 메리트가 있어서 잘 쓰고 있습니다.",
+      firstMessage: "네 담당자님 오셨어요. 제미다파요? 글쎄.. 이미 슈가다파 쓰고 있어서요. 가격 메리트도 있고 좋은데 굳이 바꿔야 할까요?",
       hint: "[No.1 DPP-4i 기반 복합제] 스위칭 연구 결과 기존 EVO+DAPA 조합에서 제미다파 전환 시 혈당 조절이 유지되었으며, 같은 국산 DPP-4i/SGLT-2i 복합제 중에서도 No.1 오리지널 성분인 '제미글로' 기반의 제미다파가 프리미엄 가치와 신뢰도가 있음을 어필하세요.",
       mission: "슈가다파 처방 원장님께 제미글로 기반의 제미다파의 브랜드 파워와 임상 신뢰도를 각인시키세요.",
       recommendedDetail: "가장 검증된 DPP-4i 성분 기반 복합제로서의 확고한 신뢰도 어필."

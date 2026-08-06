@@ -20,8 +20,8 @@ export async function evaluateWithElevenLabs(conversationId: string) {
       if (!res.ok) {
         const errText = await res.text();
         console.error(`ElevenLabs API returned ${res.status}: ${errText}`);
-        if (res.status === 401) throw new Error('UNAUTHORIZED');
-        if (res.status === 404) throw new Error('NOT_FOUND');
+        if (res.status === 401) throw new Error('UNAUTHORIZED_OR_INVALID_KEY');
+        if (res.status === 404) throw new Error('NOT_FOUND_CONVERSATION');
         throw new Error(`API_ERROR_${res.status}`);
       }
 
@@ -61,8 +61,11 @@ export async function evaluateWithElevenLabs(conversationId: string) {
       }
       
       await new Promise(resolve => setTimeout(resolve, 3000));
-    } catch (e) {
+    } catch (e: any) {
       console.error('Error polling ElevenLabs:', e);
+      if (e.message === 'UNAUTHORIZED_OR_INVALID_KEY' || e.message === 'NOT_FOUND_CONVERSATION') {
+        throw e; // Do not retry on these fatal errors
+      }
       await new Promise(resolve => setTimeout(resolve, 3000));
     }
   }
