@@ -56,23 +56,27 @@ export const EvaluationReport: React.FC<EvaluationReportProps> = ({
             </div>
           )}
 
-          {evaluation.strengths && evaluation.strengths.length > 0 && (
-            <div className="bg-emerald-50 p-4 rounded-2xl border border-emerald-100">
-              <h4 className="font-bold text-emerald-700 mb-2">✨ 잘한 점</h4>
+          <div className="bg-emerald-50 p-4 rounded-2xl border border-emerald-100">
+            <h4 className="font-bold text-emerald-700 mb-2">✨ 잘한 점</h4>
+            {evaluation.strengths && evaluation.strengths.length > 0 ? (
               <ul className="list-disc pl-5 text-sm space-y-1 text-emerald-600 font-medium">
                 {evaluation.strengths.map((s, i) => <li key={i}>{s}</li>)}
               </ul>
-            </div>
-          )}
+            ) : (
+              <p className="text-sm text-emerald-600 font-medium opacity-80">특별히 관찰된 내용이 없습니다.</p>
+            )}
+          </div>
 
-          {evaluation.weaknesses && evaluation.weaknesses.length > 0 && (
-            <div className="bg-rose-50 p-4 rounded-2xl border border-rose-100">
-              <h4 className="font-bold text-rose-700 mb-2">🎯 보완점</h4>
+          <div className="bg-rose-50 p-4 rounded-2xl border border-rose-100">
+            <h4 className="font-bold text-rose-700 mb-2">🎯 보완점</h4>
+            {evaluation.weaknesses && evaluation.weaknesses.length > 0 ? (
               <ul className="list-disc pl-5 text-sm space-y-1 text-rose-600 font-medium">
                 {evaluation.weaknesses.map((w, i) => <li key={i}>{w}</li>)}
               </ul>
-            </div>
-          )}
+            ) : (
+              <p className="text-sm text-rose-600 font-medium opacity-80">특별히 관찰된 내용이 없습니다.</p>
+            )}
+          </div>
           
           {evaluation.recommendedScript && (
             <div className="bg-indigo-50 p-4 rounded-2xl border border-indigo-100">

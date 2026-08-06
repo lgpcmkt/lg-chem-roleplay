@@ -22,51 +22,36 @@ export const ScenarioSelectScreen: React.FC<ScenarioSelectScreenProps> = ({
   }[product];
 
   return (
-    <div className="flex-1 flex flex-col bg-slate-50 text-slate-800 font-sans min-h-screen relative">
+    <div className="flex-1 flex flex-col bg-transparent text-white font-sans min-h-screen relative">
       
       {/* Header */}
-      <div className="w-full flex items-center p-4 border-b border-slate-200 bg-white sticky top-0 z-10 shadow-sm">
-        <button onClick={onBack} className="p-2 mr-2 hover:bg-slate-100 rounded-full transition-colors">
-          <ArrowLeft className="w-6 h-6 text-slate-600" />
+      <div className="w-full flex items-center p-4 sticky top-0 z-10">
+        <button onClick={onBack} className="p-2 mr-2 hover:bg-white/10 rounded-full transition-colors text-white/80">
+          <ArrowLeft className="w-6 h-6" />
         </button>
         <div className="flex flex-col">
-          <span className={`text-xs font-bold ${productInfo.text}`}>{productInfo.name}</span>
-          <span className="text-lg font-black tracking-tight text-slate-800">어떤 경쟁품 스위칭을 도전할까요?</span>
+          <span className="text-xs font-bold text-white/80">{productInfo.name}</span>
+          <span className="text-lg font-black tracking-tight text-white">어떤 경쟁품 스위칭을 도전할까요?</span>
         </div>
       </div>
 
       {/* List */}
-      <div className="flex-1 overflow-y-auto p-4 pb-12 flex flex-col gap-3">
-        {scenarios.map((sc, idx) => (
-          <div 
-            key={sc.id} 
-            className="card-duo p-4 flex flex-col gap-3 group animate-fadeIn"
-            style={{ animationDelay: `${idx * 0.05}s`, animationFillMode: 'both' }}
-          >
-            <div className="flex justify-between items-start">
-              <div className="flex items-center gap-3">
-                <div className={`w-10 h-10 rounded-xl shadow-sm flex items-center justify-center text-white font-bold text-lg ${productInfo.bg}`}>
-                  {idx + 1}
-                </div>
-                <div>
-                  <h3 className="font-bold text-lg text-slate-800">{sc.title}</h3>
-                </div>
-              </div>
-            </div>
-            <div className="bg-slate-100 p-3 rounded-xl border border-slate-200">
-              <p className="text-xs text-slate-500 mb-1 font-bold">원장님 예상 반응:</p>
-              <p className="text-sm text-slate-700">"{sc.firstMessage}"</p>
-            </div>
-            
+      <div className="flex-1 overflow-y-auto p-4 pb-12">
+        <div className="grid grid-cols-2 gap-3">
+          {scenarios.map((sc, idx) => (
             <button 
+              key={sc.id} 
               onClick={() => onSelect(sc)}
-              className={`mt-1 w-full py-3 rounded-xl font-bold text-white flex items-center justify-center gap-2 transition-transform active:scale-[0.98] ${productInfo.bg} shadow-md`}
+              className={`card-modern flex flex-col items-center justify-center p-4 min-h-[120px] animate-fadeIn active:scale-[0.95]`}
+              style={{ animationDelay: `${idx * 0.05}s`, animationFillMode: 'both' }}
             >
-              <PlayCircle className="w-5 h-5" />
-              도전하기
+              <div className={`w-10 h-10 rounded-full mb-2 flex items-center justify-center text-white font-bold text-sm shadow-sm ${productInfo.bg}`}>
+                VS
+              </div>
+              <span className="font-bold text-base text-slate-800 text-center break-keep">{sc.title}</span>
             </button>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
       
     </div>

@@ -7,40 +7,19 @@
 
 @layer base {
   html, body {
-    @apply text-slate-800 bg-slate-50 antialiased;
+    @apply text-slate-800 antialiased;
     overscroll-behavior: none;
     font-family: 'Pretendard', sans-serif;
   }
 }
 
 @layer utilities {
-  .btn-duo {
-    @apply relative inline-flex items-center justify-center font-bold text-center rounded-2xl select-none active:translate-y-1 active:border-b-0 transition-all duration-75;
-    border-bottom-width: 4px;
+  .card-modern {
+    @apply bg-white rounded-[24px] shadow-[0_8px_30px_rgb(0,0,0,0.06)] cursor-pointer hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)] transition-all duration-300 border border-slate-100;
   }
   
-  .btn-duo-orange {
-    @apply bg-orange-500 text-white border-orange-700 hover:bg-orange-400;
-  }
-
-  .btn-duo-brown {
-    @apply bg-[#78350f] text-white border-[#451a03] hover:bg-[#92400e];
-  }
-
-  .btn-duo-pink {
-    @apply bg-pink-500 text-white border-pink-700 hover:bg-pink-400;
-  }
-
-  .btn-duo-gray {
-    @apply bg-slate-200 text-slate-600 border-slate-300 hover:bg-slate-100;
-  }
-
-  .card-duo {
-    @apply bg-white rounded-2xl border-2 border-slate-200 shadow-sm cursor-pointer hover:border-slate-300 transition-colors duration-200;
-  }
-  
-  .card-duo-active {
-    @apply bg-blue-50 border-2 border-blue-400;
+  .card-modern-active {
+    @apply bg-indigo-50 border-indigo-200;
   }
 }
 
@@ -57,6 +36,11 @@ html, body, #root {
   to { opacity: 1; transform: translateY(0); }
 }
 
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 @keyframes popBounce {
   0% { transform: scale(1); }
   30% { transform: scale(1.03); }
@@ -64,11 +48,19 @@ html, body, #root {
   100% { transform: scale(1); }
 }
 
+@keyframes speakingGlow {
+  0% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.5); }
+  70% { box-shadow: 0 0 0 12px rgba(99, 102, 241, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0); }
+}
+
 .animate-fadeIn { animation: fadeIn 0.4s ease-out; }
+.animate-slideUp { animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
 .animate-pop-bounce { animation: popBounce 0.3s ease-out; }
+.animate-speaking-glow { animation: speakingGlow 2s infinite; }
 
 /* Scrollbar */
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+::-webkit-scrollbar-thumb { background: rgba(203, 213, 225, 0.5); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(148, 163, 184, 0.8); }

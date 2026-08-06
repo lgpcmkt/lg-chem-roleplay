@@ -143,7 +143,7 @@ export const RoleplayRoom: React.FC<RoleplayRoomProps> = ({
           product_info: productInfoStr,
           competitor_drug: scenario.title,
           mission: scenario.mission,
-          first_message: scenario.firstMessage,
+          first_message: `네 담당자님 오셨어요. ${scenario.firstMessage}`,
           recommended_detail: scenario.recommendedDetail
         },
       });
@@ -196,46 +196,37 @@ export const RoleplayRoom: React.FC<RoleplayRoomProps> = ({
     }
   };
 
-  const calculateProgress = () => {
-    // Simple mock progress based on turns (max 10 turns)
-    const userTurns = chatHistory.filter(m => m.role === 'user').length;
-    return Math.min((userTurns / 5) * 100, 100);
-  };
 
   return (
-    <div className="flex-1 flex flex-col bg-slate-50 text-slate-800 font-sans min-h-screen relative overflow-hidden">
+    <div className="flex-1 flex flex-col bg-transparent font-sans min-h-screen relative overflow-hidden text-slate-800">
       
-      {/* Header */}
-      <div className="px-4 py-3 bg-white flex flex-col z-10 shadow-sm border-b border-slate-200">
-        <div className="flex items-center gap-3">
-          <button onClick={onBack} className="p-2 -ml-2 rounded-full hover:bg-slate-100 transition-colors text-slate-500">
+      {/* Header with Avatar */}
+      <div className="px-4 py-4 flex flex-col items-center z-10 sticky top-0 bg-transparent text-white">
+        <div className="w-full flex items-center justify-between mb-2">
+          <button onClick={onBack} className="p-2 -ml-2 rounded-full hover:bg-white/10 transition-colors text-white/80">
             <ArrowLeft className="w-6 h-6" />
           </button>
-          {/* Progress Bar */}
-          <div className="flex-1 h-3 bg-slate-200 rounded-full overflow-hidden">
-            <div 
-              className={`h-full ${productInfo.bg} transition-all duration-500 ease-out`}
-              style={{ width: `${calculateProgress()}%` }}
-            />
-          </div>
+          <div className="flex-1"></div>
         </div>
-        <div className="text-center mt-2 animate-fadeIn">
-          <h2 className={`font-bold text-lg ${productInfo.text}`}>VS {scenario.title}</h2>
-          <p className="text-xs text-slate-400 font-medium mt-0.5">스위칭 디테일 롤플레잉</p>
+        
+        {/* Avatar Area */}
+        <div className="flex flex-col items-center mt-2 animate-fadeIn">
+          <div className={`relative w-20 h-20 rounded-full border-4 border-white/20 bg-white shadow-xl mb-3 flex items-center justify-center overflow-hidden ${conversation.isSpeaking ? 'animate-speaking-glow' : ''}`}>
+            <img src="/images/korean_doctor_strict_clinic_1785413940376.png" alt="doc" className="w-full h-full object-cover" />
+          </div>
+          <h2 className="font-black text-xl tracking-tight">원장님</h2>
+          <p className="text-xs font-bold bg-white/20 px-3 py-1 rounded-full mt-2 backdrop-blur-md">
+            VS {scenario.title} 스위칭
+          </p>
         </div>
       </div>
 
       {/* Chat Area */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-5 bg-slate-50">
+      <div className="flex-1 overflow-y-auto p-4 space-y-5">
         {chatHistory.map((msg, idx) => (
           <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'} animate-slideUp`}>
-            {msg.role === 'assistant' && (
-               <div className="w-10 h-10 rounded-full border border-slate-200 bg-white mr-2 flex items-center justify-center overflow-hidden flex-shrink-0 shadow-sm">
-                 <img src="/images/korean_doctor_strict_clinic_1785413940376.png" alt="doc" className="w-full h-full object-cover" />
-               </div>
-            )}
-            <div className={`max-w-[75%] rounded-2xl px-4 py-3 text-[15px] leading-relaxed shadow-sm ${
-              msg.role === 'user' ? `bg-slate-200 text-slate-800 rounded-tr-sm` : 'bg-white text-slate-800 border border-slate-200 rounded-tl-sm'
+            <div className={`max-w-[75%] rounded-[20px] px-5 py-3.5 text-[15px] leading-relaxed shadow-sm font-medium ${
+              msg.role === 'user' ? `bg-white/90 text-slate-800 rounded-br-sm backdrop-blur-sm` : 'bg-indigo-900/40 text-white border border-indigo-400/30 rounded-bl-sm backdrop-blur-sm shadow-xl'
             }`}>
               {msg.role === 'assistant' ? <TypewriterText text={msg.content} speed={15} /> : msg.content}
             </div>
@@ -257,10 +248,7 @@ export const RoleplayRoom: React.FC<RoleplayRoomProps> = ({
         )}
         {(!isMicPressed && conversation.status === 'connected' && !conversation.isSpeaking && chatHistory.length > 0 && chatHistory[chatHistory.length - 1].role === 'user') ? (
           <div className="flex justify-start animate-fadeIn">
-             <div className="w-10 h-10 rounded-full border border-slate-200 bg-white mr-2 flex items-center justify-center overflow-hidden flex-shrink-0 shadow-sm">
-               <img src="/images/korean_doctor_strict_clinic_1785413940376.png" alt="doc" className="w-full h-full object-cover" />
-             </div>
-            <div className="rounded-2xl rounded-tl-sm px-4 py-3 bg-white border border-slate-200 text-slate-400 text-sm font-medium animate-pulse shadow-sm">
+            <div className="rounded-[20px] rounded-bl-sm px-5 py-3.5 bg-indigo-900/40 backdrop-blur-sm border border-indigo-400/30 text-white/70 text-sm font-medium animate-pulse shadow-sm">
               원장님이 생각중입니다...
             </div>
           </div>
@@ -289,7 +277,7 @@ export const RoleplayRoom: React.FC<RoleplayRoomProps> = ({
       )}
 
       {/* Bottom Controls */}
-      <div className="bg-white p-4 z-10 flex flex-col gap-3 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] border-t border-slate-100">
+      <div className="bg-white/10 backdrop-blur-md p-4 z-10 flex flex-col gap-3 shadow-[0_-8px_30px_rgba(0,0,0,0.1)] border-t border-white/10 pb-6 rounded-t-[32px]">
         
         {/* Top bar (Hint / Mic / End) */}
         <div className="flex justify-between items-center gap-2">
@@ -322,19 +310,19 @@ export const RoleplayRoom: React.FC<RoleplayRoomProps> = ({
         </div>
 
         {/* Text Input */}
-        <div className="flex items-center gap-2 bg-slate-100 rounded-2xl p-1 pr-1 border border-slate-200 focus-within:border-slate-400 focus-within:bg-white transition-colors shadow-inner">
+        <div className="flex items-center gap-2 bg-white/20 rounded-[20px] p-1.5 pr-1.5 border border-white/10 focus-within:bg-white/30 transition-colors shadow-inner backdrop-blur-md">
           <input
             type="text"
             value={textInput}
             onChange={(e) => setTextInput(e.target.value)}
             onKeyDown={handleTextKeyDown}
             placeholder="마이크 대신 텍스트로 대화할 수 있습니다..."
-            className="flex-1 bg-transparent text-slate-800 text-[15px] px-3 py-2 outline-none font-medium placeholder-slate-400"
+            className="flex-1 bg-transparent text-white text-[15px] px-3 py-2 outline-none font-medium placeholder-white/50"
           />
           <button
             onClick={handleSendText}
             disabled={!textInput.trim()}
-            className="w-10 h-10 rounded-xl bg-slate-800 flex items-center justify-center text-white disabled:bg-slate-300 disabled:text-slate-500 transition-colors shrink-0 shadow-sm"
+            className="w-11 h-11 rounded-[16px] bg-white flex items-center justify-center text-indigo-600 disabled:opacity-50 disabled:bg-white/50 transition-colors shrink-0 shadow-md"
           >
             <Send className="w-5 h-5 ml-1" />
           </button>
@@ -344,7 +332,7 @@ export const RoleplayRoom: React.FC<RoleplayRoomProps> = ({
         {chatHistory.length > 1 && (
            <button
              onClick={handleEndCall}
-             className={`w-full py-4 mt-2 font-black text-lg ${productInfo.btn} flex items-center justify-center gap-2`}
+             className="w-full py-4 mt-2 font-black text-lg bg-indigo-600 hover:bg-indigo-500 text-white rounded-2xl flex items-center justify-center gap-2 shadow-lg active:scale-[0.98] transition-all"
            >
              <CheckCircle className="w-6 h-6" />
              대화 종료 및 평가 받기

@@ -39,31 +39,31 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ employeeInfo, onLogout, 
   }
 
   const products = [
-    { id: 'zemiglo', name: '제미글로', desc: '강력하고 안전한 DPP-4 억제제', colorClass: 'text-orange-500', icon: '🔥' },
-    { id: 'zemimet', name: '제미메트', desc: '제미글로+메트포르민 복합제', colorClass: 'text-[#78350f]', icon: '💊' },
-    { id: 'zemidapa', name: '제미다파', desc: '제미글로+다파글리플로진 복합제', colorClass: 'text-pink-500', icon: '💖' },
+    { id: 'zemiglo', name: '제미글로', desc: '강력하고 안전한 DPP-4 억제제', colorClass: 'text-orange-500 bg-orange-50', icon: 'Z' },
+    { id: 'zemimet', name: '제미메트', desc: '제미글로+메트포르민 복합제', colorClass: 'text-emerald-500 bg-emerald-50', icon: 'M' },
+    { id: 'zemidapa', name: '제미다파', desc: '제미글로+다파글리플로진 복합제', colorClass: 'text-blue-500 bg-blue-50', icon: 'D' },
   ] as const;
 
   return (
-    <div className="flex-1 flex flex-col items-center justify-start bg-slate-50 text-slate-800 font-sans min-h-screen pt-8 pb-12">
-      
+    <div className="flex-1 flex flex-col items-center justify-start bg-transparent text-white font-sans min-h-screen pt-8 pb-12">
+
       {/* Header Info */}
-      <div className="w-full max-w-md px-6 flex justify-between items-center mb-10">
+      <div className="w-full max-w-md px-6 flex justify-between items-center mb-10 text-white/90">
         <div className="flex flex-col">
-          <span className="text-sm font-bold text-slate-800">{employeeInfo.name} 님</span>
-          <span className="text-xs text-slate-500 font-medium">이번 달 누적 연습: {progress.totalPlays || 0}회</span>
+          <span className="text-sm font-bold">{employeeInfo.name} 님</span>
+          <span className="text-xs font-medium opacity-80">이번 달 누적 연습: {progress.totalPlays || 0}회</span>
         </div>
-        <button onClick={onLogout} className="p-2 rounded-xl text-slate-400 hover:text-slate-600 hover:bg-slate-200 transition-colors flex items-center gap-2">
+        <button onClick={onLogout} className="p-2 rounded-xl text-white/60 hover:text-white hover:bg-white/10 transition-colors flex items-center gap-2">
           <LogOut className="w-5 h-5" />
         </button>
       </div>
 
       {/* Title */}
       <div className="w-full max-w-md px-6 mb-8 text-left animate-fadeIn">
-        <h1 className="text-2xl font-black mb-2 text-slate-800 tracking-tight leading-snug">
+        <h1 className="text-2xl font-black mb-2 text-white tracking-tight leading-snug">
           오늘은 어떤 제품 디테일을<br/>연습해볼까요?
         </h1>
-        <p className="text-slate-500 text-sm font-medium">제품을 선택하고 경쟁품 스위칭에 도전하세요!</p>
+        <p className="text-white/80 text-sm font-medium">제품을 선택하고 경쟁품 스위칭에 도전하세요!</p>
       </div>
 
       {/* Product List */}
@@ -73,14 +73,14 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ employeeInfo, onLogout, 
             <div 
               key={p.id}
               onClick={() => onSelectProduct(p.id)}
-              className="card-duo p-5 flex items-center justify-between group active:scale-[0.98]"
+              className="card-modern p-5 flex items-center justify-between group active:scale-[0.98]"
             >
               <div className="flex items-center gap-4">
-                <div className={`w-14 h-14 rounded-2xl flex items-center justify-center text-3xl bg-slate-100 group-hover:scale-110 transition-transform ${p.colorClass}`}>
+                <div className={`w-14 h-14 rounded-[20px] flex items-center justify-center text-2xl font-black group-hover:scale-110 transition-transform ${p.colorClass}`}>
                   {p.icon}
                 </div>
                 <div className="flex flex-col text-left">
-                  <span className={`text-xl font-black ${p.colorClass}`}>{p.name}</span>
+                  <span className="text-xl font-black text-slate-800">{p.name}</span>
                   <span className="text-xs text-slate-500 mt-1 font-medium">{p.desc}</span>
                 </div>
               </div>
@@ -89,7 +89,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ employeeInfo, onLogout, 
           );
         })}
       </div>
-      
+
     </div>
   );
 };

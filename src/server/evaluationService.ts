@@ -64,6 +64,15 @@ export async function evaluateWithElevenLabs(conversationId: string) {
     }
   }
 
-  console.error('ElevenLabs evaluation polling timed out');
-  return null;
+  console.error('ElevenLabs evaluation polling timed out or failed to extract criteria');
+  return {
+    isSuccess: false,
+    grade: 'C',
+    totalScore: 0,
+    reasoning: '대화가 너무 짧거나 명확한 정보가 부족하여 AI가 채점을 완료하지 못했습니다.',
+    strengths: [],
+    weaknesses: [],
+    recommendedScript: '',
+    detailedFeedback: '오류: 채점 기준 누락',
+  };
 }
