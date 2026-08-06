@@ -22,9 +22,9 @@ export const EvaluationReport: React.FC<EvaluationReportProps> = ({
   };
 
   return (
-    <div className="flex-1 flex flex-col items-center justify-start bg-slate-50 text-slate-800 font-sans min-h-screen overflow-y-auto p-4 pb-12 w-full">
+    <div className="flex-1 flex flex-col items-center justify-start bg-slate-50 text-slate-800 font-sans h-full overflow-y-auto p-4 w-full">
 
-      <div className="w-full max-w-md bg-white rounded-3xl p-6 flex flex-col items-center shadow-lg border border-slate-100 animate-slideUp mt-4">
+      <div className="w-full max-w-md bg-white rounded-3xl p-6 flex flex-col items-center border border-slate-200 animate-slideUp my-auto">
         
         <div className="flex items-center gap-2 mb-6">
           {evaluation.isSuccess ? (
@@ -51,37 +51,37 @@ export const EvaluationReport: React.FC<EvaluationReportProps> = ({
         <div className="w-full text-left flex flex-col gap-4 mb-8">
           {evaluation.reasoning && (
             <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200">
-              <h3 className="font-bold text-slate-800 mb-2 flex items-center gap-2">👨‍⚕️ 원장님의 코멘트</h3>
+              <h3 className="font-bold text-slate-800 mb-2 flex items-center gap-2">원장님의 코멘트</h3>
               <p className="text-sm leading-relaxed text-slate-600 font-medium">{evaluation.reasoning}</p>
             </div>
           )}
 
-          <div className="bg-emerald-50 p-4 rounded-2xl border border-emerald-100">
-            <h4 className="font-bold text-emerald-700 mb-2">✨ 잘한 점</h4>
+          <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200">
+            <h4 className="font-bold text-blue-600 mb-2">잘한 점</h4>
             {evaluation.strengths && evaluation.strengths.length > 0 ? (
-              <ul className="list-disc pl-5 text-sm space-y-1 text-emerald-600 font-medium">
+              <ul className="list-disc pl-5 text-sm space-y-1 text-slate-600 font-medium">
                 {evaluation.strengths.map((s, i) => <li key={i}>{s}</li>)}
               </ul>
             ) : (
-              <p className="text-sm text-emerald-600 font-medium opacity-80">특별히 관찰된 내용이 없습니다.</p>
+              <p className="text-sm text-slate-500 font-medium opacity-80">특별히 관찰된 내용이 없습니다.</p>
             )}
           </div>
 
-          <div className="bg-rose-50 p-4 rounded-2xl border border-rose-100">
-            <h4 className="font-bold text-rose-700 mb-2">🎯 보완점</h4>
+          <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200">
+            <h4 className="font-bold text-slate-600 mb-2">보완점</h4>
             {evaluation.weaknesses && evaluation.weaknesses.length > 0 ? (
-              <ul className="list-disc pl-5 text-sm space-y-1 text-rose-600 font-medium">
+              <ul className="list-disc pl-5 text-sm space-y-1 text-slate-600 font-medium">
                 {evaluation.weaknesses.map((w, i) => <li key={i}>{w}</li>)}
               </ul>
             ) : (
-              <p className="text-sm text-rose-600 font-medium opacity-80">특별히 관찰된 내용이 없습니다.</p>
+              <p className="text-sm text-slate-500 font-medium opacity-80">특별히 관찰된 내용이 없습니다.</p>
             )}
           </div>
           
           {evaluation.recommendedScript && (
-            <div className="bg-indigo-50 p-4 rounded-2xl border border-indigo-100">
-              <h3 className="font-bold text-indigo-700 mb-2">💡 추천 디테일 멘트</h3>
-              <p className="text-sm italic leading-relaxed text-indigo-600 font-medium">"{evaluation.recommendedScript}"</p>
+            <div className="bg-blue-50 p-4 rounded-2xl border border-blue-100">
+              <h3 className="font-bold text-blue-700 mb-2">추천 디테일 멘트</h3>
+              <p className="text-sm italic leading-relaxed text-blue-600 font-medium">"{evaluation.recommendedScript}"</p>
             </div>
           )}
         </div>
