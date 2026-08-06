@@ -148,7 +148,7 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-200 flex items-center justify-center font-sans">
+    <div className="h-[100dvh] bg-slate-200 flex items-center justify-center font-sans overflow-hidden">
       <main className="max-w-md w-full h-[100dvh] bg-slate-50 shadow-2xl relative overflow-hidden flex flex-col text-slate-800">
         {screen === 'home' && employeeInfo && (
           <HomeScreen 
