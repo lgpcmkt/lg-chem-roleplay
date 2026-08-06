@@ -1,15 +1,17 @@
 @import "tailwindcss";
 @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+@import url('https://hangeul.pstatic.net/hangeul_static/css/nanum-square.css');
 
 @theme {
-  --font-sans: 'Pretendard', sans-serif;
+  --font-sans: 'NanumSquare', sans-serif;
+  --font-chat: 'Pretendard', sans-serif;
 }
 
 @layer base {
   html, body {
     @apply text-slate-800 antialiased;
     overscroll-behavior: none;
-    font-family: 'Pretendard', sans-serif;
+    font-family: 'NanumSquare', sans-serif;
   }
 }
 

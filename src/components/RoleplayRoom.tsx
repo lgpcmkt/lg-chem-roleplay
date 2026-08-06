@@ -221,7 +221,7 @@ export const RoleplayRoom: React.FC<RoleplayRoomProps> = ({
       </div>
 
       {/* Chat Area */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-5">
+      <div className="flex-1 overflow-y-auto p-4 space-y-5 font-chat">
         {chatHistory.map((msg, idx) => (
           <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'} animate-slideUp`}>
             <div className={`max-w-[75%] rounded-[20px] px-5 py-3.5 text-[15px] leading-relaxed shadow-sm font-medium ${
